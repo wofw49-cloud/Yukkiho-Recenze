@@ -10,12 +10,13 @@
   <style>
     :root { --accent: #ff1a1a; }
     body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e0e0e0; }
-    .logo { font-family: 'Press Start 2P', cursive; font-size: 2.6rem; line-height: 1; background: linear-gradient(90deg, #ff1a1a, #ff6666); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .logo { font-family: 'Press Start 2P', cursive; font-size: 2.55rem; line-height: 1; background: linear-gradient(90deg, #ff1a1a, #ff6666); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .nav-link { position: relative; transition: all 0.3s; }
     .nav-link:after { content: ''; position: absolute; width: 0; height: 3px; bottom: -4px; left: 0; background: var(--accent); transition: width 0.3s; }
     .nav-link.active:after, .nav-link:hover:after { width: 100%; }
     .card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-    .card:hover { transform: translateY(-8px); }
+    .card:hover { transform: translateY(-12px); }
+    .rating { background: linear-gradient(135deg, #ff1a1a, #c8102e); }
   </style>
 </head>
 <body class="min-h-screen pb-20">
@@ -31,23 +32,20 @@
         <a onclick="showTab(2)" class="nav-link cursor-pointer">Recenze</a>
         <a onclick="showTab(3)" class="nav-link cursor-pointer">Soutěže</a>
       </nav>
-      <button onclick="adminLogin()" class="bg-zinc-900 hover:bg-red-600 px-6 py-3 rounded-xl flex items-center gap-2">
+      <button onclick="adminLogin()" class="bg-zinc-900 hover:bg-red-600 px-6 py-3 rounded-xl flex items-center gap-2 transition-all">
         <i class="fas fa-user-shield"></i> Admin
       </button>
     </div>
   </header>
 
   <div class="max-w-7xl mx-auto px-6 pt-10">
-
-    <!-- DOMŮ -->
     <div id="tab0" class="tab active">
-      <h2 class="text-4xl font-bold mb-8">Nejnovější</h2>
+      <h2 class="text-4xl font-bold mb-10">Nejnovější</h2>
       <div id="latestContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </div>
 
-    <!-- RECENZE -->
     <div id="tab2" class="tab hidden">
-      <div class="flex justify-between mb-10">
+      <div class="flex justify-between items-center mb-10">
         <h2 class="text-4xl font-bold">Recenze</h2>
         <button onclick="showReviewForm()" id="adminPanel" style="display:none" class="bg-red-600 hover:bg-red-700 px-8 py-4 rounded-2xl font-semibold flex items-center gap-3">
           <i class="fas fa-plus"></i> Nová recenze
@@ -64,15 +62,15 @@
       <input id="rTitle" placeholder="Název hry" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
       <input id="rPlatform" placeholder="Platforma" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
       <input id="rRating" type="number" min="0" max="100" placeholder="Hodnocení (%)" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
-      <textarea id="rText" rows="8" placeholder="Text recenze..." class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4"></textarea>
+      <textarea id="rText" rows="10" placeholder="Text recenze..." class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4"></textarea>
       <div class="flex gap-4 mt-8">
-        <button onclick="saveReview()" class="flex-1 bg-red-600 hover:bg-red-700 py-4 rounded-2xl font-bold">Uložit</button>
+        <button onclick="saveReview()" class="flex-1 bg-red-600 hover:bg-red-700 py-4 rounded-2xl font-bold">Uložit recenzi</button>
         <button onclick="closeReviewForm()" class="flex-1 bg-zinc-700 hover:bg-zinc-600 py-4 rounded-2xl font-bold">Zrušit</button>
       </div>
     </div>
   </div>
 
-  <!-- ADMIN LOGIN -->
+  <!-- LOGIN -->
   <div id="loginModal" class="hidden fixed inset-0 bg-black/95 z-[200] flex items-center justify-center">
     <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-md">
       <h2 class="text-3xl font-bold mb-8">Admin přihlášení</h2>
@@ -88,37 +86,37 @@
     let isAdmin = false;
     const ADMIN_PASSWORD = "yukki77";
 
-    async function api(table, method, path = '', body = null) {
-      try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}${path}`, {
-          method,
-          headers: {
-            'apikey': SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-            'Content-Type': 'application/json'
-          },
-          body: body ? JSON.stringify(body) : undefined
-        });
-        if (!res.ok) throw new Error(await res.text());
-        return res.json();
-      } catch (e) {
-        alert("Chyba: " + e.message);
-        throw e;
+    async function api(method, body = null) {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews`, {
+        method,
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: body ? JSON.stringify(body) : undefined
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text);
       }
+      return res.json();
     }
 
     async function saveReview() {
       try {
-        await api('reviews', 'POST', '', {
+        await api('POST', {
           title: document.getElementById('rTitle').value,
-          platform: document.getElementById('rPlatform').value,
-          rating: parseInt(document.getElementById('rRating').value) || 50,
+          platform: document.getElementById('rPlatform').value || null,
+          rating: parseInt(document.getElementById('rRating').value) || null,
           text: document.getElementById('rText').value
         });
         alert('✅ Recenze uložena!');
         closeReviewForm();
         location.reload();
-      } catch (e) {}
+      } catch (e) {
+        alert('Chyba: ' + e.message);
+      }
     }
 
     function showReviewForm() { if(isAdmin) document.getElementById('reviewFormModal').classList.remove('hidden'); }
@@ -137,29 +135,22 @@
     function showTab(n) {
       document.querySelectorAll('.tab').forEach(t => t.classList.add('hidden'));
       document.getElementById('tab' + n).classList.remove('hidden');
-      document.querySelectorAll('.nav-link').forEach((a,i) => a.classList.toggle('active', i === n));
     }
 
-    function openCurrentDetail() { alert("Detail recenze"); }
-
-    // Jednoduchý render
-    async function renderAll() {
+    async function loadReviews() {
       try {
-        const reviews = await api('reviews', 'GET', '?order=created_at.desc');
-        const container = document.getElementById('latestContainer');
-        container.innerHTML = reviews.map(r => `
+        const reviews = await api('GET', null);
+        document.getElementById('latestContainer').innerHTML = reviews.map(r => `
           <div class="card bg-zinc-900 rounded-3xl p-6">
             <h3 class="text-2xl font-bold">${r.title}</h3>
-            <p class="text-red-500 text-4xl font-black mt-4">${r.rating || '?'}%</p>
-            <p class="text-zinc-400 mt-2">${r.platform || ''}</p>
+            <p class="text-red-500 text-5xl font-black mt-4">${r.rating || ''}%</p>
+            <p class="mt-4 text-zinc-400">${r.text ? r.text.substring(0,150) + '...' : ''}</p>
           </div>
         `).join('');
-      } catch(e) {
-        document.getElementById('latestContainer').innerHTML = `<p class="text-zinc-500">Žádné recenze zatím nejsou.</p>`;
-      }
+      } catch(e) {}
     }
 
-    renderAll();
+    loadReviews();
   </script>
 </body>
 </html>
