@@ -39,7 +39,7 @@
   </header>
 
   <div class="max-w-7xl mx-auto px-6 pt-10">
-    <!-- DOMŮ -->
+
     <div id="tab0" class="tab active">
       <div id="hero" class="h-[620px] rounded-3xl bg-cover bg-center relative overflow-hidden mb-16 flex items-end">
         <div class="p-12 md:p-20 bg-gradient-to-t from-black via-black/90 to-transparent w-full">
@@ -53,25 +53,49 @@
       <div id="latestContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </div>
 
-    <!-- Ostatní taby -->
-    <div id="tab1" class="tab hidden">...</div>
-    <div id="tab2" class="tab hidden">...</div>
-    <div id="tab3" class="tab hidden">...</div>
+    <div id="tab1" class="tab hidden">
+      <h2 class="text-4xl font-bold mb-10">Novinky</h2>
+      <div id="newsList" class="space-y-12"></div>
+    </div>
+
+    <div id="tab2" class="tab hidden">
+      <div class="flex justify-between items-center mb-10">
+        <h2 class="text-4xl font-bold">Recenze</h2>
+        <button onclick="showReviewForm()" id="adminPanel" style="display:none" class="bg-red-600 hover:bg-red-700 px-8 py-4 rounded-2xl font-semibold flex items-center gap-3">
+          <i class="fas fa-plus"></i> Nová recenze
+        </button>
+      </div>
+      <div id="reviewsList" class="space-y-12"></div>
+    </div>
+
+    <div id="tab3" class="tab hidden">
+      <h2 class="text-4xl font-bold mb-10">Soutěže</h2>
+      <div id="contestsList" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+    </div>
   </div>
 
-  <!-- REVIEW FORM (jen základní pole) -->
+  <!-- REVIEW FORM -->
   <div id="reviewFormModal" class="hidden fixed inset-0 bg-black/95 z-[110] flex items-center justify-center p-6">
     <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-2xl">
       <h2 class="text-3xl font-bold mb-8">Nová recenze</h2>
       <input id="rTitle" placeholder="Název hry" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
       <input id="rPlatform" placeholder="Platforma" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
       <input id="rRating" type="number" min="0" max="100" placeholder="Hodnocení (%)" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
-      <input id="rImage" placeholder="URL obrázku (volitelné)" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
+      <input id="rImage" placeholder="URL obrázku" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
       <textarea id="rText" rows="10" placeholder="Text recenze..." class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4"></textarea>
       <div class="flex gap-4 mt-8">
         <button onclick="saveReview()" class="flex-1 bg-red-600 hover:bg-red-700 py-4 rounded-2xl font-bold">Uložit recenzi</button>
         <button onclick="closeReviewForm()" class="flex-1 bg-zinc-700 hover:bg-zinc-600 py-4 rounded-2xl font-bold">Zrušit</button>
       </div>
+    </div>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="loginModal" class="hidden fixed inset-0 bg-black/95 z-[200] flex items-center justify-center">
+    <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-md">
+      <h2 class="text-3xl font-bold mb-8">Admin přihlášení</h2>
+      <input id="adminPass" type="password" placeholder="Heslo" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-6">
+      <button onclick="checkAdminLogin()" class="w-full bg-red-600 py-4 rounded-2xl font-bold">Přihlásit se</button>
     </div>
   </div>
 
@@ -94,15 +118,13 @@
           },
           body: body ? JSON.stringify(body) : undefined
         });
-
         if (!res.ok) {
-          const errorText = await res.text();
-          throw new Error(`HTTP ${res.status}: ${errorText}`);
+          const err = await res.text();
+          throw new Error(`HTTP ${res.status} - ${err}`);
         }
         return res.json();
       } catch (e) {
         alert('Chyba: ' + e.message);
-        console.error(e);
         throw e;
       }
     }
@@ -112,13 +134,12 @@
         await api('reviews', 'POST', '', {
           title: document.getElementById('rTitle').value,
           platform: document.getElementById('rPlatform').value,
-          rating: parseInt(document.getElementById('rRating').value) || 0,
-          imageUrl: document.getElementById('rImage').value || null,
+          rating: parseInt(document.getElementById('rRating').value),
+          imageUrl: document.getElementById('rImage').value,
           text: document.getElementById('rText').value
         });
-        alert('✅ Recenze uložena!');
+        alert('✅ Uloženo!');
         closeReviewForm();
-        // refresh
         location.reload();
       } catch (e) {}
     }
@@ -130,13 +151,20 @@
     function checkAdminLogin() {
       if (document.getElementById('adminPass').value === ADMIN_PASSWORD) {
         isAdmin = true;
-        alert('✅ Admin mód zapnutý');
+        document.getElementById('adminPanel').style.display = 'flex';
         document.getElementById('loginModal').classList.add('hidden');
-      } else alert('Špatné heslo');
+        alert('Admin mód zapnutý');
+      } else alert('Špatné heslo!');
     }
 
-    function showTab(n) { /* ... */ }
-    async function renderAll() { /* basic version */ console.log("Render..."); }
+    function showTab(n) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.add('hidden'));
+      document.getElementById('tab' + n).classList.remove('hidden');
+      document.querySelectorAll('.nav-link').forEach((a, i) => a.classList.toggle('active', i === n));
+    }
+
+    function openCurrentDetail() { alert('Otevírám detail...'); }
+    function renderAll() { console.log("Stránka načtena"); }
 
     // Start
     renderAll();
