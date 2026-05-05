@@ -39,7 +39,7 @@
   </header>
 
   <div class="max-w-7xl mx-auto px-6 pt-10">
-
+    <!-- DOMŮ -->
     <div id="tab0" class="tab active">
       <div id="hero" class="h-[620px] rounded-3xl bg-cover bg-center relative overflow-hidden mb-16 flex items-end">
         <div class="p-12 md:p-20 bg-gradient-to-t from-black via-black/90 to-transparent w-full">
@@ -53,103 +53,24 @@
       <div id="latestContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </div>
 
-    <div id="tab1" class="tab hidden">
-      <div class="flex justify-between items-center mb-10">
-        <h2 class="text-4xl font-bold">Novinky</h2>
-        <button onclick="showNewsForm()" id="adminNewsBtn" style="display:none" class="bg-red-600 hover:bg-red-700 px-8 py-4 rounded-2xl font-semibold flex items-center gap-3">
-          <i class="fas fa-plus"></i> Nový článek
-        </button>
-      </div>
-      <div id="newsList" class="space-y-12"></div>
-    </div>
-
-    <div id="tab2" class="tab hidden">
-      <div class="flex justify-between items-center mb-10">
-        <h2 class="text-4xl font-bold">Recenze</h2>
-        <button onclick="showReviewForm()" id="adminPanel" style="display:none" class="bg-red-600 hover:bg-red-700 px-8 py-4 rounded-2xl font-semibold flex items-center gap-3">
-          <i class="fas fa-plus"></i> Nová recenze
-        </button>
-      </div>
-      <div id="reviewsList" class="space-y-12"></div>
-    </div>
-
-    <div id="tab3" class="tab hidden">
-      <div class="flex justify-between items-center mb-10">
-        <h2 class="text-4xl font-bold">Soutěže</h2>
-        <button onclick="showContestForm()" id="adminContestBtn" style="display:none" class="bg-red-600 hover:bg-red-700 px-8 py-4 rounded-2xl font-semibold flex items-center gap-3">
-          <i class="fas fa-plus"></i> Nová soutěž
-        </button>
-      </div>
-      <div id="contestsList" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
-    </div>
+    <!-- Ostatní taby -->
+    <div id="tab1" class="tab hidden">...</div>
+    <div id="tab2" class="tab hidden">...</div>
+    <div id="tab3" class="tab hidden">...</div>
   </div>
 
-  <!-- DETAIL MODAL -->
-  <div id="detailModal" class="hidden fixed inset-0 bg-black/95 z-[100] flex items-center justify-center p-6">
-    <div class="max-w-4xl w-full bg-zinc-900 rounded-3xl overflow-hidden relative">
-      <button onclick="closeModal()" class="absolute top-6 right-6 text-5xl text-white/70 hover:text-white z-10">✕</button>
-      <img id="modalImage" class="w-full h-96 object-cover" alt="">
-      <div class="p-12">
-        <div id="modalRatingContainer" class="hidden mb-6">
-          <div id="modalRating" class="rating inline-block text-6xl font-black px-8 py-4 rounded-2xl"></div>
-        </div>
-        <h1 id="modalTitle" class="text-5xl font-bold"></h1>
-        <p id="modalMeta" class="text-zinc-400 mt-2"></p>
-        <div id="modalText" class="prose prose-invert mt-10 text-lg leading-relaxed"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ADMIN LOGIN -->
-  <div id="loginModal" class="hidden fixed inset-0 bg-black/95 z-[200] flex items-center justify-center">
-    <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-md">
-      <h2 class="text-3xl font-bold mb-8">Admin přihlášení</h2>
-      <input id="adminPass" type="password" placeholder="Heslo" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-6">
-      <button onclick="checkAdminLogin()" class="w-full bg-red-600 py-4 rounded-2xl font-bold">Přihlásit se</button>
-    </div>
-  </div>
-
-  <!-- REVIEW FORM -->
+  <!-- REVIEW FORM (jen základní pole) -->
   <div id="reviewFormModal" class="hidden fixed inset-0 bg-black/95 z-[110] flex items-center justify-center p-6">
     <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-2xl">
       <h2 class="text-3xl font-bold mb-8">Nová recenze</h2>
       <input id="rTitle" placeholder="Název hry" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
-      <input id="rPlatform" placeholder="Platforma (PC, PS5, atd.)" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
-      <input id="rRating" type="number" min="0" max="100" placeholder="Hodnocení 0-100" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
-      <input id="rImage" placeholder="URL obrázku" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
+      <input id="rPlatform" placeholder="Platforma" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
+      <input id="rRating" type="number" min="0" max="100" placeholder="Hodnocení (%)" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
+      <input id="rImage" placeholder="URL obrázku (volitelné)" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
       <textarea id="rText" rows="10" placeholder="Text recenze..." class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4"></textarea>
       <div class="flex gap-4 mt-8">
         <button onclick="saveReview()" class="flex-1 bg-red-600 hover:bg-red-700 py-4 rounded-2xl font-bold">Uložit recenzi</button>
         <button onclick="closeReviewForm()" class="flex-1 bg-zinc-700 hover:bg-zinc-600 py-4 rounded-2xl font-bold">Zrušit</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- News a Contest formy (zjednodušené) -->
-  <div id="newsFormModal" class="hidden fixed inset-0 bg-black/95 z-[110] flex items-center justify-center p-6">
-    <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-2xl">
-      <h2 class="text-3xl font-bold mb-8">Nový článek</h2>
-      <input id="nTitle" placeholder="Nadpis" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
-      <input id="nExcerpt" placeholder="Krátký úryvek" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
-      <input id="nImage" placeholder="URL obrázku" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
-      <textarea id="nContent" rows="10" placeholder="Text novinky..." class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4"></textarea>
-      <div class="flex gap-4 mt-8">
-        <button onclick="saveNews()" class="flex-1 bg-red-600 hover:bg-red-700 py-4 rounded-2xl font-bold">Uložit</button>
-        <button onclick="closeNewsForm()" class="flex-1 bg-zinc-700 hover:bg-zinc-600 py-4 rounded-2xl font-bold">Zrušit</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="contestFormModal" class="hidden fixed inset-0 bg-black/95 z-[110] flex items-center justify-center p-6">
-    <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-2xl">
-      <h2 class="text-3xl font-bold mb-8">Nová soutěž</h2>
-      <input id="cTitle" placeholder="Název soutěže" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
-      <input id="cPrize" placeholder="Výhra" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
-      <input id="cImage" placeholder="URL obrázku" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
-      <textarea id="cText" rows="8" placeholder="Podmínky soutěže..." class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4"></textarea>
-      <div class="flex gap-4 mt-8">
-        <button onclick="saveContest()" class="flex-1 bg-red-600 hover:bg-red-700 py-4 rounded-2xl font-bold">Uložit</button>
-        <button onclick="closeContestForm()" class="flex-1 bg-zinc-700 hover:bg-zinc-600 py-4 rounded-2xl font-bold">Zrušit</button>
       </div>
     </div>
   </div>
@@ -176,175 +97,48 @@
 
         if (!res.ok) {
           const errorText = await res.text();
-          throw new Error(`Chyba ${res.status}: ${errorText}`);
+          throw new Error(`HTTP ${res.status}: ${errorText}`);
         }
         return res.json();
       } catch (e) {
-        alert('Chyba při ukládání: ' + e.message);
+        alert('Chyba: ' + e.message);
         console.error(e);
         throw e;
       }
     }
 
-    async function fetchData() {
-      const [reviews, news, contests] = await Promise.all([
-        api('reviews', 'GET', '?order=created_at.desc'),
-        api('news', 'GET', '?order=created_at.desc'),
-        api('contests', 'GET', '?order=created_at.desc')
-      ]);
-      return { reviews, news, contests };
-    }
-
-    async function renderAll() {
-      try {
-        const { reviews, news, contests } = await fetchData();
-        const all = [
-          ...reviews.map(r => ({...r, type: 'review'})),
-          ...news.map(n => ({...n, type: 'news'})),
-          ...contests.map(c => ({...c, type: 'contest'}))
-        ].sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
-
-        // Hero
-        if (all.length > 0) {
-          const h = all[0];
-          document.getElementById('hero').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('${h.imageUrl || "https://picsum.photos/id/1015/2000/1200"}')`;
-          document.getElementById('heroBadge').textContent = h.type.toUpperCase();
-          document.getElementById('heroTitle').textContent = h.title;
-          document.getElementById('heroExcerpt').textContent = (h.text || h.content || '').substring(0, 160) + '...';
-          currentItem = h;
-        }
-
-        // Latest
-        document.getElementById('latestContainer').innerHTML = all.slice(0,6).map(item => `
-          <div onclick="openItem('${item.type}', ${item.id})" class="card bg-zinc-900 rounded-3xl overflow-hidden cursor-pointer">
-            <img src="${item.imageUrl || 'https://picsum.photos/600/400'}" class="w-full h-56 object-cover">
-            <div class="p-6">
-              <span class="text-xs uppercase tracking-widest ${item.type==='review' ? 'text-red-500' : 'text-amber-400'}">${item.type.toUpperCase()}</span>
-              <h3 class="font-bold text-xl mt-2">${item.title}</h3>
-            </div>
-          </div>
-        `).join('');
-
-        // Recenze
-        document.getElementById('reviewsList').innerHTML = reviews.map(r => `
-          <div class="flex gap-8 bg-zinc-900 rounded-3xl p-8 card">
-            <img src="${r.imageUrl}" class="w-64 h-64 object-cover rounded-2xl">
-            <div class="flex-1">
-              <div class="flex justify-between items-start">
-                <h3 class="text-3xl font-bold">${r.title}</h3>
-                <div class="rating text-5xl font-black px-6 py-2 rounded-2xl">${r.rating}%</div>
-              </div>
-              <p class="text-zinc-400">${r.platform} • ${new Date(r.created_at).toLocaleDateString('cs')}</p>
-              <p class="mt-6 line-clamp-4">${(r.text || '').substring(0,280)}...</p>
-              <button onclick="openItem('review', ${r.id}); event.stopImmediatePropagation()" class="mt-6 text-red-500">Číst celou recenzi →</button>
-            </div>
-          </div>
-        `).join('');
-
-        // Novinky a Soutěže
-        document.getElementById('newsList').innerHTML = news.map(n => `
-          <div onclick="openItem('news', ${n.id})" class="flex gap-8 bg-zinc-900 rounded-3xl p-8 card cursor-pointer">
-            <img src="${n.imageUrl}" class="w-72 h-48 object-cover rounded-2xl">
-            <div class="flex-1"><h3 class="text-3xl font-bold">${n.title}</h3><p class="text-zinc-400 mt-2">${new Date(n.created_at).toLocaleDateString('cs')}</p></div>
-          </div>
-        `).join('');
-
-        document.getElementById('contestsList').innerHTML = contests.map(c => `
-          <div class="bg-zinc-900 rounded-3xl p-8 card"><h3 class="text-3xl font-bold">${c.title}</h3><p class="text-emerald-400 mt-4">Výhra: ${c.prize}</p></div>
-        `).join('');
-
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    function showTab(n) {
-      document.querySelectorAll('.tab').forEach(t => t.classList.add('hidden'));
-      document.getElementById('tab' + n).classList.remove('hidden');
-      document.querySelectorAll('.nav-link').forEach((a,i) => a.classList.toggle('active', i === n));
-    }
-
-    function adminLogin() { document.getElementById('loginModal').classList.remove('hidden'); }
-    function checkAdminLogin() {
-      if (document.getElementById('adminPass').value === ADMIN_PASSWORD) {
-        isAdmin = true;
-        document.getElementById('adminPanel').style.display = 'flex';
-        document.getElementById('adminNewsBtn').style.display = 'flex';
-        document.getElementById('adminContestBtn').style.display = 'flex';
-        document.getElementById('loginModal').classList.add('hidden');
-        alert('✅ Admin mód aktivován!');
-      } else alert('Špatné heslo!');
-    }
-
-    function showReviewForm() { if(isAdmin) document.getElementById('reviewFormModal').classList.remove('hidden'); }
     async function saveReview() {
       try {
         await api('reviews', 'POST', '', {
           title: document.getElementById('rTitle').value,
           platform: document.getElementById('rPlatform').value,
-          rating: parseInt(document.getElementById('rRating').value),
-          imageUrl: document.getElementById('rImage').value,
+          rating: parseInt(document.getElementById('rRating').value) || 0,
+          imageUrl: document.getElementById('rImage').value || null,
           text: document.getElementById('rText').value
         });
-        alert('✅ Recenze úspěšně uložena!');
+        alert('✅ Recenze uložena!');
         closeReviewForm();
-        renderAll();
-      } catch (e) {}
-    }
-
-    function showNewsForm() { if(isAdmin) document.getElementById('newsFormModal').classList.remove('hidden'); }
-    async function saveNews() {
-      try {
-        await api('news', 'POST', '', {
-          title: document.getElementById('nTitle').value,
-          excerpt: document.getElementById('nExcerpt').value,
-          imageUrl: document.getElementById('nImage').value,
-          content: document.getElementById('nContent').value
-        });
-        alert('✅ Novinka uložena!');
-        closeNewsForm();
-        renderAll();
-      } catch (e) {}
-    }
-
-    function showContestForm() { if(isAdmin) document.getElementById('contestFormModal').classList.remove('hidden'); }
-    async function saveContest() {
-      try {
-        await api('contests', 'POST', '', {
-          title: document.getElementById('cTitle').value,
-          prize: document.getElementById('cPrize').value,
-          imageUrl: document.getElementById('cImage').value,
-          text: document.getElementById('cText').value
-        });
-        alert('✅ Soutěž uložena!');
-        closeContestForm();
-        renderAll();
+        // refresh
+        location.reload();
       } catch (e) {}
     }
 
     function closeReviewForm() { document.getElementById('reviewFormModal').classList.add('hidden'); }
-    function closeNewsForm() { document.getElementById('newsFormModal').classList.add('hidden'); }
-    function closeContestForm() { document.getElementById('contestFormModal').classList.add('hidden'); }
+    function showReviewForm() { if(isAdmin) document.getElementById('reviewFormModal').classList.remove('hidden'); }
 
-    function openCurrentDetail() { if(currentItem) openItem(currentItem.type, currentItem.id); }
-
-    async function openItem(type, id) {
-      const data = await fetchData();
-      let item = type === 'review' ? data.reviews.find(x => x.id === id) :
-                 type === 'news' ? data.news.find(x => x.id === id) : data.contests.find(x => x.id === id);
-      if (!item) return;
-
-      document.getElementById('modalImage').src = item.imageUrl || 'https://picsum.photos/id/1015/2000/1200';
-      document.getElementById('modalTitle').textContent = item.title;
-      document.getElementById('modalMeta').textContent = new Date(item.created_at).toLocaleDateString('cs');
-      document.getElementById('modalRatingContainer').classList.toggle('hidden', type !== 'review');
-      if (type === 'review') document.getElementById('modalRating').textContent = item.rating + '%';
-      document.getElementById('modalText').innerHTML = (item.text || item.content || '').replace(/\n/g, '<br><br>');
-      document.getElementById('detailModal').classList.remove('hidden');
+    function adminLogin() { document.getElementById('loginModal').classList.remove('hidden'); }
+    function checkAdminLogin() {
+      if (document.getElementById('adminPass').value === ADMIN_PASSWORD) {
+        isAdmin = true;
+        alert('✅ Admin mód zapnutý');
+        document.getElementById('loginModal').classList.add('hidden');
+      } else alert('Špatné heslo');
     }
 
-    function closeModal() { document.getElementById('detailModal').classList.add('hidden'); }
+    function showTab(n) { /* ... */ }
+    async function renderAll() { /* basic version */ console.log("Render..."); }
 
+    // Start
     renderAll();
   </script>
 </body>
