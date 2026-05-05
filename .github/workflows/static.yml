@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yukkiho Recenze</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Press+Start+2P&display=swap');
+        
+        body { margin:0; padding:0; font-family:'Inter',sans-serif; background:#0a0a0a; color:#e0e0e0; }
+        header {
+            background:#111; padding:20px 40px; display:flex; justify-content:space-between; align-items:center;
+            border-bottom:5px solid #ff1a1a; position:sticky; top:0; z-index:100;
+        }
+        .logo { font-family:'Press Start 2P',cursive; font-size:28px; color:#ff1a1a; }
+        nav a { color:#ff6666; margin:0 20px; text-decoration:none; font-weight:600; cursor:pointer; }
+        nav a.active { color:#ff1a1a; border-bottom:2px solid #ff1a1a; }
+        
+        .container { max-width:1100px; margin:40px auto; padding:0 20px; }
+        .tab { display:none; }
+        .tab.active { display:block; }
+        
+        .card { 
+            background:#1a1a1a; 
+            border-radius:16px; 
+            padding:20px; 
+            margin-bottom:25px; 
+            border:1px solid #330000; 
+        }
+        .review-header { 
+            display:flex; 
+            align-items:center; 
+            gap:20px; 
+            cursor:pointer; 
+        }
+        .review-image { 
+            width:110px; height:110px; object-fit:cover; border-radius:12px; border:2px solid #ff1a1a; 
+        }
+        button { background:#ff1a1a; color:white; border:none; padding:12px 24px; border-radius:10px; cursor:pointer; }
+        input, textarea { width:100%; padding:12px; margin:8px 0; background:#111; border:1px solid #440000; border-radius:8px; color:white; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">YUKKIHO RECENZE</div>
+    <nav>
+        <a onclick="showTab(0)" class="active" id="nav0">Domů</a>
+        <a onclick="showTab(1)" id="nav1">Recenze</a>
+        <a onclick="showTab(2)" id="nav2">Síň slávy</a>
+    </nav>
+    <div>
+        <span id="status">Veřejný režim</span>
+        <button onclick="adminLogin()">Admin Login</button>
+    </div>
+</header>
+
+<div class="container">
+
+    <!-- DOMŮ -->
+    <div id="tab0" class="tab active">
+        <h1 style="color:#ff1a1a; text-align:center;">Vítej na Yukkiho Recenzích</h1>
+        <h2>Novinky / Poslední recenze</h2>
+        <div id="homeReviews"></div>
+    </div>
+
+    <!-- RECENZE -->
+    <div id="tab1" class="tab">
+        <h2>Všechny recenze</h2>
+        <div id="adminPanel" style="display:none; margin:15px 0;">
+            <button onclick="showReviewForm()">+ Napsat novou recenzi</button>
+        </div>
+        <div id="reviewsList"></div>
+    </div>
+
+    <!-- SÍŇ SLÁVY -->
+    <div id="tab2" class="tab">
+        <h2>🥇 Síň slávy</h2>
+        <div id="hallOfFame"></div>
+    </div>
+</div>
+
+<!-- Admin Login -->
+<div id="loginModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:1000;">
+    <div style="background:#1a1a1a; width:350px; margin:150px auto; padding:30px; border-radius:16px; border:3px solid #ff1a1a;">
+        <h2>Admin Login</h2>
+        <input type="password" id="adminPass" placeholder="Heslo" style="width:100%; margin:15px 0;">
+        <button onclick="checkAdminLogin()">Přihlásit</button>
+        <button onclick="document.getElementById('loginModal').style.display='none'" style="background:#444;">Zrušit</button>
+    </div>
+</div>
+
+<script>
+    let reviews = JSON.parse(localStorage.getItem('yukkiReviews')) || [];
+    let isAdmin = false;
+    const ADMIN_PASSWORD = "yukki77";
+
+    function showTab(n) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById('tab'+n).classList.add('active');
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        document.getElementById('nav'+n).classList.add('active');
+    }
+
+    function adminLogin() {
+        document.getElementById('loginModal').style.display = 'block';
+    }
+
+    function checkAdminLogin() {
+        if (document.getElementById('adminPass').value === ADMIN_PASSWORD) {
+            isAdmin = true;
+            document.getElementById('status').innerHTML = '✅ ADMIN';
+            document.getElementById('adminPanel').style.display = 'block';
+            document.getElementById('loginModal').style.display = 'none';
+            renderAll();
+        } else {
+            alert('Špatné heslo!');
+        }
+    }
+
+    function showReviewForm() {
+        const title = prompt("Název hry:");
+        if (!title) return;
+        const platform = prompt("Platforma:", "PC");
+        const rating = prompt("Hodnocení v %:", "85");
+        const imageUrl = prompt("URL obrázku (volitelné):");
+        const text = prompt("Text recenze:");
+
+        if (title && rating && text) {
+            reviews.unshift({
+                title,
+                platform: platform || "PC",
+                rating: parseInt(rating),
+                imageUrl: imageUrl || "",
+                text: text,
+                date: new Date().toISOString()
+            });
+            localStorage.setItem('yukkiReviews', JSON.stringify(reviews));
+            renderAll();
+        }
+    }
+
+    function renderHomeReviews() {
+        const container = document.getElementById('homeReviews');
+        container.innerHTML = '';
+
+        const latest = reviews.slice(0, 6); // max 6 nejnovějších
+
+        if (latest.length === 0) {
+            container.innerHTML = '<p style="color:#777;">Zatím žádné recenze. Admin může přidat první.</p>';
+            return;
+        }
+
+        latest.forEach((r, i) => {
+            const div = document.createElement('div');
+            div.className = 'card';
+            div.innerHTML = `
+                <div class="review-header" onclick="toggleReview(this)">
+                    ${r.imageUrl ? `<img src="${r.imageUrl}" class="review-image">` : ''}
+                    <div>
+                        <h3>${r.title}</h3>
+                        <p>${r.platform} • ${r.rating}% • ${new Date(r.date).toLocaleDateString('cs-CZ')}</p>
+                    </div>
+                </div>
+                <div style="display:none; margin-top:15px;">
+                    <p style="white-space: pre-line;">${r.text}</p>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    function toggleReview(el) {
+        const content = el.nextElementSibling;
+        content.style.display = content.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function renderReviews() {
+        const container = document.getElementById('reviewsList');
+        container.innerHTML = '';
+        reviews.forEach(r => {
+            const div = document.createElement('div');
+            div.className = 'card';
+            div.innerHTML = `<h3>${r.title}</h3><p>${r.platform} — ${r.rating}%</p>`;
+            container.appendChild(div);
+        });
+    }
+
+    function renderHallOfFame() {
+        const container = document.getElementById('hallOfFame');
+        container.innerHTML = '';
+        const sorted = [...reviews].sort((a,b) => b.rating - a.rating).slice(0,10);
+        sorted.forEach(r => {
+            const div = document.createElement('div');
+            div.className = 'card';
+            div.innerHTML = `<strong>${r.title}</strong> — ${r.rating}%`;
+            container.appendChild(div);
+        });
+    }
+
+    function renderAll() {
+        renderHomeReviews();
+        renderReviews();
+        renderHallOfFame();
+    }
+
+    // Spuštění
+    renderAll();
+</script>
+</body>
+</html>
