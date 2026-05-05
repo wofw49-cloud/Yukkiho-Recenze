@@ -46,6 +46,12 @@
       <div id="latestContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
     </div>
 
+    <!-- NOVINKY -->
+    <div id="tab1" class="tab hidden">
+      <h2 class="text-4xl font-bold mb-10">Novinky</h2>
+      <div id="newsList" class="space-y-12"></div>
+    </div>
+
     <!-- RECENZE -->
     <div id="tab2" class="tab hidden">
       <div class="flex justify-between items-center mb-10">
@@ -71,13 +77,13 @@
       <input id="rTitle" placeholder="Název hry" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
       <textarea id="rText" rows="10" placeholder="Text recenze..." class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4"></textarea>
       <div class="flex gap-4 mt-8">
-        <button onclick="saveReview()" class="flex-1 bg-red-600 hover:bg-red-700 py-4 rounded-2xl font-bold">Uložit</button>
+        <button onclick="saveReview()" class="flex-1 bg-red-600 hover:bg-red-700 py-4 rounded-2xl font-bold">Uložit recenzi</button>
         <button onclick="closeReviewForm()" class="flex-1 bg-zinc-700 hover:bg-zinc-600 py-4 rounded-2xl font-bold">Zrušit</button>
       </div>
     </div>
   </div>
 
-  <!-- ADMIN LOGIN -->
+  <!-- LOGIN -->
   <div id="loginModal" class="hidden fixed inset-0 bg-black/95 z-[200] flex items-center justify-center">
     <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-md">
       <h2 class="text-3xl font-bold mb-8">Admin přihlášení</h2>
@@ -95,7 +101,7 @@
 
     async function api(method, body = null) {
       const res = await fetch(`${SUPABASE_URL}/rest/v1/reviews`, {
-        method,
+        method: method,
         headers: {
           'apikey': SUPABASE_KEY,
           'Authorization': `Bearer ${SUPABASE_KEY}`,
@@ -113,7 +119,7 @@
           title: document.getElementById('rTitle').value,
           text: document.getElementById('rText').value
         });
-        alert('✅ Uloženo!');
+        alert('✅ Recenze uložena!');
         closeReviewForm();
         loadReviews();
       } catch (e) {
@@ -127,13 +133,13 @@
         const html = reviews.map(r => `
           <div class="card bg-zinc-900 rounded-3xl p-8">
             <h3 class="text-3xl font-bold">${r.title}</h3>
-            <p class="mt-6">${(r.text || '').substring(0, 300)}...</p>
+            <p class="mt-6 text-zinc-300">${(r.text || '').substring(0, 280)}...</p>
           </div>
         `).join('');
         document.getElementById('reviewsList').innerHTML = html;
         document.getElementById('latestContainer').innerHTML = html;
         document.getElementById('hallOfFame').innerHTML = html;
-      } catch(e) {}
+      } catch (e) {}
     }
 
     function showReviewForm() { if(isAdmin) document.getElementById('reviewFormModal').classList.remove('hidden'); }
@@ -145,7 +151,7 @@
         isAdmin = true;
         document.getElementById('adminPanel').style.display = 'flex';
         document.getElementById('loginModal').classList.add('hidden');
-        alert('Admin mód zapnutý');
+        alert('Admin mód aktivován!');
       } else alert('Špatné heslo!');
     }
 
