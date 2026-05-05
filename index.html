@@ -8,94 +8,34 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    :root { --accent: #ff1a1a; }
     body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #e0e0e0; }
-    .logo { font-family: 'Press Start 2P', cursive; font-size: 2.55rem; line-height: 1; background: linear-gradient(90deg, #ff1a1a, #ff6666); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .nav-link { position: relative; transition: all 0.3s; }
-    .nav-link:after { content: ''; position: absolute; width: 0; height: 3px; bottom: -4px; left: 0; background: var(--accent); transition: width 0.3s; }
-    .nav-link.active:after, .nav-link:hover:after { width: 100%; }
-    .card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-    .card:hover { transform: translateY(-12px); }
-    .rating { background: linear-gradient(135deg, #ff1a1a, #c8102e); }
+    .logo { font-family: 'Press Start 2P', cursive; font-size: 2.6rem; background: linear-gradient(90deg, #ff1a1a, #ff6666); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
   </style>
 </head>
 <body class="min-h-screen pb-20">
 
-  <header class="sticky top-0 z-50 bg-black/95 border-b border-red-900/50 backdrop-blur-xl">
-    <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-      <div onclick="showTab(0)" class="flex items-center gap-3 cursor-pointer">
-        <div class="logo">YUKKIHO<br><span class="text-2xl tracking-widest text-red-500">RECENZE</span></div>
-      </div>
-      <nav class="flex gap-8 text-lg font-medium">
-        <a onclick="showTab(0)" class="nav-link cursor-pointer active">Domů</a>
-        <a onclick="showTab(1)" class="nav-link cursor-pointer">Novinky</a>
-        <a onclick="showTab(2)" class="nav-link cursor-pointer">Recenze</a>
-        <a onclick="showTab(3)" class="nav-link cursor-pointer">Soutěže</a>
-      </nav>
-      <button onclick="adminLogin()" class="bg-zinc-900 hover:bg-red-600 px-6 py-3 rounded-xl flex items-center gap-2 transition-all">
-        <i class="fas fa-user-shield"></i> Admin
-      </button>
+  <header class="sticky top-0 z-50 bg-black/95 border-b border-red-900">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+      <div onclick="showTab(0)" class="logo cursor-pointer">YUKKIHO RECENZE</div>
+      <button onclick="adminLogin()" class="bg-zinc-900 hover:bg-red-600 px-6 py-3 rounded-xl">Admin</button>
     </div>
   </header>
 
   <div class="max-w-7xl mx-auto px-6 pt-10">
-
-    <div id="tab0" class="tab active">
-      <div id="hero" class="h-[620px] rounded-3xl bg-cover bg-center relative overflow-hidden mb-16 flex items-end">
-        <div class="p-12 md:p-20 bg-gradient-to-t from-black via-black/90 to-transparent w-full">
-          <span id="heroBadge" class="uppercase text-red-500 font-bold tracking-widest"></span>
-          <h1 id="heroTitle" class="text-5xl md:text-7xl font-bold mt-3 leading-none"></h1>
-          <p id="heroExcerpt" class="mt-6 text-xl max-w-2xl"></p>
-          <button onclick="openCurrentDetail()" class="mt-8 bg-white text-black px-10 py-5 rounded-2xl font-bold text-lg hover:scale-105 transition-all">Číst dál →</button>
-        </div>
-      </div>
-      <h2 class="text-4xl font-bold mb-10">Nejnovější</h2>
-      <div id="latestContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
-    </div>
-
-    <div id="tab1" class="tab hidden">
-      <h2 class="text-4xl font-bold mb-10">Novinky</h2>
-      <div id="newsList" class="space-y-12"></div>
-    </div>
-
-    <div id="tab2" class="tab hidden">
-      <div class="flex justify-between items-center mb-10">
-        <h2 class="text-4xl font-bold">Recenze</h2>
-        <button onclick="showReviewForm()" id="adminPanel" style="display:none" class="bg-red-600 hover:bg-red-700 px-8 py-4 rounded-2xl font-semibold flex items-center gap-3">
-          <i class="fas fa-plus"></i> Nová recenze
-        </button>
-      </div>
-      <div id="reviewsList" class="space-y-12"></div>
-    </div>
-
-    <div id="tab3" class="tab hidden">
-      <h2 class="text-4xl font-bold mb-10">Soutěže</h2>
-      <div id="contestsList" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
-    </div>
+    <button onclick="showReviewForm()" class="bg-red-600 px-6 py-3 rounded-xl mb-8">+ Nová recenze</button>
+    <div id="reviewsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
   </div>
 
-  <!-- REVIEW FORM -->
-  <div id="reviewFormModal" class="hidden fixed inset-0 bg-black/95 z-[110] flex items-center justify-center p-6">
-    <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-2xl">
-      <h2 class="text-3xl font-bold mb-8">Nová recenze</h2>
-      <input id="rTitle" placeholder="Název hry" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
-      <input id="rPlatform" placeholder="Platforma" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
-      <input id="rRating" type="number" min="0" max="100" placeholder="Hodnocení (%)" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
-      <input id="rImage" placeholder="URL obrázku" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-4">
-      <textarea id="rText" rows="10" placeholder="Text recenze..." class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4"></textarea>
-      <div class="flex gap-4 mt-8">
-        <button onclick="saveReview()" class="flex-1 bg-red-600 hover:bg-red-700 py-4 rounded-2xl font-bold">Uložit recenzi</button>
-        <button onclick="closeReviewForm()" class="flex-1 bg-zinc-700 hover:bg-zinc-600 py-4 rounded-2xl font-bold">Zrušit</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- LOGIN -->
-  <div id="loginModal" class="hidden fixed inset-0 bg-black/95 z-[200] flex items-center justify-center">
-    <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-md">
-      <h2 class="text-3xl font-bold mb-8">Admin přihlášení</h2>
-      <input id="adminPass" type="password" placeholder="Heslo" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 mb-6">
-      <button onclick="checkAdminLogin()" class="w-full bg-red-600 py-4 rounded-2xl font-bold">Přihlásit se</button>
+  <!-- FORM -->
+  <div id="reviewFormModal" class="hidden fixed inset-0 bg-black/95 z-50 flex items-center justify-center">
+    <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-lg">
+      <h2 class="text-3xl font-bold mb-6">Nová recenze</h2>
+      <input id="rTitle" placeholder="Název hry" class="w-full mb-4 bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4">
+      <input id="rPlatform" placeholder="Platforma" class="w-full mb-4 bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4">
+      <input id="rRating" type="number" min="0" max="100" placeholder="Hodnocení (%)" class="w-full mb-4 bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4">
+      <textarea id="rText" rows="8" placeholder="Text recenze..." class="w-full mb-6 bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4"></textarea>
+      
+      <button onclick="saveReview()" class="w-full bg-red-600 hover:bg-red-700 py-4 rounded-2xl font-bold">Uložit recenzi</button>
     </div>
   </div>
 
@@ -105,7 +45,6 @@
 
     let isAdmin = false;
     const ADMIN_PASSWORD = "yukki77";
-    let currentItem = null;
 
     async function api(table, method, path = '', body = null) {
       try {
@@ -120,7 +59,7 @@
         });
         if (!res.ok) {
           const err = await res.text();
-          throw new Error(`HTTP ${res.status} - ${err}`);
+          throw new Error(err);
         }
         return res.json();
       } catch (e) {
@@ -134,40 +73,32 @@
         await api('reviews', 'POST', '', {
           title: document.getElementById('rTitle').value,
           platform: document.getElementById('rPlatform').value,
-          rating: parseInt(document.getElementById('rRating').value),
-          imageUrl: document.getElementById('rImage').value,
+          rating: parseInt(document.getElementById('rRating').value) || 0,
           text: document.getElementById('rText').value
         });
         alert('✅ Uloženo!');
-        closeReviewForm();
+        document.getElementById('reviewFormModal').classList.add('hidden');
         location.reload();
       } catch (e) {}
     }
 
-    function closeReviewForm() { document.getElementById('reviewFormModal').classList.add('hidden'); }
-    function showReviewForm() { if(isAdmin) document.getElementById('reviewFormModal').classList.remove('hidden'); }
+    function showReviewForm() {
+      if (!isAdmin) return alert("Nejsi admin");
+      document.getElementById('reviewFormModal').classList.remove('hidden');
+    }
 
-    function adminLogin() { document.getElementById('loginModal').classList.remove('hidden'); }
-    function checkAdminLogin() {
-      if (document.getElementById('adminPass').value === ADMIN_PASSWORD) {
+    function adminLogin() {
+      const pass = prompt("Zadej heslo:");
+      if (pass === ADMIN_PASSWORD) {
         isAdmin = true;
-        document.getElementById('adminPanel').style.display = 'flex';
-        document.getElementById('loginModal').classList.add('hidden');
-        alert('Admin mód zapnutý');
-      } else alert('Špatné heslo!');
+        alert("Admin mód zapnutý");
+      } else {
+        alert("Špatné heslo");
+      }
     }
-
-    function showTab(n) {
-      document.querySelectorAll('.tab').forEach(t => t.classList.add('hidden'));
-      document.getElementById('tab' + n).classList.remove('hidden');
-      document.querySelectorAll('.nav-link').forEach((a, i) => a.classList.toggle('active', i === n));
-    }
-
-    function openCurrentDetail() { alert('Otevírám detail...'); }
-    function renderAll() { console.log("Stránka načtena"); }
 
     // Start
-    renderAll();
+    console.log("Stránka načtena - klikni na Admin");
   </script>
 </body>
 </html>
