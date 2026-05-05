@@ -3,228 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yukkiho Recenze | Gaming Portal</title>
+    <title>Yukkiho Recenze | LEVEL UP</title>
+    <!-- Supabase Knihovna -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --red: #e50914; --dark: #0f0f0f; --card: #1a1a1a; --text: #f0f0f0; }
-        body { background: var(--dark); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; line-height: 1.6; }
+        :root { --red: #ff0000; --dark: #050505; --card: #121212; --text: #e0e0e0; --gold: #ffd700; }
+        body { background: var(--dark); color: var(--text); font-family: 'Rajdhani', sans-serif; margin: 0; background-image: radial-gradient(circle at 50% 50%, #1a0505 0%, #050505 100%); }
         
-        /* Navbar */
-        nav { background: #000; border-bottom: 2px solid var(--red); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-        .logo { font-size: 1.5rem; font-weight: bold; color: var(--red); text-decoration: none; cursor: pointer; }
-        .nav-links span { margin-left: 20px; cursor: pointer; font-weight: 500; transition: 0.3s; }
-        .nav-links span:hover { color: var(--red); }
+        /* --- NAVIGACE --- */
+        nav { background: rgba(0,0,0,0.9); border-bottom: 2px solid var(--red); padding: 10px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 1.8rem; font-weight: 800; color: var(--red); text-shadow: 0 0 10px var(--red); cursor: pointer; }
+        .user-stats { background: #111; padding: 5px 15px; border: 1px solid var(--red); border-radius: 4px; display: flex; align-items: center; gap: 10px; }
 
-        .container { max-width: 1100px; margin: 20px auto; padding: 0 20px; }
-        
-        /* Karty */
+        /* --- LAYOUT --- */
+        .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-        .card { background: var(--card); border-radius: 12px; overflow: hidden; cursor: pointer; border: 1px solid #222; transition: 0.3s; position: relative; }
-        .card:hover { transform: translateY(-5px); border-color: var(--red); }
-        .card img { width: 100%; height: 180px; object-fit: cover; }
-        .card-body { padding: 15px; }
-        .badge { position: absolute; top: 10px; right: 10px; background: var(--red); padding: 5px 10px; border-radius: 5px; font-weight: bold; }
-
-        /* Detail článku */
-        .detail-view { background: var(--card); padding: 30px; border-radius: 12px; }
-        .detail-header { border-bottom: 2px solid var(--red); margin-bottom: 20px; }
-        .back-btn { color: var(--red); cursor: pointer; display: inline-block; margin-bottom: 10px; }
-
-        /* Komentáře a Hodnocení */
-        .comment-section { margin-top: 40px; background: #111; padding: 20px; border-radius: 8px; }
-        .comment { border-bottom: 1px solid #333; padding: 10px 0; }
-        .rating-box { display: flex; align-items: center; gap: 15px; background: #222; padding: 15px; border-radius: 8px; margin: 20px 0; }
         
-        /* Form prvky */
-        input, textarea, button { width: 100%; padding: 12px; margin-top: 10px; border-radius: 5px; border: none; box-sizing: border-box; }
-        input, textarea { background: #222; color: #fff; border: 1px solid #444; }
-        button { background: var(--red); color: white; font-weight: bold; cursor: pointer; }
+        /* --- KARTY --- */
+        .card { background: var(--card); border: 1px solid #333; position: relative; clip-path: polygon(0 0, 100% 0, 100% 90%, 90% 100%, 0 100%); transition: 0.3s; padding: 20px; text-align: left; }
+        .card:hover { border-color: var(--red); transform: translateY(-5px); }
+        .rating-tag { position: absolute; top: 10px; right: 10px; background: var(--red); color: white; padding: 5px 10px; font-weight: bold; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); }
         
-        .hidden { display: none; }
-        .admin-btn { background: #333; width: auto; padding: 5px 15px; font-size: 0.8rem; }
+        /* --- FORMULÁŘE --- */
+        .admin-box { background: #111; border: 1px solid var(--red); padding: 25px; margin-top: 50px; }
+        input, textarea, select { width: 100%; padding: 12px; margin: 8px 0; background: #222; border: 1px solid #444; color: white; box-sizing: border-box; }
+        button { background: linear-gradient(45deg, #8b0000, #ff0000); color: white; border: none; padding: 15px; width: 100%; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; transition: 0.2s; }
+        button:hover { letter-spacing: 1px; box-shadow: 0 0 15px var(--red); }
+        
+        .xp-bar { height: 5px; background: #333; width: 100px; margin-top: 5px; }
+        .xp-fill { height: 100%; background: var(--red); }
     </style>
 </head>
 <body>
 
 <nav>
-    <div class="logo" onclick="renderHome()">YUKKIHO RECENZE</div>
-    <div class="nav-links">
-        <span onclick="renderHome()">Domů</span>
-        <span onclick="renderCategory('news')">Novinky</span>
-        <span onclick="renderCategory('review')">Recenze</span>
-        <span onclick="renderHall()">Síň slávy</span>
-        <span onclick="showAdmin()" id="admin-link" class="hidden">Admin</span>
+    <div class="logo" onclick="location.reload()">YUKKIHO RECENZE</div>
+    <div id="auth-section">
+        <button onclick="userLogin()" style="padding: 5px 15px; width: auto; font-size: 0.8rem;">REGISTRACE / LOGIN</button>
     </div>
-    <button class="admin-btn" onclick="adminLogin()">Admin Login</button>
 </nav>
 
-<div class="container" id="app">
-    <!-- Tady se dynamicky mění obsah -->
+<div class="container">
+    <h2 id="view-title">🔥 POSLEDNÍ AKTIVITA</h2>
+    <div id="feed" class="grid">Načítám cloudová data...</div>
+
+    <!-- ADMIN PANEL -->
+    <div class="admin-box" id="admin-panel">
+        <h3 style="color: var(--red); margin-top: 0;">🛠 PŘIDAT NOVÝ PŘÍSPĚVEK</h3>
+        <input type="text" id="p-title" placeholder="Název hry / Novinky">
+        <select id="p-type">
+            <option value="review">Recenze</option>
+            <option value="news">Novinka</option>
+        </select>
+        <input type="number" id="p-rating" placeholder="Hodnocení % (jen u recenzí)">
+        <input type="text" id="p-img" placeholder="URL obrázku (nepovinné)">
+        <textarea id="p-content" rows="5" placeholder="Tvůj text..."></textarea>
+        <button onclick="saveToCloud()">PUBLIKOVAT NA WEB</button>
+    </div>
 </div>
 
 <script>
-    // --- DATA (V reálu by byla v databázi, teď v localStorage) ---
-    let posts = JSON.parse(localStorage.getItem('yukki_posts')) || [
-        { id: 1, type: 'review', title: 'The Witcher 3', content: 'Zaklínač je legenda...', img: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f', rating: 98, comments: [], userRatings: [95, 100] },
-        { id: 2, type: 'news', title: 'GTA VI uniklé info', content: 'Nové zprávy o Rockstaru...', img: 'https://images.unsplash.com/photo-1542751371-adc38448a05e', rating: null, comments: [] }
-    ];
+    // --- KONFIGURACE (Tvoje údaje ze Supabase) ---
+    const SB_URL = 'https://eyxgzormlrfwsnvlotio.supabase.co'; 
+    const SB_KEY = 'sb_publishable_fBCkptr7dfkY51JdA-EnEw_oQZTxZIn5Ais4V8eOBy1fSByX1z71Zf3P9S4z7R1'; 
+    const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
-    let isAdmin = false;
+    let currentUser = JSON.parse(localStorage.getItem('yukki_user')) || null;
 
-    // --- RENDER FUNKCE ---
-
-    function renderHome() {
-        let html = `<h2>🔥 Nejnovější obsah</h2><div class="grid">`;
-        posts.slice().reverse().forEach(post => {
-            html += createCard(post);
-        });
-        html += `</div>`;
-        document.getElementById('app').innerHTML = html;
+    // --- START ---
+    async function init() {
+        renderUser();
+        await loadPosts();
     }
 
-    function renderCategory(type) {
-        let html = `<h2>${type === 'news' ? '📰 Novinky' : '🎮 Recenze'}</h2><div class="grid">`;
-        posts.filter(p => p.type === type).reverse().forEach(post => {
-            html += createCard(post);
-        });
-        html += `</div>`;
-        document.getElementById('app').innerHTML = html;
-    }
+    // --- LOGIKA DATABÁZE ---
+    async function loadPosts() {
+        const { data, error } = await supabaseClient
+            .from('posts')
+            .select('*')
+            .order('created_at', { ascending: false });
 
-    function createCard(post) {
-        return `
-            <div class="card" onclick="renderDetail(${post.id})">
-                ${post.rating ? `<div class="badge">${post.rating}%</div>` : ''}
-                <img src="${post.img}" alt="">
-                <div class="card-body">
-                    <small style="color:var(--red)">${post.type.toUpperCase()}</small>
-                    <h3>${post.title}</h3>
-                    <p>${post.content.substring(0, 80)}...</p>
+        if (error) {
+            document.getElementById('feed').innerHTML = "Chyba načítání: " + error.message;
+            return;
+        }
+
+        let html = "";
+        data.forEach(post => {
+            const isReview = post.type === 'review';
+            html += `
+                <div class="card">
+                    ${isReview ? `<div class="rating-tag">${post.rating}%</div>` : ''}
+                    <small style="color: var(--red)">#${post.type.toUpperCase()}</small>
+                    <h3 style="margin: 10px 0;">${post.title}</h3>
+                    <p style="font-size: 0.9rem; color: #bbb;">${post.content.substring(0, 150)}...</p>
                 </div>
-            </div>
-        `;
-    }
-
-    function renderDetail(id) {
-        const post = posts.find(p => p.id === id);
-        let userAvg = post.userRatings && post.userRatings.length ? 
-            (post.userRatings.reduce((a,b) => a+b, 0) / post.userRatings.length).toFixed(0) : "---";
-
-        let html = `
-            <div class="detail-view">
-                <span class="back-btn" onclick="renderHome()">← Zpět na domů</span>
-                <div class="detail-header">
-                    <h1>${post.title}</h1>
-                    ${post.rating ? `<p>Redakční hodnocení: <strong>${post.rating}%</strong> | Hodnocení komunity: <strong>${userAvg}%</strong></p>` : ''}
-                </div>
-                <img src="${post.img}" style="width:100%; border-radius:8px; margin-bottom:20px;">
-                <p style="white-space: pre-wrap;">${post.content}</p>
-
-                ${post.type === 'review' ? `
-                    <div class="rating-box">
-                        <span>Ohodnoť hru (0-100%):</span>
-                        <input type="number" id="u-rating" style="width:80px" min="0" max="100">
-                        <button onclick="addRating(${post.id})" style="width:auto">Odeslat</button>
-                    </div>
-                ` : ''}
-
-                <div class="comment-section">
-                    <h3>Komentáře (${post.comments.length})</h3>
-                    <div id="comments-list">
-                        ${post.comments.map(c => `<div class="comment"><strong>${c.name}</strong>: ${c.text}</div>`).join('')}
-                    </div>
-                    <input type="text" id="c-name" placeholder="Tvé jméno">
-                    <textarea id="c-text" placeholder="Tvůj komentář..."></textarea>
-                    <button onclick="addComment(${post.id})">Přidat komentář</button>
-                </div>
-            </div>
-        `;
-        document.getElementById('app').innerHTML = html;
-        window.scrollTo(0,0);
-    }
-
-    function renderHall() {
-        let sorted = posts.filter(p => p.type === 'review').sort((a,b) => b.rating - a.rating);
-        let html = `<h2>🏆 Síň slávy</h2><div class="grid">`;
-        sorted.forEach((post, i) => {
-            html += `<div class="card" onclick="renderDetail(${post.id})">
-                <div class="badge">TOP ${i+1}</div>
-                <div class="card-body"><h3>${post.rating}% - ${post.title}</h3></div>
-            </div>`;
+            `;
         });
-        html += `</div>`;
-        document.getElementById('app').innerHTML = html;
+        document.getElementById('feed').innerHTML = html || "Web je prázdný. Přidej něco!";
     }
 
-    // --- FUNKCE PRO DATA ---
+    async function saveToCloud() {
+        const title = document.getElementById('p-title').value;
+        const type = document.getElementById('p-type').value;
+        const rating = document.getElementById('p-rating').value;
+        const content = document.getElementById('p-content').value;
+        const img = document.getElementById('p-img').value;
 
-    function addComment(id) {
-        const name = document.getElementById('c-name').value;
-        const text = document.getElementById('c-text').value;
-        if(!name || !text) return alert("Vyplň jméno a text!");
-        
-        posts.find(p => p.id === id).comments.push({name, text});
-        saveAndRefresh(id);
+        if (!title || !content) return alert("Nadpis a obsah jsou povinné!");
+
+        const { error } = await supabaseClient.from('posts').insert([
+            { title, type, rating: rating || 0, content, img }
+        ]);
+
+        if (error) alert("Chyba: " + error.message);
+        else location.reload();
     }
 
-    function addRating(id) {
-        const score = parseInt(document.getElementById('u-rating').value);
-        if(isNaN(score) || score < 0 || score > 100) return alert("Zadej 0-100");
-        
-        const post = posts.find(p => p.id === id);
-        if(!post.userRatings) post.userRatings = [];
-        post.userRatings.push(score);
-        saveAndRefresh(id);
-    }
-
-    function saveAndRefresh(id) {
-        localStorage.setItem('yukki_posts', JSON.stringify(posts));
-        renderDetail(id);
-    }
-
-    // --- ADMIN SEKCE ---
-
-    function adminLogin() {
-        const pass = prompt("Zadej admin heslo:");
-        if(pass === "yukki") {
-            isAdmin = true;
-            document.getElementById('admin-link').classList.remove('hidden');
-            renderHome();
+    // --- UŽIVATELSKÝ SYSTÉM (SIMULACE S XP) ---
+    function userLogin() {
+        const name = prompt("Zadej svou herní přezdívku:");
+        if (name) {
+            currentUser = { name: name, xp: 0, level: 1 };
+            localStorage.setItem('yukki_user', JSON.stringify(currentUser));
+            renderUser();
         }
     }
 
-    function showAdmin() {
-        document.getElementById('app').innerHTML = `
-            <div class="detail-view">
-                <h2>Nový příspěvek</h2>
-                <select id="a-type"><option value="review">Recenze</option><option value="news">Novinka</option></select>
-                <input type="text" id="a-title" placeholder="Název">
-                <input type="text" id="a-img" placeholder="URL obrázku">
-                <input type="number" id="a-rating" placeholder="Hodnocení % (jen u recenzí)">
-                <textarea id="a-content" rows="10" placeholder="Text článku..."></textarea>
-                <button onclick="createPost()">Publikovat</button>
-            </div>
-        `;
+    function renderUser() {
+        if (currentUser) {
+            const xpNeeded = currentUser.level * 100;
+            const progress = (currentUser.xp / xpNeeded) * 100;
+            document.getElementById('auth-section').innerHTML = `
+                <div class="user-stats">
+                    <div>
+                        <strong>${currentUser.name}</strong> <br>
+                        <small style="color: var(--gold)">LVL ${currentUser.level}</small>
+                    </div>
+                    <div>
+                        <div class="xp-bar"><div class="xp-fill" style="width: ${progress}%"></div></div>
+                        <small style="font-size: 0.6rem;">${currentUser.xp}/${xpNeeded} XP</small>
+                    </div>
+                </div>
+            `;
+        }
     }
 
-    function createPost() {
-        const newPost = {
-            id: Date.now(),
-            type: document.getElementById('a-type').value,
-            title: document.getElementById('a-title').value,
-            content: document.getElementById('a-content').value,
-            img: document.getElementById('a-img').value || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f',
-            rating: parseInt(document.getElementById('a-rating').value) || null,
-            comments: [],
-            userRatings: []
-        };
-        posts.push(newPost);
-        localStorage.setItem('yukki_posts', JSON.stringify(posts));
-        renderHome();
-    }
-
-    // Inicializace
-    renderHome();
+    init();
 </script>
-
 </body>
 </html>
