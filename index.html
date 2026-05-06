@@ -36,13 +36,14 @@
                 <div class="w-12 h-12 bg-gradient-to-br from-red-600 to-rose-600 rounded-2xl flex items-center justify-center text-3xl">🌀</div>
                 <span class="text-4xl font-bold tracking-widest neon title-font">YUKKI</span>
             </div>
-            <div class="flex gap-8 text-lg font-medium">
-                <button onclick="switchTab(0)" class="tab-active pb-1 px-4" id="tab-0">DOMŮ</button>
-                <button onclick="switchTab(1)" class="pb-1 px-4 hover:text-red-400" id="tab-1">NOVINKY</button>
-                <button onclick="switchTab(2)" class="pb-1 px-4 hover:text-red-400" id="tab-2">RECENZE</button>
-                <button onclick="switchTab(3)" class="pb-1 px-4 hover:text-red-400" id="tab-3">ŽEBŘÍČEK</button>
-                <button onclick="switchTab(4)" class="pb-1 px-4 hover:text-red-400" id="tab-4">KOMUNITA</button>
-            </div>
+           <div class="flex gap-8 text-lg font-medium">
+    <button onclick="switchTab(0)" class="tab-active pb-1 px-4" id="tab-0">DOMŮ</button>
+    <button onclick="switchTab(1)" class="pb-1 px-4 hover:text-red-400" id="tab-1">NOVINKY</button>
+    <button onclick="switchTab(2)" class="pb-1 px-4 hover:text-red-400" id="tab-2">RECENZE</button>
+    <button onclick="switchTab(3)" class="pb-1 px-4 hover:text-red-400" id="tab-3">ŽEBŘÍČEK</button>
+    <button onclick="switchTab(4)" class="pb-1 px-4 hover:text-red-400" id="tab-4">KOMUNITA</button>
+    <button onclick="switchTab(5)" class="pb-1 px-4 hover:text-red-400" id="tab-5">KALENDÁŘ</button>
+</div>
             <button onclick="toggleLogin()" class="px-6 py-3 bg-gradient-to-r from-red-600 to-rose-600 rounded-2xl font-bold flex items-center gap-2">
                 <i class="fas fa-user"></i>
                 <span id="loginText">PŘIHLÁSIT SE</span>
@@ -84,6 +85,18 @@
         </div>
     </main>
 
+<!-- KALENDÁŘ -->
+<div id="page-5" class="hidden">
+    <h2 class="text-4xl font-bold title-font mb-8">KALENDÁŘ VYDÁNÍ</h2>
+    <div class="flex justify-between items-center mb-6">
+        <button onclick="showCreateReleaseModal()" 
+                class="px-6 py-3 bg-red-600 rounded-xl font-bold flex items-center gap-2">
+            <i class="fas fa-plus"></i> Přidat hru
+        </button>
+    </div>
+    <div id="calendar-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+</div>
+    
     <!-- ADMIN BAR -->
     <div id="adminBar" class="hidden fixed bottom-6 right-6 bg-zinc-900 border border-red-500 rounded-2xl p-4 flex gap-3 z-50">
         <button onclick="showCreateModal('news')" class="px-6 py-3 bg-red-600 rounded-xl font-bold">+ Novinka</button>
@@ -163,6 +176,7 @@
         let news = [];
         let reviews = [];
         let communityLinks = [];
+        let upcomingReleases = [];
         let editingType = null;
         let editingIndex = null;
         let editingLinkIndex = null;
@@ -527,6 +541,92 @@
             a.download = "yukki_data.json";
             a.click();
         }
+        function renderCalendar() {
+    const container = document.getElementById('calendar-container');
+    const sorted = [...upcomingReleases].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    container.innerHTML = sorted.map((game, i) => {
+        const date = new Date(game.date);
+        const dateStr = date.toLocaleDateString('cs-CZ', { 
+            day: 'numeric', 
+            month: 'long', 
+            year: 'numeric' 
+        });
+
+        const platforms = game.platforms.map(p => 
+            `<span class="inline-block bg-zinc-800 text-xs px-3 py-1 rounded-full">${p}</span>`
+        ).join(' ');
+
+        return `
+            <div class="bg-zinc-900 rounded-3xl overflow-hidden border border-red-500/30 hover:border-red-500 transition-all">
+                <img src="${game.image}" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <div class="text-red-400 text-sm font-medium">${dateStr}</div>
+                    <h3 class="text-2xl font-bold mt-2">${game.title}</h3>
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        ${platforms}
+                    </div>
+                    ${game.description ? `<p class="text-gray-400 text-sm mt-4 line-clamp-3">${game.description}</p>` : ''}
+                    
+                    ${isAdmin ? `
+                    <div class="flex gap-3 mt-6">
+                        <button onclick="editRelease(${i}); event.stopImmediatePropagation()" 
+                                class="flex-1 py-3 bg-blue-600 rounded-xl text-sm">UPRAVIT</button>
+                        <button onclick="deleteRelease(${i}); event.stopImmediatePropagation()" 
+                                class="flex-1 py-3 bg-red-600 rounded-xl text-sm">SMAZAT</button>
+                    </div>` : ''}
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function showCreateReleaseModal(editIndex = null) {
+    if (!isAdmin) return alert("Nejsi admin!");
+
+    const title = editIndex !== null ? "Upravit vydání" : "Nové vydání hry";
+    // Můžeš použít existující createModal a upravit ho, nebo vytvořit nový – pro jednoduchost použijeme stávající
+
+    // Prozatím použijeme alert + prompt (rychlé řešení), později vylepšíme
+    const titleGame = prompt("Název hry:");
+    if (!titleGame) return;
+
+    const date = prompt("Datum vydání (YYYY-MM-DD):", "2026-06-15");
+    const platformsStr = prompt("Platformy (oddělené čárkou):", "PC, PS5, Xbox Series");
+    const image = prompt("URL obrázku:", "https://picsum.photos/id/237/1200/700");
+    const description = prompt("Krátký popis (nepovinné):", "");
+
+    const platforms = platformsStr.split(',').map(p => p.trim());
+
+    const newRelease = { 
+        id: Date.now(), 
+        title: titleGame, 
+        date, 
+        platforms, 
+        image, 
+        description 
+    };
+
+    if (editIndex !== null) {
+        upcomingReleases[editIndex] = newRelease;
+    } else {
+        upcomingReleases.push(newRelease);
+    }
+
+    renderCalendar();
+    alert("Hra přidána do kalendáře!");
+}
+
+function editRelease(i) {
+    showCreateReleaseModal(i);
+}
+
+function deleteRelease(i) {
+    if (confirm("Smazat hru z kalendáře?")) {
+        upcomingReleases.splice(i, 1);
+        renderCalendar();
+    }
+}
 
         window.onload = () => {
             loadData();
@@ -535,6 +635,7 @@
             renderReviews();
             renderLeaderboard();
             renderCommunity();
+            renderCalendar();
             switchTab(0);
         };
     </script>
