@@ -69,7 +69,7 @@
         <button onclick="exportData()" class="px-6 py-3 bg-emerald-600 rounded-xl">📤 Exportovat data</button>
     </div>
 
-    <!-- LOGIN -->
+    <!-- LOGIN MODAL -->
     <div id="loginModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
         <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-md border border-purple-500">
             <h2 class="text-3xl font-bold mb-6 text-center title-font">YUKKI ADMIN</h2>
@@ -79,13 +79,13 @@
         </div>
     </div>
 
-    <!-- CREATE/EDIT MODAL -->
+    <!-- CREATE MODAL -->
     <div id="createModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
         <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-2xl border border-purple-500">
             <h2 class="text-3xl font-bold mb-6" id="modalTitle">Nová novinka</h2>
             <input id="postTitle" placeholder="Název" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
             <input id="postImage" placeholder="URL fotky" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
-            <input id="postScore" type="number" placeholder="Hodnocení % (jen u recenzí)" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
+            <input id="postScore" type="number" placeholder="Hodnocení % (jen recenze)" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
             <input id="postDate" type="date" class="w-full mb-6 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
             <textarea id="postContent" rows="8" placeholder="Obsah..." class="w-full bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4"></textarea>
             
@@ -113,8 +113,8 @@
         let isAdmin = false;
         let news = [];
         let reviews = [];
-        let editingIndex = null;
         let editingType = null;
+        let editingIndex = null;
 
         function loadData() {
             news = JSON.parse(localStorage.getItem('yukki_news') || '[]');
@@ -126,7 +126,7 @@
                     title: "Assassin's Creed Black Flag Resynced – datum vydání je venku!",
                     image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3751950/header.jpg?t=1777900688",
                     date: "2026-05-06",
-                    content: `Po letech spekulací je to konečně oficiální...`
+                    content: `Po letech spekulací je to konečně oficiální. Ubisoft oznámil remake na 9. července 2026.`
                 }];
             }
         }
@@ -137,14 +137,14 @@
         }
 
         function exportData() {
-            const data = { news, reviews };
+            const data = {news, reviews};
             const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = "yukki_full_backup.json";
+            a.download = "yukki_data.json";
             a.click();
-            alert("✅ Kompletní data stažena!");
+            alert("Data stažena!");
         }
 
         function renderHome() {
@@ -166,11 +166,12 @@
                     <img src="${n.image}" class="w-full h-56 object-cover cursor-pointer" onclick="openDetail('news', ${i})">
                     <div class="p-6">
                         <h3 class="text-2xl font-bold cursor-pointer" onclick="openDetail('news', ${i})">${n.title}</h3>
-                        <p class="text-purple-400 text-sm mt-2">${n.date}</p>
+                        <p class="text-purple-400 text-sm">${n.date}</p>
                         <p class="mt-4">${n.content}</p>
-                        ${isAdmin ? `<div class="flex gap-3 mt-6">
-                            <button onclick="event.stopImmediatePropagation(); editItem('news', ${i});" class="flex-1 py-3 bg-blue-600 rounded-2xl text-sm">UPRAVIT</button>
-                            <button onclick="event.stopImmediatePropagation(); deleteItem('news', ${i});" class="flex-1 py-3 bg-red-600 rounded-2xl text-sm">SMAZAT</button>
+                        ${isAdmin ? `
+                        <div class="flex gap-3 mt-6">
+                            <button onclick="event.stopImmediatePropagation(); editItem('news', ${i});" class="flex-1 py-3 bg-blue-600 rounded-2xl">UPRAVIT</button>
+                            <button onclick="event.stopImmediatePropagation(); deleteItem('news', ${i});" class="flex-1 py-3 bg-red-600 rounded-2xl">SMAZAT</button>
                         </div>` : ''}
                     </div>
                 </div>
@@ -178,7 +179,6 @@
         }
 
         function renderReviews() {
-            // podobně jako renderNews, ale pro reviews
             document.getElementById('reviews-container').innerHTML = reviews.map((r, i) => `
                 <div class="bg-zinc-900 rounded-3xl overflow-hidden">
                     <img src="${r.image}" class="w-full h-56 object-cover cursor-pointer" onclick="openDetail('review', ${i})">
@@ -187,11 +187,12 @@
                             <h3 class="text-2xl font-bold cursor-pointer" onclick="openDetail('review', ${i})">${r.title}</h3>
                             <div class="text-4xl font-bold text-purple-400">${r.score}</div>
                         </div>
-                        <p class="text-purple-400 text-sm mt-2">${r.date}</p>
+                        <p class="text-purple-400 text-sm">${r.date}</p>
                         <p class="mt-4">${r.content}</p>
-                        ${isAdmin ? `<div class="flex gap-3 mt-6">
-                            <button onclick="event.stopImmediatePropagation(); editItem('review', ${i});" class="flex-1 py-3 bg-blue-600 rounded-2xl text-sm">UPRAVIT</button>
-                            <button onclick="event.stopImmediatePropagation(); deleteItem('review', ${i});" class="flex-1 py-3 bg-red-600 rounded-2xl text-sm">SMAZAT</button>
+                        ${isAdmin ? `
+                        <div class="flex gap-3 mt-6">
+                            <button onclick="event.stopImmediatePropagation(); editItem('review', ${i});" class="flex-1 py-3 bg-blue-600 rounded-2xl">UPRAVIT</button>
+                            <button onclick="event.stopImmediatePropagation(); deleteItem('review', ${i});" class="flex-1 py-3 bg-red-600 rounded-2xl">SMAZAT</button>
                         </div>` : ''}
                     </div>
                 </div>
@@ -217,13 +218,19 @@
             if (n === 2) renderReviews();
         }
 
+        function toggleLogin() {
+            document.getElementById('loginModal').classList.toggle('hidden');
+        }
+
         function adminLogin() {
             if (document.getElementById('loginUser').value === "yukki" && document.getElementById('loginPass').value === "yukki123") {
                 isAdmin = true;
                 document.getElementById('loginText').innerHTML = '👑 YUKKI';
                 document.getElementById('adminBar').classList.remove('hidden');
                 toggleLogin();
-            } else alert("Špatné heslo!");
+            } else {
+                alert("Špatné heslo! (yukki123)");
+            }
         }
 
         function showCreateModal(type) {
@@ -265,8 +272,27 @@
             renderReviews();
         }
 
-        function editNews(i) { editingType = 'news'; editingIndex = i; /* ... */ }
-        function deleteNews(i) { /* ... */ }
+        function editItem(type, i) {
+            editingType = type;
+            editingIndex = i;
+            const item = type === 'news' ? news[i] : reviews[i];
+            document.getElementById('modalTitle').textContent = type === 'news' ? "Upravit novinku" : "Upravit recenzi";
+            document.getElementById('postTitle').value = item.title;
+            document.getElementById('postImage').value = item.image;
+            document.getElementById('postScore').value = item.score || '';
+            document.getElementById('postDate').value = item.date;
+            document.getElementById('postContent').value = item.content;
+            document.getElementById('createModal').classList.remove('hidden');
+        }
+
+        function deleteItem(type, i) {
+            if (confirm("Opravdu smazat?")) {
+                if (type === 'news') news.splice(i, 1);
+                else reviews.splice(i, 1);
+                renderNews();
+                renderReviews();
+            }
+        }
 
         window.onload = () => {
             loadData();
