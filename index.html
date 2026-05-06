@@ -12,292 +12,490 @@
         .title-font { font-family: 'Orbitron', sans-serif; }
         .neon { text-shadow: 0 0 20px #ef4444, 0 0 40px #b91c1c; }
         .tab-active { border-bottom: 4px solid #ef4444; color: white; }
-        .leaderboard-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .leaderboard-card:hover { transform: translateY(-10px) scale(1.03); box-shadow: 0 30px 60px -15px rgb(185 28 28 / 0.5); }
-        #detailModal .modal-content-wrapper { max-height: calc(94vh - 340px); overflow-y: auto; scrollbar-width: thin; scrollbar-color: #ef4444 #27272a; }
+
+        .leaderboard-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .leaderboard-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 30px 60px -15px rgb(185 28 28 / 0.5);
+        }
+
+        #detailModal .modal-content-wrapper {
+            max-height: calc(94vh - 300px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #ef4444 #27272a;
+        }
     </style>
 </head>
 <body class="bg-zinc-950 text-white min-h-screen">
-
-<nav class="bg-black border-b border-red-600 fixed w-full z-50">
-    <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-        <div class="flex items-center gap-4">
-            <div class="w-12 h-12 bg-gradient-to-br from-red-600 to-rose-600 rounded-2xl flex items-center justify-center text-3xl">🌀</div>
-            <span class="text-4xl font-bold tracking-widest neon title-font">YUKKI</span>
-        </div>
-        <div class="flex gap-8 text-lg font-medium">
-            <button onclick="switchTab(0)" class="tab-active pb-1 px-4" id="tab-0">DOMŮ</button>
-            <button onclick="switchTab(1)" class="pb-1 px-4 hover:text-red-400" id="tab-1">NOVINKY</button>
-            <button onclick="switchTab(2)" class="pb-1 px-4 hover:text-red-400" id="tab-2">RECENZE</button>
-            <button onclick="switchTab(3)" class="pb-1 px-4 hover:text-red-400" id="tab-3">ŽEBŘÍČEK</button>
-            <button onclick="switchTab(4)" class="pb-1 px-4 hover:text-red-400" id="tab-4">KOMUNITA</button>
-        </div>
-        <div class="flex items-center gap-4">
+    <nav class="bg-black border-b border-red-600 fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-red-600 to-rose-600 rounded-2xl flex items-center justify-center text-3xl">🌀</div>
+                <span class="text-4xl font-bold tracking-widest neon title-font">YUKKI</span>
+            </div>
+            <div class="flex gap-8 text-lg font-medium">
+                <button onclick="switchTab(0)" class="tab-active pb-1 px-4" id="tab-0">DOMŮ</button>
+                <button onclick="switchTab(1)" class="pb-1 px-4 hover:text-red-400" id="tab-1">NOVINKY</button>
+                <button onclick="switchTab(2)" class="pb-1 px-4 hover:text-red-400" id="tab-2">RECENZE</button>
+                <button onclick="switchTab(3)" class="pb-1 px-4 hover:text-red-400" id="tab-3">ŽEBŘÍČEK</button>
+                <button onclick="switchTab(4)" class="pb-1 px-4 hover:text-red-400" id="tab-4">KOMUNITA</button>
+            </div>
             <button onclick="toggleLogin()" class="px-6 py-3 bg-gradient-to-r from-red-600 to-rose-600 rounded-2xl font-bold flex items-center gap-2">
                 <i class="fas fa-user"></i>
                 <span id="loginText">PŘIHLÁSIT SE</span>
             </button>
-            <button onclick="showRegisterModal()" class="text-sm text-red-400 hover:text-red-300">Registrovat</button>
+        </div>
+    </nav>
+
+    <main class="pt-24 max-w-7xl mx-auto px-6 pb-20">
+        <!-- DOMŮ -->
+        <div id="page-0">
+            <h1 class="text-6xl font-bold text-center mt-10 mb-2 neon title-font">Vítej zpátky, Yukki</h1>
+            <div id="hero-news" onclick="openDetail('news', 0)" class="cursor-pointer relative h-[65vh] rounded-3xl overflow-hidden mb-12 border border-red-500/30"></div>
+            <h2 class="text-3xl font-bold mb-6 title-font">Poslední recenze</h2>
+            <div id="home-reviews" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+        </div>
+
+        <!-- NOVINKY -->
+        <div id="page-1" class="hidden">
+            <h2 class="text-4xl font-bold title-font mb-8">NOVINKY</h2>
+            <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+        </div>
+
+        <!-- RECENZE -->
+        <div id="page-2" class="hidden">
+            <h2 class="text-4xl font-bold title-font mb-8">RECENZE</h2>
+            <div id="reviews-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        </div>
+
+        <!-- ŽEBŘÍČEK -->
+        <div id="page-3" class="hidden">
+            <h2 class="text-4xl font-bold title-font mb-8">ŽEBŘÍČEK</h2>
+            <div id="leaderboard" class="space-y-6"></div>
+        </div>
+
+        <!-- KOMUNITA -->
+        <div id="page-4" class="hidden">
+            <h2 class="text-4xl font-bold title-font mb-8">KOMUNITA</h2>
+            <div id="community-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+        </div>
+    </main>
+
+    <!-- ADMIN BAR -->
+    <div id="adminBar" class="hidden fixed bottom-6 right-6 bg-zinc-900 border border-red-500 rounded-2xl p-4 flex gap-3 z-50">
+        <button onclick="showCreateModal('news')" class="px-6 py-3 bg-red-600 rounded-xl font-bold">+ Novinka</button>
+        <button onclick="showCreateModal('review')" class="px-6 py-3 bg-red-600 rounded-xl font-bold">+ Recenze</button>
+        <button onclick="showCreateLinkModal()" class="px-6 py-3 bg-red-600 rounded-xl font-bold">+ Odkaz</button>
+        <button onclick="exportData()" class="px-6 py-3 bg-emerald-600 rounded-xl font-bold">📤 Export</button>
+    </div>
+
+    <!-- LOGIN MODAL -->
+    <div id="loginModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
+        <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-md border border-red-500">
+            <h2 class="text-3xl font-bold mb-6 text-center title-font">YUKKI ADMIN</h2>
+            <input id="loginUser" value="yukki" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
+            <input id="loginPass" type="password" value="yukki123" class="w-full mb-6 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
+            <button onclick="adminLogin()" class="w-full py-4 bg-gradient-to-r from-red-600 to-rose-600 rounded-2xl font-bold">Přihlásit se</button>
         </div>
     </div>
-</nav>
 
-<main class="pt-24 max-w-7xl mx-auto px-6 pb-20">
-    <div id="page-0">
-        <h1 class="text-6xl font-bold text-center mt-10 mb-2 neon title-font">Vítej zpátky, Yukki</h1>
-        <div id="hero-news" onclick="openDetail('news', 0)" class="cursor-pointer relative h-[65vh] rounded-3xl overflow-hidden mb-12 border border-red-500/30"></div>
-        <h2 class="text-3xl font-bold mb-6 title-font">Poslední recenze</h2>
-        <div id="home-reviews" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
-    </div>
-
-    <div id="page-1" class="hidden">
-        <h2 class="text-4xl font-bold title-font mb-8">NOVINKY</h2>
-        <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
-    </div>
-
-    <div id="page-2" class="hidden">
-        <h2 class="text-4xl font-bold title-font mb-8">RECENZE</h2>
-        <div id="reviews-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
-    </div>
-
-    <div id="page-3" class="hidden">
-        <h2 class="text-4xl font-bold title-font mb-8">ŽEBŘÍČEK</h2>
-        <div id="leaderboard" class="space-y-6"></div>
-    </div>
-
-    <div id="page-4" class="hidden">
-        <h2 class="text-4xl font-bold title-font mb-8">KOMUNITA</h2>
-        <div id="community-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
-    </div>
-</main>
-
-<!-- ADMIN BAR -->
-<div id="adminBar" class="hidden fixed bottom-6 right-6 bg-zinc-900 border border-red-500 rounded-2xl p-4 flex gap-3 z-50">
-    <button onclick="showCreateModal('news')" class="px-6 py-3 bg-red-600 rounded-xl font-bold">+ Novinka</button>
-    <button onclick="showCreateModal('review')" class="px-6 py-3 bg-red-600 rounded-xl font-bold">+ Recenze</button>
-    <button onclick="showCreateLinkModal()" class="px-6 py-3 bg-red-600 rounded-xl font-bold">+ Odkaz</button>
-    <button onclick="exportData()" class="px-6 py-3 bg-emerald-600 rounded-xl font-bold">📤 Export</button>
-</div>
-
-<!-- LOGIN MODAL -->
-<div id="loginModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
-    <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-md border border-red-500">
-        <h2 class="text-3xl font-bold mb-6 text-center title-font">YUKKI ADMIN</h2>
-        <input id="loginUser" value="yukki" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
-        <input id="loginPass" type="password" placeholder="Heslo" class="w-full mb-6 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
-        <button onclick="adminLogin()" class="w-full py-4 bg-gradient-to-r from-red-600 to-rose-600 rounded-2xl font-bold">Přihlásit se</button>
-    </div>
-</div>
-
-<!-- REGISTER MODAL -->
-<div id="registerModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
-    <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-md border border-red-500">
-        <h2 class="text-3xl font-bold mb-6 text-center title-font">Registrace</h2>
-        <input id="regUsername" placeholder="Uživatelské jméno" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
-        <input id="regPassword" type="password" placeholder="Heslo" class="w-full mb-6 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
-        <button onclick="registerUser()" class="w-full py-4 bg-red-600 rounded-2xl font-bold">Registrovat</button>
-        <button onclick="hideRegisterModal()" class="w-full mt-3 py-4 bg-zinc-800 rounded-2xl font-bold">Zrušit</button>
-    </div>
-</div>
-
-<!-- CREATE MODAL -->
-<div id="createModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
-    <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-2xl border border-red-500">
-        <h2 class="text-3xl font-bold mb-6" id="modalTitle">Nová novinka</h2>
-        <input id="postTitle" placeholder="Název" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
-        <input id="postImages" placeholder="URL fotek (oddělené čárkou)" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
-        <input id="postVideo" placeholder="YouTube URL nebo mp4 link" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
-        <input id="postScore" type="number" placeholder="Hodnocení % (jen recenze)" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
-        <input id="postDate" type="date" class="w-full mb-6 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
-        <textarea id="postContent" rows="10" placeholder="Obsah..." class="w-full bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4"></textarea>
-        <div class="flex gap-4 mt-6">
-            <button onclick="savePost()" class="flex-1 py-4 bg-red-600 rounded-2xl font-bold">Uložit</button>
-            <button onclick="hideCreateModal()" class="flex-1 py-4 bg-zinc-800 rounded-2xl font-bold">Zrušit</button>
-        </div>
-    </div>
-</div>
-
-<!-- DETAIL MODAL -->
-<div id="detailModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-start justify-center pt-8 pb-8 overflow-hidden">
-    <div class="bg-zinc-900 rounded-3xl w-full max-w-6xl border border-red-500 overflow-hidden relative max-h-[94vh] flex flex-col">
-        <button onclick="closeModal()" class="absolute top-6 right-6 z-20 w-14 h-14 bg-black/80 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-4xl font-light">✕</button>
-        <div id="modal-media" class="w-full bg-black"></div>
-        <div class="modal-content-wrapper flex-1 p-8 md:p-16 max-w-4xl mx-auto overflow-y-auto">
-            <h2 id="modal-title" class="text-4xl md:text-5xl font-bold title-font"></h2>
-            <div id="modal-score" class="text-6xl font-bold text-red-400 mt-6"></div>
-            <div id="modal-content" class="mt-12 text-gray-200 leading-relaxed text-[17.5px] whitespace-pre-wrap"></div>
-            <div class="mt-16 border-t border-red-500/30 pt-8">
-                <h3 class="text-2xl font-bold mb-6">Komentáře</h3>
-                <div id="comments-container" class="space-y-6 mb-8"></div>
-                <textarea id="new-comment" rows="3" placeholder="Napiš komentář..." class="w-full bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4"></textarea>
-                <button onclick="addComment()" class="mt-3 px-8 py-3 bg-red-600 rounded-2xl font-bold">Odeslat komentář</button>
+    <!-- CREATE/EDIT MODAL -->
+    <div id="createModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
+        <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-2xl border border-red-500">
+            <h2 class="text-3xl font-bold mb-6" id="modalTitle">Nová novinka</h2>
+            <input id="postTitle" placeholder="Název" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
+            <input id="postImages" placeholder="URL fotek (oddělené čárkou)" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
+            <input id="postVideo" placeholder="YouTube URL nebo mp4 link" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
+            <input id="postScore" type="number" placeholder="Hodnocení % (jen recenze)" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
+            <input id="postDate" type="date" class="w-full mb-6 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
+            <textarea id="postContent" rows="10" placeholder="Obsah..." class="w-full bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4"></textarea>
+            <div class="flex gap-4 mt-6">
+                <button onclick="savePost()" class="flex-1 py-4 bg-red-600 rounded-2xl font-bold">Uložit</button>
+                <button onclick="hideCreateModal()" class="flex-1 py-4 bg-zinc-800 rounded-2xl font-bold">Zrušit</button>
             </div>
         </div>
     </div>
-</div>
 
-<!-- LINK MODAL -->
-<div id="linkModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
-    <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-lg border border-red-500">
-        <h2 class="text-3xl font-bold mb-6" id="linkModalTitle">Nový odkaz</h2>
-        <input id="linkTitle" placeholder="Název odkazu" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
-        <input id="linkUrl" placeholder="https://" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
-        <input id="linkIcon" placeholder="fa-youtube" value="fa-youtube" class="w-full mb-6 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
-        <div class="flex gap-4">
-            <button onclick="saveLink()" class="flex-1 py-4 bg-red-600 rounded-2xl font-bold">Uložit</button>
-            <button onclick="hideLinkModal()" class="flex-1 py-4 bg-zinc-800 rounded-2xl font-bold">Zrušit</button>
+    <!-- DETAIL MODAL -->
+    <div id="detailModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-start justify-center pt-8 pb-8 overflow-hidden">
+        <div class="bg-zinc-900 rounded-3xl w-full max-w-6xl border border-red-500 overflow-hidden relative max-h-[94vh] flex flex-col">
+            <button onclick="closeModal()" class="absolute top-6 right-6 z-20 w-14 h-14 bg-black/80 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-4xl font-light">✕</button>
+            <div id="modal-media" class="w-full bg-black"></div>
+            <div class="modal-content-wrapper flex-1 p-8 md:p-16 max-w-4xl mx-auto overflow-y-auto">
+                <h2 id="modal-title" class="text-4xl md:text-5xl font-bold title-font"></h2>
+                <div id="modal-score" class="text-6xl font-bold text-red-400 mt-6"></div>
+                <div id="modal-content" class="mt-12 text-gray-200 leading-relaxed text-[17.5px] whitespace-pre-wrap"></div>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    let isAdmin = false;
-    let news = [];
-    let reviews = [];
-    let communityLinks = [];
-    let editingType = null;
-    let editingIndex = null;
-    let editingLinkIndex = null;
+    <!-- KOMUNITNÍ ODKAZ MODAL -->
+    <div id="linkModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
+        <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-lg border border-red-500">
+            <h2 class="text-3xl font-bold mb-6" id="linkModalTitle">Nový odkaz</h2>
+            <input id="linkTitle" placeholder="Název odkazu" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
+            <input id="linkUrl" placeholder="https://" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
+            <input id="linkIcon" placeholder="fa-youtube" value="fa-youtube" class="w-full mb-6 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
+            <div class="flex gap-4">
+                <button onclick="saveLink()" class="flex-1 py-4 bg-red-600 rounded-2xl font-bold">Uložit</button>
+                <button onclick="hideLinkModal()" class="flex-1 py-4 bg-zinc-800 rounded-2xl font-bold">Zrušit</button>
+            </div>
+        </div>
+    </div>
 
-    function loadData() {
-        news = [{
-            id: 1778037001738,
-            title: "Proč si PC hráči musejí počkat na Grand Theft Auto VI?",
-            image: "https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg?",
-            images: ["https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg?"],
-            video: "",
-            date: "2026-05-06",
-            content: "Hry od Rockstar Games vycházejí nejprve na konzole a až později na počítače. Stejné to bude i u GTA 6. Proč tomu tak je? Palčivé otázce se věnoval generální ředitel Take-Two Interactive. Potvrdil také marketingovou exkluzivitu PlayStationu.\n\nTahle odpověď PC hráče nepotěší. Rockstar se snaží nejprve obsloužit hlavní uživatelskou základnu, a to co nejlépe. Tím se myslí právě hráči na PlayStationu a Xboxu.\n\n„Rockstar vždy začíná na konzolích, protože právě tam vás hráči hodnotí podle toho, jak dobře zvládnete launch,“ vysvětlil Strauss Zelnick pro Bloomberg. Jinými slovy, pokud by start nevyšel podle představ, mohlo by to negativně ovlivnit i pozdější prodeje na dalších platformách.\n\nZároveň zdůraznil, že zpoždění PC verze nijak nesouvisí s marketingovou spoluprací se Sony u Grand Theft Auto VI. Jde o dlouhodobou strategii, kterou Rockstar používá už roky. Zajímavé je, že samotná data jdou proti této logice. Zelnick totiž zároveň připustil, že u velkých titulů dnes může PC tvořit klidně 45 až 50 % celkových prodejů. Pro srovnání – ještě v roce 2007 to bylo jen kolem 5 % u NBA 2K.\n\nPřesto se strategie nemění, protože konzole jsou pro Rockstar stále klíčovým startovním bodem a až následně přichází rozšíření na další platformy. Doufejme, že alespoň na PC verzi nebudeme čekat dlouho. Spekuluje se o vydání v první polovině roku 2027.\n\nVedle toho bylo potvrzeno i něco, o čem se spekulovalo už delší dobu. GTA 6 má marketingové partnerství se Sony. Hra tak bude v reklamních materiálech primárně spojována s konzolí PlayStation 5. To ale neznamená exkluzivní obsah. Jde čistě o to, že hra bude prezentována na PS5 a všude bude vidět logo PlayStationu. Je dost možné, že vznikne také bundle s konzolí a hrou."
-        }];
+    <script>
+        let isAdmin = false;
+        let news = [];
+        let reviews = [];
+        let communityLinks = [];
+        let editingType = null;
+        let editingIndex = null;
+        let editingLinkIndex = null;
 
-        reviews = [
-            {
-                id: 1778037961299,
-                title: "The Elder Scrolls IV: Oblivion Remastered",
-                image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2623190/a7cee9165bb1bfc092c390c5cff215ce0e381dfc/header.jpg?t=1761681073",
-                images: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2623190/a7cee9165bb1bfc092c390c5cff215ce0e381dfc/header.jpg?t=1761681073"],
+        function loadData() {
+            news = [{
+                id: 1778031631685,
+                title: "Proč si PC hráči musejí počkat na Grand Theft Auto VI?",
+                image: "https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg?",
+                images: [],
                 video: "",
-                date: "2026-04-15",
-                content: "The Elder Scrolls IV: Oblivion Remastered je hra, která na první pohled zaujme především tím, jak krásně ožila jedna z největších fantasy klasik. A naštěstí nejde jen o grafický facelift – pořád je to ten samý chaotický, obrovský a nezapomenutelný Oblivion, jen v modernějším kabátě.\nCo funguje dobře\nNejsilnější stránkou remasteru je bezesporu vizuální a atmosférický upgrade. Cyrodiil vypadá nádherně – nové textury, lepší nasvícení, dynamické počasí, realistické stíny a voda dělají z procházek krajinou opravdový zážitek. NPC tváře už nevypadají jako voskové figuríny a celkový dojem ze světa je výrazně příjemnější.\nSouboje díky vylepšeným animacím, lepším zásahům a svižnější magii působí mnohem uspokojivěji než v originále. Lukostřelba konečně funguje, meče mají váhu a přepracované UI a inventář výrazně zlepšují komfort hraní. Obrovský svět plný questů, frakcí a dungeonů je stále stejně návykový a legendární humor NPC dialogů pořád baví.\nCo hru sráží\nPřes všechny vylepšení zůstávají některé staré neduhy. Ikonické bugy přežily, AI nepřátel je občas na úrovni rohlíku a level scaling stále dokáže pěkně zamotat zážitek (bandita s daedrickým mečem v levelu 30 je pořád realita). Dabing zůstal stejný, takže občas máte pocit, že celá vesnice mluví jedním hlasem.\nPro úplné nováčky může hra působit velmi old-school – některé mechaniky jsou dnes už dost archaické a absence moderních vychytávek (jako kvalitní crafting) je znát.\nVerdikt\nThe Elder Scrolls IV: Oblivion Remastered je krásný a srdečný návrat do jedné z nejlepších herních říší všech dob. Není to revoluční předělání, ale poctivý remaster, který zachovává duši originálu a zároveň ho dělá přijatelnějším pro dnešní hráče.\nPro fanoušky původní hry téměř povinnost. Pro nováčky zajímavý výlet do historie, která stále dokáže okouzlit.",
-                score: 90
-            },
-            {
-                id: 1778037465077,
-                title: "Mafia: The Old Country",
-                image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1941540/d06980bb8f41737ca68da8eed40079347db09c84/header.jpg?t=1764177372",
-                images: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1941540/d06980bb8f41737ca68da8eed40079347db09c84/header.jpg?t=1764177372"],
-                video: "",
-                date: "2025-09-29",
-                content: "Mafia: The Old Country je přesně ten typ hry, který připomene, proč si série Mafia vybudovala tak silné jméno. Stylová atmosféra staré Itálie, důraz na příběh a soundtrack, který funguje i mimo samotné hraní, tvoří velmi solidní základ.\n\nPříběh stojí na osvědčených motivech – rodina, loajalita, zrada. Nejde o nic vyloženě nového, ale zpracování je natolik kvalitní, že to vůbec nevadí. Postavy působí uvěřitelně, dialogy mají správnou váhu a momenty se šéfem rodiny patří k tomu nejlepšímu, co hra nabízí.\n\nCo funguje dobře:\nSilná atmosféra a vizuální stylizace – prostředí venkova i měst působí autenticky a detailně.\nStřelba má solidní odezvu a působí uspokojivě.\nJízdní model je výrazně lepší než v minulosti – auta se konečně ovládají přirozeněji.\nČeský dabing a titulky výrazně posilují celkový zážitek a nostalgii.\n\nCo hru sráží:\nUmělá inteligence není vždy spolehlivá – nepřátelé občas reagují pomalu nebo nepřesvědčivě.\nNěkteré mise působí zbytečně výplňově a nenabízí nic nového.\nChybí volný režim po dohrání, což omezuje dlouhodobou hratelnost.\n\nVerdikt\nMafia: The Old Country není revoluční titul, ale představuje poctivý návrat ke kořenům série. Sází na silný příběh, atmosféru a styl, a i přes své nedostatky dokáže nabídnout velmi solidní zážitek.",
-                score: 80
-            },
-            {
-                id: 1778037293234,
-                title: "Plants vs. Zombies: Replanted",
-                image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3654560/2a3015b525e5d4da6d2c1a517d0a8c1504b1eee8/header.jpg?t=1763401327",
-                images: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3654560/2a3015b525e5d4da6d2c1a517d0a8c1504b1eee8/header.jpg?t=1763401327"],
-                video: "",
-                date: "2026-02-24",
-                content: "Po letech jsem se z nostalgie vrátil k obraně trávníku, tentokrát v remasterované podobě. Replanted nepřináší zásadní novinky, ale přesně plní to, co slibuje – modernější verzi osvědčené klasiky.\n\nPlusy\nModernizovaná grafika: Vizuální stránka působí čistě a ostře. Nové efekty a upravené textury hře dodávají svěžest, aniž by ztratila své původní kouzlo.\nOvěřená hratelnost: Herní mechaniky zůstaly beze změn, což je v tomto případě výhoda. Jednoduchý a návykový gameplay funguje i dnes bez problémů.\nStabilita a optimalizace: Hra běží plynule, bez výraznějších technických nedostatků.\nCena: Přibližně 20 € za kvalitní remaster je férová nabídka.\n\nMínusy\nMinimum nového obsahu: Hra nepřináší výraznější rozšíření ani nové mechaniky, což může být pro některé hráče zklamání.\nKrátká výdrž: Zkušení hráči projdou obsahem poměrně rychle a zážitek může působit krátkodobě.\nOmezená ambice: Replanted působí spíše jako pocta originálu než jako snaha značku posunout dál.\n\nVerdikt\nPlants vs. Zombies: Replanted je poctivě zpracovaný remaster, který staví na silných základech původní hry. Nepřináší nic zásadně nového, ale to, co nabízí, funguje velmi dobře. Pokud víte, co od něj očekávat, pravděpodobně budete spokojeni.",
-                score: 82
-            },
-            {
-                id: 1778037209163,
-                title: "Quarantine Zone: The Last Check",
-                image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3419520/c8562f1c2f8f054e5f8efeb536a0ba2490905033/header.jpg?t=1776795498",
-                images: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3419520/c8562f1c2f8f054e5f8efeb536a0ba2490905033/header.jpg?t=1776795498"],
-                video: "",
-                date: "2026-02-25",
-                content: "Quarantine Zone mě mile překvapila hlavně svým nápadem. Kontrolovat lidi na checkpointu během zombie apokalypsy zní jednoduše, ale ve skutečnosti jde o dost intenzivní a návykovou záležitost. Největší síla hry je v rozhodování – pustíš člověka dál, nebo tím riskuješ nákazu celé základny? Tenhle morální tlak funguje výborně a často tě nutí přemýšlet víc, než bys čekal.\n\nHra skvěle pracuje s napětím. Každý další příchozí může být problém a ty nikdy nemáš jistotu, jestli ses rozhodl správně. Právě tenhle „Papers, Please“ vibe v kombinaci se zombie tématikou dává hře silnou atmosféru.\n\nPo několika hodinách se ale začne projevovat repetitivnost. Herní smyčka se tolik nevyvíjí a některé mechaniky, hlavně kolem správy základny, by si zasloužily větší hloubku. Technická stránka navíc není úplně bez chyb, i když nic, co by hru vyloženě rozbíjelo.\n\nCelkově jsem se ale bavil víc, než jsem čekal. Quarantine Zone stojí hlavně na skvělém konceptu a atmosféře, které dokážou přebít její nedostatky.\n\nSilný nápad a napětí, které drží hru nad vodou. Dolů ji táhne opakování a menší technické nedostatky. Pokud máš rád Papers, Please styl s temnější zombie tématikou, tohle tě pravděpodobně chytne.",
-                score: 78
-            },
-            {
-                id: 1778037659901,
-                title: "Crimson Desert",
-                image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3321460/abd7dbdeaede8b6c9a6d40bf116ff2b883f2dd45/header.jpg?t=1777016399",
-                images: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3321460/abd7dbdeaede8b6c9a6d40bf116ff2b883f2dd45/header.jpg?t=1777016399"],
-                video: "",
-                date: "2026-03-22",
-                content: "Crimson Desert je přesně ten typ hry, který se snaží spojit velký otevřený svět, silný příběh a akční soubojový systém do jednoho masivního celku. A ve většině případů se mu to daří – i když ne bez kompromisů.\n\nCo funguje dobře\nNejvětší předností hry je samotný svět. Kontinent Pywel působí živě, rozmanitě a má co nabídnout – od měst přes divočinu až po různé aktivity jako lov, crafting nebo vedlejší činnosti.\n\nSoubojový systém je dynamický a má hloubku. Kombinování zbraní, schopností a interakce s prostředím dává soubojům energii a variabilitu, díky čemuž se jen tak neokoukají.\n\nPříběh drží klasickou linku pomsty, ztráty a znovuvybudování – není revoluční, ale funguje. Postavy mají prostor a hlavní hrdina Kliff má jasnou motivaci, která žene hru dopředu.\n\nCo hru sráží\nVelikost světa je zároveň její slabina. Ne všechny aktivity jsou stejně zajímavé a místy se dostaví pocit „výplně“, kdy plníš obsah jen proto, aby byl splněný.\n\nTechnický stav při vydání nebyl ideální. Hra sice postupně dostává patche, ale při launchi se objevovaly bugy a nedostatky, které kazily celkový dojem.\n\nUmělá inteligence a některé mise působí nevyváženě – jednou hra nabídne skvělý moment, jindy sklouzne do rutiny.\n\nVerdikt\nCrimson Desert je ambiciózní open-world RPG, které vyniká především rozsahem, soubojovým systémem a atmosférou. Není to bezchybná hra a její velikost jí občas spíš škodí, ale i tak jde o velmi silný titul, který dokáže pohltit na desítky hodin.",
-                score: 86
-            },
-            {
-                id: 1778037610764,
-                title: "MOUSE: P.I. For Hire",
-                image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2416450/298ff2fc3f6a700d022b8d3ec58047f2b426be03/header.jpg?t=1777393988",
-                images: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2416450/298ff2fc3f6a700d022b8d3ec58047f2b426be03/header.jpg?t=1777393988"],
-                video: "",
-                date: "2026-04-18",
-                content: "MOUSE: P.I. For Hire je hra, která na první pohled zaujme hlavně svým unikátním stylem – ale naštěstí nezůstává jen u něj. Jde o akční FPS zasazené do noir světa inspirovaného 30. lety, kde místo lidí vystupují antropomorfní postavy. Kombinace staré kreslené estetiky a klasické střílečky funguje překvapivě dobře.\n\nCo funguje dobře\nNejsilnější stránkou hry je bez debat audiovizuální styl. Černobílá „rubber hose“ animace připomínající staré kreslené filmy dává hře výraznou identitu a odlišuje ji od většiny současných FPS titulů.\n\nGameplay je svižný a přímočarý. Hra sází na klasické principy – rychlý pohyb, přestřelky a arény plné nepřátel. Zbraně mají dobrou odezvu a souboje dokážou být dynamické a zábavné.\n\nAtmosféru podporuje i povedený soundtrack v jazzovém duchu a solidní dabing, který dobře zapadá do detektivního noir stylu. Příběh není nijak přelomový, ale díky dialogům a postavám dokáže zaujmout.\n\nCo hru sráží\nPřes silnou prezentaci je herní jádro poměrně klasické. Po čase se může dostavit pocit repetitivnosti, zejména kvůli podobné struktuře soubojů a levelů.\n\nTempo není vždy ideálně vyvážené. Některé pasáže působí zdlouhavě a nové prvky nepřichází tak často, jak by bylo potřeba.\n\nUmělá inteligence nepřátel je spíše průměrná a občas nepůsobí příliš přesvědčivě.\n\nVerdikt\nMOUSE: P.I. For Hire je stylově výrazná hra, která boduje především atmosférou a vizuálním zpracováním. Hratelnost stojí na osvědčených základech, což je zároveň její výhoda i slabina.\n\nNejde o revoluci, ale o kvalitně zpracovaný titul, který si najde své publikum hlavně mezi fanoušky klasických FPS a netradiční estetiky.",
-                score: 85
-            }
-        ];
+                date: "2026-05-06",
+                content: "Hry od Rockstar Games vycházejí nejprve na konzole a až později na PC..."
+            }];
 
-        communityLinks = [
-            { title: "YouTube", url: "https://www.youtube.com/@YukkiCZE", icon: "fa-youtube" },
-            { title: "Instagram", url: "https://www.instagram.com/_yukki77_/", icon: "fa-instagram" }
-        ];
-    }
+            reviews = [
+                {
+                    id: 1778031727108,
+                    title: "Crimson Desert",
+                    image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3321460/669119c3747653f41a46c59f213168448d094e04/ss_669119c3747653f41a46c59f213168448d094e04.1920x1080.jpg",
+                    images: [],
+                    video: "",
+                    score: 68,
+                    date: "2026-03-22",
+                    content: "Crimson Desert je jeden z největších a nejambicióznějších open-world titulů...\n\nVerdikt: Solidní průměr."
+                },
+                {
+                    id: 1778031574329,
+                    title: "MOUSE: P.I. For Hire",
+                    image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2416450/298ff2fc3f6a700d022b8d3ec58047f2b426be03/header.jpg",
+                    images: [],
+                    video: "",
+                    score: 82,
+                    date: "2026-05-06",
+                    content: "Stylová retro FPS, která tě dostane.\n\nVerdikt: Velmi doporučuji."
+                }
+            ];
 
-    function showCreateModal(type) {
-        editingType = type;
-        editingIndex = null;
-        document.getElementById('modalTitle').textContent = type === 'news' ? "Nová novinka" : "Nová recenze";
-        document.getElementById('postTitle').value = '';
-        document.getElementById('postImages').value = '';
-        document.getElementById('postVideo').value = '';
-        document.getElementById('postScore').value = type === 'review' ? '' : '';
-        document.getElementById('postDate').value = new Date().toISOString().split('T')[0];
-        document.getElementById('postContent').value = '';
-        document.getElementById('createModal').classList.remove('hidden');
-    }
-
-    function savePost() {
-        const title = document.getElementById('postTitle').value.trim();
-        if (!title) return alert("Název je povinný!");
-
-        const newItem = {
-            id: Date.now(),
-            title: title,
-            image: "https://via.placeholder.com/800x400?text=Nový+obrázek",
-            images: document.getElementById('postImages').value.split(',').map(u => u.trim()).filter(u => u),
-            video: document.getElementById('postVideo').value.trim(),
-            date: document.getElementById('postDate').value,
-            content: document.getElementById('postContent').value,
-            score: editingType === 'review' ? parseInt(document.getElementById('postScore').value) || 0 : null
-        };
-
-        if (editingIndex !== null) {
-            if (editingType === 'news') news[editingIndex] = newItem;
-            else reviews[editingIndex] = newItem;
-        } else {
-            if (editingType === 'news') news.unshift(newItem);
-            else reviews.unshift(newItem);
+            communityLinks = [
+                { title: "YouTube", url: "https://www.youtube.com/@YukkiCZE", icon: "fa-youtube" },
+                { title: "Instagram", url: "https://www.instagram.com/_yukki77_/", icon: "fa-instagram" }
+            ];
         }
 
-        hideCreateModal();
-        renderNews();
-        renderReviews();
-        renderLeaderboard();
-        renderHome();
-        alert("Úspěšně uloženo!");
-    }
+        function sortByDate(arr) {
+            return [...arr].sort((a, b) => new Date(b.date) - new Date(a.date));
+        }
 
-    function hideCreateModal() {
-        document.getElementById('createModal').classList.add('hidden');
-    }
+        function renderNews() {
+            const sorted = sortByDate(news);
+            document.getElementById('news-container').innerHTML = sorted.map((n) => {
+                const idx = news.findIndex(item => item.id === n.id);
+                return `
+                    <div class="bg-zinc-900 rounded-3xl overflow-hidden">
+                        <img src="${n.image}" class="w-full h-56 object-cover cursor-pointer" onclick="openDetail('news', ${idx})">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold">${n.title}</h3>
+                            <p class="mt-4 line-clamp-4">${n.content}</p>
+                            ${isAdmin ? `<div class="flex gap-3 mt-6">
+                                <button onclick="event.stopImmediatePropagation(); editItem('news', ${idx});" class="flex-1 py-3 bg-blue-600 rounded-xl">UPRAVIT</button>
+                                <button onclick="event.stopImmediatePropagation(); deleteItem('news', ${idx});" class="flex-1 py-3 bg-red-600 rounded-xl">SMAZAT</button>
+                            </div>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
 
-    // Zbytek funkcí (renderHome, renderNews, renderReviews, switchTab, adminLogin atd.) zůstává stejný jako v předchozích verzích
+        function renderReviews() {
+            const sorted = sortByDate(reviews);
+            document.getElementById('reviews-container').innerHTML = sorted.map((r) => {
+                const idx = reviews.findIndex(item => item.id === r.id);
+                return `
+                    <div class="bg-zinc-900 rounded-3xl overflow-hidden">
+                        <img src="${r.image}" class="w-full h-56 object-cover cursor-pointer" onclick="openDetail('review', ${idx})">
+                        <div class="p-6">
+                            <div class="flex justify-between">
+                                <h3 class="text-2xl font-bold">${r.title}</h3>
+                                <div class="text-5xl font-bold text-red-400">${r.score}</div>
+                            </div>
+                            <p class="mt-4 line-clamp-4">${r.content}</p>
+                            ${isAdmin ? `<div class="flex gap-3 mt-6">
+                                <button onclick="event.stopImmediatePropagation(); editItem('review', ${idx});" class="flex-1 py-3 bg-blue-600 rounded-xl">UPRAVIT</button>
+                                <button onclick="event.stopImmediatePropagation(); deleteItem('review', ${idx});" class="flex-1 py-3 bg-red-600 rounded-xl">SMAZAT</button>
+                            </div>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
 
-    window.onload = () => {
-        loadData();
-        renderHome();
-        renderNews();
-        renderReviews();
-        renderLeaderboard();
-        renderCommunity();
-        switchTab(0);
-    };
-</script>
+        function renderLeaderboard() {
+            const sorted = [...reviews].sort((a, b) => b.score - a.score);
+            document.getElementById('leaderboard').innerHTML = sorted.map((r, index) => {
+                const rankClass = index === 0 ? 'from-yellow-400 to-amber-500' : 
+                                 index === 1 ? 'from-gray-300 to-gray-400' : 
+                                 index === 2 ? 'from-orange-600 to-amber-700' : 'from-red-600 to-rose-600';
+                const idx = reviews.findIndex(review => review.id === r.id);
+                return `
+                    <div onclick="openDetail('review', ${idx})" class="leaderboard-card bg-gradient-to-r from-zinc-900 to-zinc-950 border border-red-500/30 hover:border-red-500 rounded-3xl p-8 flex items-center gap-8 cursor-pointer">
+                        <div class="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-br ${rankClass} w-20">${index + 1}</div>
+                        <img src="${r.image}" class="w-28 h-28 object-cover rounded-2xl border border-red-500/50">
+                        <div class="flex-1">
+                            <h3 class="text-3xl font-bold">${r.title}</h3>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-7xl font-bold text-red-400">${r.score}<span class="text-2xl">%</span></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderCommunity() {
+            document.getElementById('community-container').innerHTML = communityLinks.map((link, i) => `
+                <a href="${link.url}" target="_blank" class="block bg-zinc-900 hover:bg-zinc-800 border border-red-500/30 hover:border-red-500 rounded-3xl p-8 transition-all group">
+                    <i class="fas ${link.icon} text-5xl text-red-500 mb-6"></i>
+                    <h3 class="text-2xl font-bold group-hover:text-red-400">${link.title}</h3>
+                    ${isAdmin ? `
+                    <div class="flex gap-3 mt-8">
+                        <button onclick="event.preventDefault(); editLink(${i});" class="flex-1 py-3 bg-blue-600 rounded-xl">UPRAVIT</button>
+                        <button onclick="event.preventDefault(); deleteLink(${i});" class="flex-1 py-3 bg-red-600 rounded-xl">SMAZAT</button>
+                    </div>` : ''}
+                </a>
+            `).join('');
+        }
+
+        function renderHome() {
+            if (news.length > 0) {
+                const latest = sortByDate(news)[0];
+                document.getElementById('hero-news').innerHTML = `
+                    <img src="${latest.image}" class="absolute inset-0 w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/70"></div>
+                    <div class="absolute bottom-12 left-12 right-12">
+                        <h2 class="text-5xl font-bold title-font">${latest.title}</h2>
+                    </div>
+                `;
+            }
+            const latestReviews = sortByDate(reviews).slice(0, 3);
+            document.getElementById('home-reviews').innerHTML = latestReviews.map(r => {
+                const idx = reviews.findIndex(review => review.id === r.id);
+                return `
+                    <div onclick="openDetail('review', ${idx})" class="bg-zinc-900 rounded-3xl p-6 cursor-pointer">
+                        <img src="${r.image}" class="w-full h-40 object-cover rounded-2xl mb-4">
+                        <h4 class="font-bold">${r.title}</h4>
+                        <div class="text-4xl font-bold text-red-400">${r.score}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openDetail(type, i) {
+            const item = type === 'news' ? news[i] : reviews[i];
+            let mediaHTML = '';
+
+            if (item.images && item.images.length > 0) {
+                mediaHTML += `<div class="grid grid-cols-1 md:grid-cols-2 gap-2 p-4">`;
+                item.images.forEach(src => {
+                    mediaHTML += `<img src="${src}" class="rounded-2xl w-full">`;
+                });
+                mediaHTML += `</div>`;
+            }
+            if (item.video) {
+                if (item.video.includes('youtube.com') || item.video.includes('youtu.be')) {
+                    const vid = item.video.split('v=')[1] || item.video.split('/').pop().split('?')[0];
+                    mediaHTML += `<iframe width="100%" height="520" src="https://www.youtube.com/embed/${vid}" frameborder="0" allowfullscreen class="rounded-3xl"></iframe>`;
+                } else {
+                    mediaHTML += `<video controls class="w-full rounded-3xl"><source src="${item.video}" type="video/mp4"></video>`;
+                }
+            }
+            if (!mediaHTML) mediaHTML = `<img src="${item.image}" class="w-full">`;
+
+            document.getElementById('modal-media').innerHTML = mediaHTML;
+            document.getElementById('modal-title').textContent = item.title;
+
+            const scoreEl = document.getElementById('modal-score');
+            if (type === 'review' && item.score) {
+                scoreEl.innerHTML = `${item.score}<span class="text-3xl">%</span>`;
+                scoreEl.style.display = 'block';
+            } else {
+                scoreEl.style.display = 'none';
+            }
+
+            document.getElementById('modal-content').innerHTML = item.content.replace(/\n/g, '<br><br>');
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+
+        function switchTab(n) {
+            document.querySelectorAll('[id^="page-"]').forEach(p => p.classList.add('hidden'));
+            document.getElementById(`page-${n}`).classList.remove('hidden');
+            if (n === 1) renderNews();
+            if (n === 2) renderReviews();
+            if (n === 3) renderLeaderboard();
+            if (n === 4) renderCommunity();
+        }
+
+        function toggleLogin() { document.getElementById('loginModal').classList.toggle('hidden'); }
+
+        function adminLogin() {
+            if (document.getElementById('loginUser').value === "yukki" && document.getElementById('loginPass').value === "yukki123") {
+                isAdmin = true;
+                document.getElementById('loginText').innerHTML = '👑 ADMIN';
+                document.getElementById('adminBar').classList.remove('hidden');
+                toggleLogin();
+                renderNews(); renderReviews(); renderCommunity();
+            } else alert("Špatné heslo! (yukki123)");
+        }
+
+        function showCreateModal(type) {
+            if (!isAdmin) return alert("Nejsi přihlášen jako admin!");
+            editingIndex = null;
+            editingType = type;
+            document.getElementById('modalTitle').textContent = type === 'news' ? "Nová novinka" : "Nová recenze";
+            document.getElementById('postTitle').value = '';
+            document.getElementById('postImages').value = '';
+            document.getElementById('postVideo').value = '';
+            document.getElementById('postScore').value = type === 'review' ? '80' : '';
+            document.getElementById('postDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('postContent').value = '';
+            document.getElementById('createModal').classList.remove('hidden');
+        }
+
+        function hideCreateModal() { document.getElementById('createModal').classList.add('hidden'); }
+
+        function savePost() {
+            const title = document.getElementById('postTitle').value.trim();
+            const imagesStr = document.getElementById('postImages').value.trim();
+            const video = document.getElementById('postVideo').value.trim();
+            const score = parseInt(document.getElementById('postScore').value) || 0;
+            const date = document.getElementById('postDate').value;
+            const content = document.getElementById('postContent').value.trim();
+
+            const images = imagesStr ? imagesStr.split(',').map(u => u.trim()).filter(Boolean) : [];
+
+            if (!title || !content) return alert("Název a obsah jsou povinné!");
+
+            const newItem = { id: Date.now(), title, image: images[0] || "https://picsum.photos/id/237/1200/700", images, video, date, content };
+            if (editingType === 'review') newItem.score = score;
+
+            if (editingIndex !== null) {
+                if (editingType === 'news') news[editingIndex] = newItem;
+                else reviews[editingIndex] = newItem;
+            } else {
+                if (editingType === 'news') news.unshift(newItem);
+                else reviews.unshift(newItem);
+            }
+
+            hideCreateModal();
+            renderNews();
+            renderReviews();
+            renderLeaderboard();
+            renderHome();
+            alert("Uloženo!");
+        }
+
+        function editItem(type, i) {
+            editingType = type;
+            editingIndex = i;
+            const item = type === 'news' ? news[i] : reviews[i];
+            document.getElementById('modalTitle').textContent = type === 'news' ? "Upravit novinku" : "Upravit recenzi";
+            document.getElementById('postTitle').value = item.title;
+            document.getElementById('postImages').value = item.images ? item.images.join(', ') : '';
+            document.getElementById('postVideo').value = item.video || '';
+            document.getElementById('postScore').value = item.score || '';
+            document.getElementById('postDate').value = item.date;
+            document.getElementById('postContent').value = item.content;
+            document.getElementById('createModal').classList.remove('hidden');
+        }
+
+        function deleteItem(type, i) {
+            if (confirm("Opravdu smazat?")) {
+                if (type === 'news') news.splice(i, 1);
+                else reviews.splice(i, 1);
+                renderNews();
+                renderReviews();
+                renderLeaderboard();
+                renderHome();
+            }
+        }
+
+        function showCreateLinkModal() {
+            if (!isAdmin) return alert("Nejsi admin!");
+            editingLinkIndex = null;
+            document.getElementById('linkModalTitle').textContent = "Nový odkaz";
+            document.getElementById('linkTitle').value = '';
+            document.getElementById('linkUrl').value = '';
+            document.getElementById('linkIcon').value = 'fa-youtube';
+            document.getElementById('linkModal').classList.remove('hidden');
+        }
+
+        function hideLinkModal() { document.getElementById('linkModal').classList.add('hidden'); }
+
+        function saveLink() {
+            const title = document.getElementById('linkTitle').value.trim();
+            const url = document.getElementById('linkUrl').value.trim();
+            const icon = document.getElementById('linkIcon').value || 'fa-link';
+            if (!title || !url) return alert("Název a URL jsou povinné!");
+
+            if (editingLinkIndex !== null) communityLinks[editingLinkIndex] = {title, url, icon};
+            else communityLinks.unshift({title, url, icon});
+
+            hideLinkModal();
+            renderCommunity();
+            alert("Odkaz uložen!");
+        }
+
+        function editLink(i) {
+            editingLinkIndex = i;
+            const link = communityLinks[i];
+            document.getElementById('linkModalTitle').textContent = "Upravit odkaz";
+            document.getElementById('linkTitle').value = link.title;
+            document.getElementById('linkUrl').value = link.url;
+            document.getElementById('linkIcon').value = link.icon;
+            document.getElementById('linkModal').classList.remove('hidden');
+        }
+
+        function deleteLink(i) {
+            if (confirm("Smazat odkaz?")) {
+                communityLinks.splice(i, 1);
+                renderCommunity();
+            }
+        }
+
+        function exportData() {
+            const data = {news, reviews, communityLinks};
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = "yukki_data.json";
+            a.click();
+        }
+
+        window.onload = () => {
+            loadData();
+            renderHome();
+            renderNews();
+            renderReviews();
+            renderLeaderboard();
+            renderCommunity();
+            switchTab(0);
+        };
+    </script>
 </body>
 </html>
