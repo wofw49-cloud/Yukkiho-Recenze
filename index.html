@@ -24,7 +24,7 @@
                 <span class="text-4xl font-bold tracking-widest neon title-font">YUKKI</span>
             </div>
 
-            <div class="flex gap-8 text-lg font-medium">
+            <div class="flex gap-8 text-lg font-medium" id="tabs">
                 <button onclick="switchTab(0)" class="tab-active pb-1 px-4" id="tab-0">DOMŮ</button>
                 <button onclick="switchTab(1)" class="pb-1 px-4 hover:text-purple-400" id="tab-1">NOVINKY</button>
                 <button onclick="switchTab(2)" class="pb-1 px-4 hover:text-purple-400" id="tab-2">RECENZE</button>
@@ -44,7 +44,7 @@
         <!-- DOMŮ -->
         <div id="page-0">
             <h1 class="text-6xl font-bold text-center mt-10 mb-2 neon title-font">Vítej zpátky, Yukki</h1>
-            <div id="hero-news" onclick="openDetail('news', 0)" class="cursor-pointer relative h-[65vh] rounded-3xl overflow-hidden mb-12 border border-purple-500/30"></div>
+            <div id="hero-news" onclick="openDetail('news', 0)" class="cursor-pointer relative h-[65vh] rounded-3xl overflow-hidden mb-12 border border-purple-500/30 card-hover"></div>
             
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
                 <div class="lg:col-span-7">
@@ -74,60 +74,163 @@
         <div id="page-4" class="hidden"><h2 class="text-4xl font-bold title-font">KOMUNITA</h2></div>
     </main>
 
+    <!-- ADMIN BAR -->
+    <div id="adminBar" class="hidden fixed bottom-6 right-6 bg-zinc-900 border border-purple-500 rounded-2xl p-4 flex gap-3">
+        <button onclick="showCreateModal('news')" class="px-6 py-3 bg-purple-600 rounded-xl">+ Novinka</button>
+        <button onclick="showCreateModal('review')" class="px-6 py-3 bg-purple-600 rounded-xl">+ Recenze</button>
+        <button onclick="exportFullHTML()" class="px-6 py-3 bg-emerald-600 rounded-xl">📥 Stáhnout celý index.html</button>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
+        <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-md border border-purple-500">
+            <h2 class="text-3xl font-bold mb-6 text-center title-font">YUKKI ADMIN</h2>
+            <input id="loginUser" value="yukki" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
+            <input id="loginPass" type="password" value="yukki123" class="w-full mb-6 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
+            <button onclick="adminLogin()" class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-bold">Přihlásit se</button>
+        </div>
+    </div>
+
+    <!-- Create Modal -->
+    <div id="createModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
+        <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-2xl border border-purple-500">
+            <h2 class="text-2xl font-bold mb-6" id="modalTitle">Nový příspěvek</h2>
+            <input id="postTitle" placeholder="Název" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
+            <input id="postImage" placeholder="URL obrázku" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
+            <input id="postScore" type="number" placeholder="Hodnocení % (jen u recenzí)" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
+            <input id="postDate" type="date" class="w-full mb-6 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
+            <textarea id="postContent" rows="8" placeholder="Obsah..." class="w-full bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4"></textarea>
+            
+            <div class="flex gap-4 mt-6">
+                <button onclick="savePost()" class="flex-1 py-4 bg-purple-600 rounded-2xl font-bold">Uložit</button>
+                <button onclick="hideCreateModal()" class="flex-1 py-4 bg-zinc-800 rounded-2xl font-bold">Zrušit</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        let news = [
-            {
-                id: 2,
-                title: "Assassin's Creed Black Flag Resynced – datum vydání je venku!",
-                image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3751950/header.jpg?t=1777900688",
-                date: "2026-05-06",
-                content: `Po letech spekulací a leaků je to konečně oficiální. Ubisoft oznámil remake milovaného pirátského dílu na 9. července 2026.
+        let isAdmin = false;
+        let news = [];
+        let reviews = [];
 
-Hra se staví od základu na novém enginu, dostane kompletně předělanou grafiku, lepší animace, vylepšené námořní bitvy a odstranění některých frustrujících mechanik z originálu.
+        function loadData() {
+            news = JSON.parse(localStorage.getItem('yukki_news') || '[]');
+            reviews = JSON.parse(localStorage.getItem('yukki_reviews') || '[]');
 
-Fanoušci jsou z toho v extázi. Black Flag je pro spoustu lidí dodnes nejlepší díl série a teď to vypadá, že dostane zaslouženou moderní podobu.`
+            if (news.length === 0) {
+                news = [{
+                    id: 2,
+                    title: "Assassin's Creed Black Flag Resynced – datum vydání je venku!",
+                    image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3751950/header.jpg?t=1777900688",
+                    date: "2026-05-06",
+                    content: `Po letech spekulací je to konečně oficiální. Ubisoft oznámil remake milovaného pirátského dílu na 9. července 2026.\n\nHra poběží na vylepšeném enginu, dostane novou grafiku, lepší souboje a námořní bitvy. Jsem hyped jak malej.`
+                }];
             }
-        ];
+        }
 
-        function renderNews() {
+        function saveToLocalStorage() {
+            localStorage.setItem('yukki_news', JSON.stringify(news));
+            localStorage.setItem('yukki_reviews', JSON.stringify(reviews));
+        }
+
+        function exportFullHTML() {
+            const dataStr = JSON.stringify({news, reviews}, null, 2);
+            let html = `// === VLOŽ TOTO DO FUNKCE loadData() ===\n\nnews = ${JSON.stringify(news, null, 2)};\nreviews = ${JSON.stringify(reviews, null, 2)};`;
+            
+            const blob = new Blob([html], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'yukki_data_export.txt';
+            a.click();
+            alert("✅ Soubor stažen! Otevři ho a zkopíruj data do index.html");
+        }
+
+        function renderAll() {
+            // Hero
+            if (news.length > 0) {
+                const newest = news[0];
+                document.getElementById('hero-news').innerHTML = `
+                    <img src="${newest.image}" class="absolute inset-0 w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/70"></div>
+                    <div class="absolute bottom-12 left-12 right-12">
+                        <h2 class="text-5xl font-bold title-font">${newest.title}</h2>
+                        <p class="text-xl mt-4">${newest.content.substring(0, 200)}...</p>
+                    </div>
+                `;
+            }
+
+            // Novinky
             document.getElementById('news-container').innerHTML = news.map((n, i) => `
-                <div onclick="openDetail(${i})" class="bg-zinc-900 rounded-3xl overflow-hidden cursor-pointer">
+                <div onclick="openDetail('news', ${i})" class="bg-zinc-900 rounded-3xl overflow-hidden cursor-pointer card-hover">
                     <img src="${n.image}" class="w-full h-56 object-cover">
                     <div class="p-6">
                         <h3 class="text-2xl font-bold">${n.title}</h3>
-                        <p class="text-purple-400 text-sm mt-2">${n.date}</p>
+                        <p class="text-purple-400 text-sm">${n.date}</p>
                         <p class="mt-4">${n.content}</p>
                     </div>
                 </div>
             `).join('');
         }
 
-        function renderHome() {
-            const newest = news[0];
-            document.getElementById('hero-news').innerHTML = `
-                <img src="${newest.image}" class="absolute inset-0 w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/70"></div>
-                <div class="absolute bottom-12 left-12 right-12">
-                    <span class="bg-red-600 px-4 py-1 text-sm">NOVINKA</span>
-                    <h2 class="text-5xl font-bold mt-6">${newest.title}</h2>
-                    <p class="text-xl text-gray-300 mt-4 line-clamp-3">${newest.content}</p>
-                </div>
-            `;
-        }
-
-        function openDetail(i) {
-            const n = news[i];
-            alert(n.title + "\n\n" + n.content);
+        function openDetail(type, i) {
+            alert("Otevírám detail: " + (type === 'news' ? news[i].title : "Recenze"));
         }
 
         function switchTab(n) {
             document.querySelectorAll('[id^="page-"]').forEach(p => p.classList.add('hidden'));
             document.getElementById(`page-${n}`).classList.remove('hidden');
+            document.querySelectorAll('#tabs button').forEach((b, i) => b.classList.toggle('tab-active', i === n));
+        }
+
+        function toggleLogin() {
+            document.getElementById('loginModal').classList.toggle('hidden');
+        }
+
+        function adminLogin() {
+            if (document.getElementById('loginUser').value === "yukki" && document.getElementById('loginPass').value === "yukki123") {
+                isAdmin = true;
+                document.getElementById('loginText').innerHTML = '👑 YUKKI';
+                document.getElementById('adminBar').classList.remove('hidden');
+                toggleLogin();
+                alert("Přihlášen jako admin!");
+            }
+        }
+
+        function showCreateModal(type) {
+            if (!isAdmin) return alert("Nejsi přihlášen!");
+            document.getElementById('modalTitle').textContent = type === 'news' ? "Nová novinka" : "Nová recenze";
+            document.getElementById('createModal').classList.remove('hidden');
+        }
+
+        function hideCreateModal() {
+            document.getElementById('createModal').classList.add('hidden');
+        }
+
+        function savePost() {
+            const title = document.getElementById('postTitle').value;
+            const image = document.getElementById('postImage').value || "https://picsum.photos/id/237/1200/700";
+            const score = parseInt(document.getElementById('postScore').value) || 0;
+            const date = document.getElementById('postDate').value || new Date().toISOString().split('T')[0];
+            const content = document.getElementById('postContent').value;
+
+            if (!title) return alert("Napiš název!");
+
+            if (document.getElementById('modalTitle').textContent.includes("novinka")) {
+                news.unshift({id: Date.now(), title, image, date, content});
+            } else {
+                reviews.unshift({id: Date.now(), title, image, score, date, content});
+            }
+
+            saveToLocalStorage();
+            hideCreateModal();
+            renderAll();
+            alert("Uloženo!");
         }
 
         window.onload = () => {
-            renderNews();
-            renderHome();
+            loadData();
+            renderAll();
             switchTab(0);
         };
     </script>
