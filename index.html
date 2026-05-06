@@ -26,7 +26,6 @@
         }
         .modal-content-wrapper::-webkit-scrollbar { width: 6px; }
         .modal-content-wrapper::-webkit-scrollbar-thumb { background: #ef4444; border-radius: 10px; }
-        .platform-btn.active { background: #ef4444; color: white; box-shadow: 0 0 20px rgba(239, 68, 68, 0.5); }
         .kalendar-nadpis {
             font-family: 'Orbitron', sans-serif;
             font-size: clamp(2rem, 5vw, 3.8rem);
@@ -54,7 +53,7 @@
                 <button onclick="switchTab(4)" class="py-2 px-4 hover:text-white transition-colors" id="tab-4">KOMUNITA</button>
                 <button onclick="switchTab(5)" class="py-2 px-4 hover:text-white transition-colors" id="tab-5">KALENDÁŘ</button>
             </div>
-            <button onclick="toggleLogin()" class="px-5 py-2.5 bg-red-600 hover:bg-red-500 rounded-xl font-bold transition-all flex items-center gap-2 shadow-lg shadow-red-900/30 active:scale-95">
+            <button onclick="toggleLogin()" class="px-5 py-2.5 bg-red-600 hover:bg-red-500 rounded-xl font-bold transition-all flex items-center gap-2 shadow-lg shadow-red-900/30">
                 <i class="fas fa-user-shield text-sm"></i>
                 <span id="loginText">ADMIN</span>
             </button>
@@ -96,16 +95,19 @@
     </div>
 
     <div id="createModal" class="hidden fixed inset-0 bg-black/95 z-[100] flex items-center justify-center p-6 backdrop-blur-sm">
-        <div class="bg-zinc-900 border border-red-500/40 rounded-[3rem] p-10 w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl">
+        <div class="bg-zinc-900 border border-red-500/40 rounded-[3rem] p-10 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
             <h2 id="modalTitle" class="text-3xl font-bold mb-8 title-font uppercase text-red-500">PŘIDAT OBSAH</h2>
             <div class="space-y-4">
-                <input id="gameName" placeholder="Hra / Kategorie" class="w-full bg-zinc-800/50 border border-zinc-700 rounded-2xl px-6 py-4 outline-none">
-                <input id="postTitle" placeholder="Nadpis" class="w-full bg-zinc-800/50 border border-zinc-700 rounded-2xl px-6 py-4 outline-none">
-                <input id="postImage" placeholder="URL obrázku" class="w-full bg-zinc-800/50 border border-zinc-700 rounded-2xl px-6 py-4 outline-none">
-                <input id="postScore" type="number" placeholder="Hodnocení %" class="w-full bg-zinc-800/50 border border-zinc-700 rounded-2xl px-6 py-4 outline-none">
-                <textarea id="postContent" rows="8" placeholder="Text..." class="w-full bg-zinc-800/50 border border-zinc-700 rounded-2xl px-6 py-4 outline-none"></textarea>
+                <input id="gameName" placeholder="Hra / Kategorie" class="w-full bg-zinc-800/50 border border-zinc-700 rounded-2xl px-6 py-4 outline-none text-white">
+                <input id="postTitle" placeholder="Nadpis" class="w-full bg-zinc-800/50 border border-zinc-700 rounded-2xl px-6 py-4 outline-none text-white">
+                <input id="postImage" placeholder="URL obrázku" class="w-full bg-zinc-800/50 border border-zinc-700 rounded-2xl px-6 py-4 outline-none text-white">
+                <input id="postScore" type="number" placeholder="Hodnocení % (jen pro recenze)" class="w-full bg-zinc-800/50 border border-zinc-700 rounded-2xl px-6 py-4 outline-none text-white">
+                <textarea id="postContent" rows="8" placeholder="Text..." class="w-full bg-zinc-800/50 border border-zinc-700 rounded-2xl px-6 py-4 outline-none text-white"></textarea>
             </div>
-            <div class="flex gap-4 mt-8"><button onclick="savePost()" class="flex-1 py-4 bg-red-600 rounded-2xl font-bold">ULOŽIT</button><button onclick="hideCreateModal()" class="flex-1 py-4 bg-zinc-800 rounded-2xl font-bold">ZAVŘÍT</button></div>
+            <div class="flex gap-4 mt-8">
+                <button onclick="savePost()" class="flex-1 py-4 bg-red-600 rounded-2xl font-bold">ULOŽIT</button>
+                <button onclick="hideCreateModal()" class="flex-1 py-4 bg-zinc-800 rounded-2xl font-bold">ZAVŘÍT</button>
+            </div>
         </div>
     </div>
 
@@ -113,19 +115,23 @@
         <div class="bg-zinc-900 border border-red-500/40 rounded-[3rem] p-10 w-full max-w-xl shadow-2xl">
             <h2 class="text-3xl font-bold mb-8 title-font text-red-500 uppercase">Nové Vydání</h2>
             <div class="space-y-4">
-                <input id="relTitle" placeholder="Název hry" class="w-full bg-zinc-800/50 border border-zinc-700 rounded-2xl px-6 py-4 outline-none">
+                <input id="relTitle" placeholder="Název hry" class="w-full bg-zinc-800/50 border border-zinc-700 rounded-2xl px-6 py-4 outline-none text-white">
                 <input id="relDate" type="date" class="w-full bg-zinc-800/50 border border-zinc-700 rounded-2xl px-6 py-4 outline-none text-white">
-                <input id="relImg" placeholder="URL obrázku" class="w-full bg-zinc-800/50 border border-zinc-700 rounded-2xl px-6 py-4 outline-none">
-                <input id="relPlat" placeholder="Platformy (PC, PS5...)" class="w-full bg-zinc-800/50 border border-zinc-700 rounded-2xl px-6 py-4 outline-none">
+                <input id="relImg" placeholder="URL obrázku" class="w-full bg-zinc-800/50 border border-zinc-700 rounded-2xl px-6 py-4 outline-none text-white">
+                <input id="relPlat" placeholder="Platformy (PC, PS5...)" class="w-full bg-zinc-800/50 border border-zinc-700 rounded-2xl px-6 py-4 outline-none text-white">
+                <input id="relFlag" placeholder="URL české vlajky (volitelné)" class="w-full bg-zinc-800/50 border border-zinc-700 rounded-2xl px-6 py-4 outline-none text-white">
             </div>
-            <div class="flex gap-4 mt-10"><button onclick="saveRelease()" class="flex-1 py-4 bg-red-600 rounded-2xl font-bold">ULOŽIT</button><button onclick="closeReleaseModal()" class="flex-1 py-4 bg-zinc-800 rounded-2xl font-bold">ZRUŠIT</button></div>
+            <div class="flex gap-4 mt-10">
+                <button onclick="saveRelease()" class="flex-1 py-4 bg-red-600 rounded-2xl font-bold">ULOŽIT</button>
+                <button onclick="closeReleaseModal()" class="flex-1 py-4 bg-zinc-800 rounded-2xl font-bold">ZRUŠIT</button>
+            </div>
         </div>
     </div>
 
     <div id="loginModal" class="hidden fixed inset-0 bg-black/95 z-[110] flex items-center justify-center p-6 backdrop-blur-md">
         <div class="bg-zinc-900 border border-red-500/50 p-12 rounded-[3rem] w-full max-w-sm text-center">
             <h2 class="text-2xl font-bold mb-8 title-font uppercase">Admin Login</h2>
-            <input id="loginPass" type="password" placeholder="Heslo" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 outline-none text-center mb-6">
+            <input id="loginPass" type="password" placeholder="Heslo" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-6 py-4 outline-none text-center mb-6 text-white">
             <button onclick="adminLogin()" class="w-full py-4 bg-red-600 rounded-2xl font-bold">PŘIHLÁSIT</button>
             <button onclick="toggleLogin()" class="mt-6 text-zinc-500 text-sm">Zavřít</button>
         </div>
@@ -133,12 +139,12 @@
 
     <div id="detailModal" class="hidden fixed inset-0 bg-black/98 z-[120] flex items-start justify-center pt-10 pb-10 overflow-hidden backdrop-blur-xl">
         <div class="bg-zinc-900 rounded-[3rem] w-full max-w-6xl border border-red-500/20 overflow-hidden relative max-h-[92vh] flex flex-col shadow-2xl">
-            <button onclick="closeModal()" class="absolute top-8 right-8 z-30 w-12 h-12 bg-black/60 hover:bg-red-600 rounded-full flex items-center justify-center transition-all border border-zinc-700">✕</button>
+            <button onclick="closeModal()" class="absolute top-8 right-8 z-30 w-12 h-12 bg-black/60 hover:bg-red-600 rounded-full flex items-center justify-center transition-all border border-zinc-700 text-white">✕</button>
             <div id="modal-media" class="w-full h-[48vh] relative"></div>
             <div class="modal-content-wrapper flex-1 p-10 md:p-16 overflow-y-auto bg-gradient-to-t from-zinc-950 to-zinc-900">
                 <div class="max-w-4xl mx-auto">
                     <div id="modal-game-name" class="text-red-500 font-bold tracking-[0.3em] uppercase text-sm mb-4"></div>
-                    <h2 id="modal-title" class="text-4xl md:text-6xl font-black title-font mb-6 leading-tight uppercase"></h2>
+                    <h2 id="modal-title" class="text-4xl md:text-6xl font-black title-font mb-6 leading-tight uppercase text-white"></h2>
                     <div id="modal-score" class="inline-block text-6xl font-black text-red-500 mb-10"></div>
                     <div id="modal-content" class="text-zinc-300 leading-relaxed text-lg whitespace-pre-wrap"></div>
                 </div>
@@ -149,20 +155,16 @@
     <script>
         let isAdmin = false;
         let editingType = null;
-        let currentEditId = null;
 
-        // TVOJE DATA ZADANÁ PŘÍMO V KÓDU
+        // VÝCHOZÍ DATA
         const defaultNews = [
-            { id: 1778031631685, game: "GTA VI", title: "Proč si PC hráči musejí počkat na Grand Theft Auto VI?", image: "https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg?", date: "2026-05-06", content: "Hry od Rockstar Games vycházejí nejprve na konzole..." }
+            { id: 1, game: "GTA VI", title: "Proč si PC hráči musejí počkat na Grand Theft Auto VI?", image: "https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg?", date: "2026-05-06", content: "Hry od Rockstar Games vycházejí nejprve na konzole..." }
         ];
         const defaultReviews = [
-            { id: 1778031727108, game: "Crimson Desert", title: "Crimson Desert - Recenze", score: 68, image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3321460/669119c3747653f41a46c59f213168448d094e04/ss_669119c3747653f41a46c59f213168448d094e04.1920x1080.jpg", content: "Crimson Desert je jeden z největších titulů...", date: "2026-03-22" },
-            { id: 1778031574329, game: "MOUSE", title: "MOUSE: P.I. For Hire", score: 82, image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2416450/298ff2fc3f6a700d022b8d3ec58047f2b426be03/header.jpg", content: "Stylová retro FPS...", date: "2026-05-06" }
+            { id: 101, game: "MOUSE", title: "MOUSE: P.I. For Hire", score: 82, image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2416450/298ff2fc3f6a700d022b8d3ec58047f2b426be03/header.jpg", content: "Stylová retro FPS...", date: "2026-05-06" }
         ];
         const defaultReleases = [
-            { id: 1, title: "Grand Theft Auto VI", date: "2026-11-19", platforms: ["PS5", "Xbox"], image: "https://indian-tv.cz/uploads/00/f2f73c64d9ff4ae594f591cd103e0299/1762505917.jpg?", czech: false },
-            { id: 2, title: "Subnautica 2", date: "2026-05-14", platforms: ["PC", "Xbox"], image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1962700/787e2315a1eb5aaba73c4f75e6f7d7d8835fa260/ss_787e2315a1eb5aaba73c4f75e6f7d7d8835fa260.1920x1080.jpg?t=1778032896", czech: false },
-            { id: 3, title: "Knight's Path", date: "2026-10-15", platforms: ["PC", "PS5"], image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2855590/3f52c04692bda8fd436463ba3302f052b9558b93/ss_3f52c04692bda8fd436463ba3302f052b9558b93.1920x1080.jpg?t=1770326643", czech: true }
+            { id: 201, title: "Grand Theft Auto VI", date: "2026-11-19", platforms: ["PS5", "Xbox"], image: "https://indian-tv.cz/uploads/00/f2f73c64d9ff4ae594f591cd103e0299/1762505917.jpg?", flag: "https://upload.wikimedia.org/wikipedia/commons/c/cb/Flag_of_the_Czech_Republic.svg" }
         ];
 
         let news = JSON.parse(localStorage.getItem('yukki_news')) || defaultNews;
@@ -183,71 +185,88 @@
             window.scrollTo(0,0);
         }
 
+        // --- RENDERING ---
+
         function renderNews() {
-            document.getElementById('news-container').innerHTML = news.map(n => `
-                <div class="glass-card rounded-[2.5rem] overflow-hidden group">
+            // Seřadit od nejnovějšího podle ID nebo data
+            const sorted = [...news].sort((a,b) => b.id - a.id);
+            document.getElementById('news-container').innerHTML = sorted.map(n => `
+                <div class="glass-card rounded-[2.5rem] overflow-hidden group relative">
+                    ${isAdmin ? `<button onclick="deleteItem('news', ${n.id})" class="absolute top-4 left-4 z-20 bg-red-600 p-2 rounded-full text-white text-xs">SMAZAT</button>` : ''}
                     <div class="relative overflow-hidden h-72 cursor-pointer" onclick="openDetail('news', ${n.id})">
                         <img src="${n.image}" class="w-full h-full object-cover transition-transform group-hover:scale-110">
                     </div>
                     <div class="p-8">
-                        <div class="text-red-500 font-bold text-[10px] mb-2 uppercase">${n.game || 'NOVINKA'} • ${n.date}</div>
-                        <h3 class="text-2xl font-bold mb-6">${n.title}</h3>
-                        ${isAdmin ? `<button onclick="deleteItem('news', ${n.id})" class="text-red-500 text-xs font-bold">SMAZAT</button>` : ''}
+                        <div class="text-red-500 font-bold text-[10px] mb-2 uppercase tracking-widest">${n.game || 'NOVINKA'}</div>
+                        <h3 class="text-2xl font-bold mb-6 text-white">${n.title}</h3>
                     </div>
                 </div>`).join('');
         }
 
         function renderReviews() {
-            document.getElementById('reviews-container').innerHTML = reviews.map(r => `
-                <div class="glass-card rounded-[2.5rem] overflow-hidden group">
+            const sorted = [...reviews].sort((a,b) => b.id - a.id);
+            document.getElementById('reviews-container').innerHTML = sorted.map(r => `
+                <div class="glass-card rounded-[2.5rem] overflow-hidden group relative">
+                    ${isAdmin ? `<button onclick="deleteItem('review', ${r.id})" class="absolute top-4 left-4 z-20 bg-red-600 p-2 rounded-full text-white text-xs">SMAZAT</button>` : ''}
                     <div class="relative h-64 overflow-hidden cursor-pointer" onclick="openDetail('review', ${r.id})">
                         <img src="${r.image}" class="w-full h-full object-cover transition-transform group-hover:scale-110">
-                        <div class="absolute top-4 right-4 bg-red-600/90 px-4 py-2 rounded-xl text-white font-black text-xl">${r.score}%</div>
+                        <div class="absolute top-4 right-4 bg-red-600/90 px-4 py-2 rounded-xl text-white font-black text-xl shadow-lg">${r.score}%</div>
                     </div>
                     <div class="p-8">
-                        <div class="text-red-500 font-bold text-[10px] mb-1 uppercase">${r.game || 'RECENZE'}</div>
-                        <h3 class="text-xl font-bold mb-6">${r.title}</h3>
-                        ${isAdmin ? `<button onclick="deleteItem('review', ${r.id})" class="text-red-500 text-xs font-bold">SMAZAT</button>` : ''}
+                        <div class="text-red-500 font-bold text-[10px] mb-1 uppercase tracking-widest">${r.game || 'RECENZE'}</div>
+                        <h3 class="text-xl font-bold mb-6 text-white">${r.title}</h3>
                     </div>
                 </div>`).join('');
         }
 
         function renderCalendar() {
-            document.getElementById('calendar-container').innerHTML = releases.map(g => `
-                <div class="glass-card rounded-[2.5rem] p-6">
-                    <img src="${g.image}" class="w-full h-48 object-cover rounded-3xl mb-6">
-                    <h4 class="text-2xl font-black title-font uppercase">${g.title}</h4>
-                    <p class="text-red-500 font-bold text-sm mt-1">${new Date(g.date).toLocaleDateString('cs-CZ')}</p>
-                    <div class="flex flex-wrap gap-2 mt-4">
+            // Seřadit podle data vzestupně
+            const sorted = [...releases].sort((a,b) => new Date(a.date) - new Date(b.date));
+            document.getElementById('calendar-container').innerHTML = sorted.map(g => `
+                <div class="glass-card rounded-[2.5rem] p-6 relative">
+                    ${isAdmin ? `<button onclick="deleteRelease(${g.id})" class="absolute top-4 left-4 z-20 bg-red-600 p-2 rounded-full text-white text-xs">SMAZAT</button>` : ''}
+                    <img src="${g.image}" class="w-full h-48 object-cover rounded-3xl mb-6 shadow-lg">
+                    <h4 class="text-2xl font-black title-font uppercase text-white">${g.title}</h4>
+                    <p class="text-red-500 font-bold text-sm mt-1 uppercase tracking-widest">${new Date(g.date).toLocaleDateString('cs-CZ')}</p>
+                    <div class="flex flex-wrap gap-2 mt-4 items-center">
                         ${g.platforms.map(p => `<span class="bg-zinc-800 text-zinc-400 text-[10px] px-4 py-1.5 rounded-full font-black uppercase">${p}</span>`).join('')}
-                        ${g.czech ? '🇨🇿' : ''}
+                        ${g.flag ? `<img src="${g.flag}" class="w-6 h-4 object-cover rounded-sm ml-2">` : ''}
                     </div>
-                    ${isAdmin ? `<button onclick="deleteRelease(${g.id})" class="mt-4 text-red-500 text-xs font-bold">SMAZAT</button>` : ''}
                 </div>`).join('');
         }
 
         function renderHome() {
+            // Hero section (nejnovější novinka)
             if(news.length > 0) {
-                const latest = news[0];
+                const latest = [...news].sort((a,b) => b.id - a.id)[0];
                 document.getElementById('hero-news').innerHTML = `
                     <img src="${latest.image}" class="w-full h-full object-cover opacity-60">
                     <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20"></div>
                     <div class="absolute bottom-16 left-16 right-16">
-                        <span class="bg-red-600 px-6 py-2 rounded-full text-[10px] font-black mb-6 inline-block uppercase">NEJNOVĚJŠÍ</span>
-                        <h2 class="text-5xl md:text-7xl font-black title-font uppercase">${latest.title}</h2>
+                        <span class="bg-red-600 px-6 py-2 rounded-full text-[10px] font-black mb-6 inline-block uppercase text-white">NEJNOVĚJŠÍ</span>
+                        <h2 class="text-5xl md:text-7xl font-black title-font uppercase text-white">${latest.title}</h2>
                     </div>`;
                 document.getElementById('hero-news').onclick = () => openDetail('news', latest.id);
             }
-            document.getElementById('home-releases').innerHTML = releases.slice(0, 3).map(g => `
+
+            // Nadcházející hity
+            const upcoming = [...releases].sort((a,b) => new Date(a.date) - new Date(b.date)).slice(0, 3);
+            document.getElementById('home-releases').innerHTML = upcoming.map(g => `
                 <div class="glass-card p-6 rounded-[2rem]">
                     <img src="${g.image}" class="w-full h-32 object-cover rounded-2xl mb-4">
-                    <h4 class="font-bold text-lg uppercase">${g.title}</h4>
-                    <p class="text-red-500 text-xs font-bold mt-1 uppercase">${g.date}</p>
+                    <h4 class="font-bold text-lg uppercase text-white">${g.title}</h4>
+                    <p class="text-red-500 text-xs font-bold mt-1 uppercase">${new Date(g.date).toLocaleDateString('cs-CZ')}</p>
                 </div>`).join('');
-            document.getElementById('home-reviews').innerHTML = reviews.slice(0, 3).map(r => `
+
+            // Recenze na domů
+            const lastReviews = [...reviews].sort((a,b) => b.id - a.id).slice(0, 3);
+            document.getElementById('home-reviews').innerHTML = lastReviews.map(r => `
                 <div class="glass-card p-5 rounded-[2rem] flex items-center gap-5 cursor-pointer" onclick="openDetail('review', ${r.id})">
-                    <img src="${r.image}" class="w-16 h-16 object-cover rounded-xl">
-                    <div><h4 class="font-bold text-sm">${r.game || r.title}</h4><span class="text-red-500 font-black text-sm">${r.score}%</span></div>
+                    <img src="${r.image}" class="w-16 h-16 object-cover rounded-xl shadow-md">
+                    <div>
+                        <h4 class="font-bold text-sm text-white">${r.game || r.title}</h4>
+                        <span class="text-red-500 font-black text-sm">${r.score}%</span>
+                    </div>
                 </div>`).join('');
         }
 
@@ -257,52 +276,103 @@
                 <div class="glass-card p-6 rounded-3xl flex items-center gap-8 cursor-pointer" onclick="openDetail('review', ${r.id})">
                     <div class="text-5xl font-black text-zinc-800 italic">0${i+1}</div>
                     <img src="${r.image}" class="w-24 h-24 object-cover rounded-2xl">
-                    <div class="flex-1 font-black text-2xl uppercase">${r.game || r.title}</div>
+                    <div class="flex-1 font-black text-2xl uppercase text-white tracking-tighter">${r.game || r.title}</div>
                     <div class="text-4xl font-black text-red-500">${r.score}%</div>
                 </div>`).join('');
         }
 
         function renderCommunity() {
             document.getElementById('community-container').innerHTML = `
-                <a href="https://www.youtube.com/@YukkiCZE" target="_blank" class="glass-card p-16 rounded-[3rem] text-center group"><i class="fab fa-youtube text-7xl text-red-600 mb-6 group-hover:scale-110 transition-all"></i><h3 class="text-3xl font-black uppercase">Youtube</h3></a>
-                <a href="https://www.instagram.com/_yukki77_/" target="_blank" class="glass-card p-16 rounded-[3rem] text-center group"><i class="fab fa-instagram text-7xl text-rose-500 mb-6 group-hover:scale-110 transition-all"></i><h3 class="text-3xl font-black uppercase">Instagram</h3></a>`;
+                <a href="https://www.youtube.com/@YukkiCZE" target="_blank" class="glass-card p-16 rounded-[3rem] text-center group"><i class="fab fa-youtube text-7xl text-red-600 mb-6 group-hover:scale-110 transition-all"></i><h3 class="text-3xl font-black uppercase text-white">Youtube</h3></a>
+                <a href="https://www.instagram.com/_yukki77_/" target="_blank" class="glass-card p-16 rounded-[3rem] text-center group"><i class="fab fa-instagram text-7xl text-rose-500 mb-6 group-hover:scale-110 transition-all"></i><h3 class="text-3xl font-black uppercase text-white">Instagram</h3></a>`;
         }
 
-        // ADMIN FUNKCE
+        // --- ADMIN FUNKCE ---
+
         function toggleLogin() { document.getElementById('loginModal').classList.toggle('hidden'); }
-        function adminLogin() { if(document.getElementById('loginPass').value === "yukki123") { isAdmin = true; document.getElementById('adminBar').classList.remove('hidden'); document.getElementById('loginModal').classList.add('hidden'); renderAll(); } }
+        
+        function adminLogin() { 
+            if(document.getElementById('loginPass').value === "yukki123") { 
+                isAdmin = true; 
+                document.getElementById('adminBar').classList.remove('hidden'); 
+                document.getElementById('loginModal').classList.add('hidden'); 
+                renderAll(); 
+            } else { alert("Špatné heslo!"); }
+        }
+
         function logout() { location.reload(); }
-        function showCreateModal(type) { editingType = type; currentEditId = null; document.getElementById('createModal').classList.remove('hidden'); }
+        
+        function showCreateModal(type) { 
+            editingType = type; 
+            document.getElementById('modalTitle').innerText = type === 'news' ? 'PŘIDAT NOVINKU' : 'PŘIDAT RECENZI';
+            document.getElementById('createModal').classList.remove('hidden'); 
+        }
+
         function hideCreateModal() { document.getElementById('createModal').classList.add('hidden'); }
         function showCreateReleaseModal() { document.getElementById('releaseModal').classList.remove('hidden'); }
         function closeReleaseModal() { document.getElementById('releaseModal').classList.add('hidden'); }
 
         function savePost() {
-            const data = { id: Date.now(), game: document.getElementById('gameName').value, title: document.getElementById('postTitle').value, image: document.getElementById('postImage').value, score: document.getElementById('postScore').value, content: document.getElementById('postContent').value, date: new Date().toLocaleDateString('cs-CZ') };
-            if(editingType === 'news') { news.unshift(data); localStorage.setItem('yukki_news', JSON.stringify(news)); }
-            else { reviews.unshift(data); localStorage.setItem('yukki_reviews', JSON.stringify(reviews)); }
+            const data = { 
+                id: Date.now(), 
+                game: document.getElementById('gameName').value, 
+                title: document.getElementById('postTitle').value, 
+                image: document.getElementById('postImage').value, 
+                score: document.getElementById('postScore').value, 
+                content: document.getElementById('postContent').value, 
+                date: new Date().toISOString() 
+            };
+            if(editingType === 'news') { news.push(data); localStorage.setItem('yukki_news', JSON.stringify(news)); }
+            else { reviews.push(data); localStorage.setItem('yukki_reviews', JSON.stringify(reviews)); }
             hideCreateModal(); renderAll();
         }
 
         function saveRelease() {
-            const rel = { id: Date.now(), title: document.getElementById('relTitle').value, date: document.getElementById('relDate').value, image: document.getElementById('relImg').value, platforms: document.getElementById('relPlat').value.split(','), czech: false };
+            const rel = { 
+                id: Date.now(), 
+                title: document.getElementById('relTitle').value, 
+                date: document.getElementById('relDate').value, 
+                image: document.getElementById('relImg').value, 
+                platforms: document.getElementById('relPlat').value.split(','), 
+                flag: document.getElementById('relFlag').value 
+            };
             releases.push(rel); localStorage.setItem('yukki_releases', JSON.stringify(releases));
             closeReleaseModal(); renderAll();
         }
 
-        function deleteItem(type, id) { if(confirm("Smazat?")) { if(type === 'news') news = news.filter(n => n.id !== id); else reviews = reviews.filter(r => r.id !== id); localStorage.setItem(`yukki_${type}`, JSON.stringify(type === 'news' ? news : reviews)); renderAll(); } }
-        function deleteRelease(id) { if(confirm("Smazat?")) { releases = releases.filter(r => r.id !== id); localStorage.setItem('yukki_releases', JSON.stringify(releases)); renderAll(); } }
+        function deleteItem(type, id) { 
+            if(confirm("Opravdu smazat?")) { 
+                if(type === 'news') news = news.filter(n => n.id !== id); 
+                else reviews = reviews.filter(r => r.id !== id); 
+                localStorage.setItem(`yukki_${type === 'news' ? 'news' : 'reviews'}`, JSON.stringify(type === 'news' ? news : reviews)); 
+                renderAll(); 
+            } 
+        }
+
+        function deleteRelease(id) { 
+            if(confirm("Smazat vydání?")) { 
+                releases = releases.filter(r => r.id !== id); 
+                localStorage.setItem('yukki_releases', JSON.stringify(releases)); 
+                renderAll(); 
+            } 
+        }
 
         function openDetail(type, id) {
             const item = (type === 'news' ? news : reviews).find(x => x.id === id);
+            if(!item) return;
             document.getElementById('modal-game-name').innerText = item.game || "INFO";
             document.getElementById('modal-title').innerText = item.title;
             document.getElementById('modal-content').innerText = item.content;
             document.getElementById('modal-score').innerText = item.score ? `${item.score}%` : '';
             document.getElementById('modal-media').innerHTML = `<img src="${item.image}" class="w-full h-full object-cover">`;
             document.getElementById('detailModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
         }
-        function closeModal() { document.getElementById('detailModal').classList.add('hidden'); }
+
+        function closeModal() { 
+            document.getElementById('detailModal').classList.add('hidden'); 
+            document.body.style.overflow = 'auto';
+        }
     </script>
 </body>
 </html>
