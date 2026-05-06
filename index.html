@@ -92,32 +92,13 @@
         <button onclick="exportData()" class="px-6 py-3 bg-emerald-600 rounded-xl font-bold">📤 Export</button>
     </div>
 
-    <!-- LOGIN / REGISTER MODAL -->
+    <!-- LOGIN MODAL -->
     <div id="loginModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
         <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-md border border-red-500">
-            <h2 class="text-3xl font-bold mb-6 text-center title-font">YUKKI</h2>
-            
-            <div class="flex border-b border-zinc-700 mb-6">
-                <button onclick="switchAuthTab(0)" id="auth-tab-0" class="flex-1 py-3 tab-active">Přihlášení</button>
-                <button onclick="switchAuthTab(1)" id="auth-tab-1" class="flex-1 py-3">Registrace</button>
-            </div>
-
-            <!-- LOGIN FORM -->
-            <div id="login-form">
-                <input id="loginUser" value="yukki" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4" placeholder="Uživatelské jméno">
-                <input id="loginPass" type="password" value="yukki123" class="w-full mb-6 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4" placeholder="Heslo">
-                <button onclick="adminLogin()" class="w-full py-4 bg-gradient-to-r from-red-600 to-rose-600 rounded-2xl font-bold">Přihlásit se</button>
-            </div>
-
-            <!-- REGISTER FORM -->
-            <div id="register-form" class="hidden">
-                <input id="regUsername" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4" placeholder="Uživatelské jméno">
-                <input id="regPassword" type="password" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4" placeholder="Heslo">
-                <input id="regPassword2" type="password" class="w-full mb-6 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4" placeholder="Heslo znovu">
-                <button onclick="registerUser()" class="w-full py-4 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl font-bold">Registrovat se</button>
-            </div>
-
-            <p id="auth-message" class="text-center text-sm mt-4 text-gray-400"></p>
+            <h2 class="text-3xl font-bold mb-6 text-center title-font">YUKKI ADMIN</h2>
+            <input id="loginUser" value="yukki" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
+            <input id="loginPass" type="password" value="yukki123" class="w-full mb-6 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
+            <button onclick="adminLogin()" class="w-full py-4 bg-gradient-to-r from-red-600 to-rose-600 rounded-2xl font-bold">Přihlásit se</button>
         </div>
     </div>
 
@@ -167,7 +148,6 @@
 
     <script>
         let isAdmin = false;
-        let currentUser = null;
         let news = [];
         let reviews = [];
         let communityLinks = [];
@@ -175,38 +155,26 @@
         let editingIndex = null;
         let editingLinkIndex = null;
 
-function loadData() {
+        function loadData() {
             news = [{
-                id: 1778037001738,
+                id: 1778031631685,
                 title: "Proč si PC hráči musejí počkat na Grand Theft Auto VI?",
                 image: "https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg?",
-                images: ["https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg?"],
+                images: [],
                 video: "",
-                date: "2026-05-04",
-                content: "Hry od Rockstar Games vycházejí nejprve na konzole a až později na počítače. Stejné to bude i u GTA 6. Proč tomu tak je? Palčivé otázce se věnoval generální ředitel Take-Two Interactive. Potvrdil také marketingovou exkluzivitu PlayStationu.\n\nTahle odpověď PC hráče nepotěší. Rockstar se snaží nejprve obsloužit hlavní uživatelskou základnu, a to co nejlépe. Tím se myslí právě hráči na PlayStationu a Xboxu.\n\n„Rockstar vždy začíná na konzolích, protože právě tam vás hráči hodnotí podle toho, jak dobře zvládnete launch,“ vysvětlil Strauss Zelnick pro Bloomberg. Jinými slovy, pokud by start nevyšel podle představ, mohlo by to negativně ovlivnit i pozdější prodeje na dalších platformách.\n\nZároveň zdůraznil, že zpoždění PC verze nijak nesouvisí s marketingovou spoluprací se Sony u Grand Theft Auto VI. Jde o dlouhodobou strategii, kterou Rockstar používá už roky. Zajímavé je, že samotná data jdou proti této logice. Zelnick totiž zároveň připustil, že u velkých titulů dnes může PC tvořit klidně 45 až 50 % celkových prodejů. Pro srovnání – ještě v roce 2007 to bylo jen kolem 5 % u NBA 2K.\n\nPřesto se strategie nemění, protože konzole jsou pro Rockstar stále klíčovým startovním bodem a až následně přichází rozšíření na další platformy. Doufejme, že alespoň na PC verzi nebudeme čekat dlouho. Spekuluje se o vydání v první polovině roku 2027.\n\nVedle toho bylo potvrzeno i něco, o čem se spekulovalo už delší dobu. GTA 6 má marketingové partnerství se Sony. Hra tak bude v reklamních materiálech primárně spojována s konzolí PlayStation 5. To ale neznamená exkluzivní obsah. Jde čistě o to, že hra bude prezentována na PS5 a všude bude vidět logo PlayStationu. Je dost možné, že vznikne také bundle s konzolí a hrou."
-            },
-             {
-               id: 1778037001738,
-                title: "Proč si PC hráči musejí počkat na Grand Theft Auto VI?",
-                image: "https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg?",
-                images: ["https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg?"],
-                video: "",
-                date: "2026-05-05",
-                content: "Hry od Rockstar Games vycházejí nejprve na konzole a až později na počítače. Stejné to bude i u GTA 6. Proč tomu tak je? Palčivé otázce se věnoval generální ředitel Take-Two Interactive. Potvrdil také marketingovou exkluzivitu PlayStationu.\n\nTahle odpověď PC hráče nepotěší. Rockstar se snaží nejprve obsloužit hlavní uživatelskou základnu, a to co nejlépe. Tím se myslí právě hráči na PlayStationu a Xboxu.\n\n„Rockstar vždy začíná na konzolích, protože právě tam vás hráči hodnotí podle toho, jak dobře zvládnete launch,“ vysvětlil Strauss Zelnick pro Bloomberg. Jinými slovy, pokud by start nevyšel podle představ, mohlo by to negativně ovlivnit i pozdější prodeje na dalších platformách.\n\nZároveň zdůraznil, že zpoždění PC verze nijak nesouvisí s marketingovou spoluprací se Sony u Grand Theft Auto VI. Jde o dlouhodobou strategii, kterou Rockstar používá už roky. Zajímavé je, že samotná data jdou proti této logice. Zelnick totiž zároveň připustil, že u velkých titulů dnes může PC tvořit klidně 45 až 50 % celkových prodejů. Pro srovnání – ještě v roce 2007 to bylo jen kolem 5 % u NBA 2K.\n\nPřesto se strategie nemění, protože konzole jsou pro Rockstar stále klíčovým startovním bodem a až následně přichází rozšíření na další platformy. Doufejme, že alespoň na PC verzi nebudeme čekat dlouho. Spekuluje se o vydání v první polovině roku 2027.\n\nVedle toho bylo potvrzeno i něco, o čem se spekulovalo už delší dobu. GTA 6 má marketingové partnerství se Sony. Hra tak bude v reklamních materiálech primárně spojována s konzolí PlayStation 5. To ale neznamená exkluzivní obsah. Jde čistě o to, že hra bude prezentována na PS5 a všude bude vidět logo PlayStationu. Je dost možné, že vznikne také bundle s konzolí a hrou."
-            },
+                date: "2026-05-06",
+                content: "Hry od Rockstar Games vycházejí nejprve na konzole a až později na PC..."
+            
+            id: Date.now(),                    
+                    title: "Game Pass je v květnu hodně zajímavý. Hlavními lákadly jsou Forza Horizon 6 a Subnautica 2",
+                    image: "https://indian-tv.cz/uploads/ls/36e56838c4764a7492018688930ce83e/1777998805.jpg?",
+                    date: "2026-05-07",
+                    content: "Microsoft odhalil první vlnu květnové nabídky pro Game Pass. Rozhodně je na co se těšit. Největší pozornost na sebe strhává především Forza Horizon 6 a Subnautica 2. Najdou se ale další zajímavé tituly. Hlavním tahákem je bez debat Forza Horizon 6. Závody zavezené do otevřeného světa inspirovaného Japonskem dorazí už 19. května na PC a Xbox Series X/S. Hra je již hotová a nedávno jsme se dozvěděli, jak poběží na konzolích. Ještě předtím, 14. května, vstoupí do předběžného přístupu Subnautica 2. Pokračování populárního podmořského survivalu patří mezi nejočekávanější tituly na Steamu a jeho příchod do Game Passu už při startu je pro předplatitele výrazný bonus. Zahrát si jej budete moci na Xboxu Series X/S, PC, handheldu i přes cloud. Dalšími novinkami jsou Mixtape, Outbound, Call of the Elder Gods nebo Black Jacket."
+            }];
+
             reviews = [
                 {
                     id: 1778031727108,
-                    title: "The Elder Scrolls IV: Oblivion Remastered",
-                    image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2623190/a7cee9165bb1bfc092c390c5cff215ce0e381dfc/header.jpg?t=1761681073",
-                    images: [],
-                    video: "",
-                    score: 90,
-                    date: "2026-04-15",
-                    content: "The Elder Scrolls IV: Oblivion Remastered je hra, která na první pohled zaujme především tím, jak krásně ožila jedna z největších fantasy klasik. A naštěstí nejde jen o grafický facelift – pořád je to ten samý chaotický, obrovský a nezapomenutelný Oblivion, jen v modernějším kabátě. \n\nCo funguje dobře Nejsilnější stránkou remasteru je bezesporu vizuální a atmosférický upgrade. Cyrodiil vypadá nádherně – nové textury, lepší nasvícení, dynamické počasí, realistické stíny a voda dělají z procházek krajinou opravdový zážitek. NPC tváře už nevypadají jako voskové figuríny a celkový dojem ze světa je výrazně příjemnější. \n\nSouboje díky vylepšeným animacím, lepším zásahům a svižnější magii působí mnohem uspokojivěji než v originále. Lukostřelba konečně funguje, meče mají váhu a přepracované UI a inventář výrazně zlepšují komfort hraní. Obrovský svět plný questů, frakcí a dungeonů je stále stejně návykový a legendární humor NPC dialogů pořád baví. \n\nCo hru sráží \n\nPřes všechny vylepšení zůstávají některé staré neduhy. Ikonické bugy přežily, AI nepřátel je občas na úrovni rohlíku a level scaling stále dokáže pěkně zamotat zážitek (bandita s daedrickým mečem v levelu 30 je pořád realita). Dabing zůstal stejný, takže občas máte pocit, že celá vesnice mluví jedním hlasem. Pro úplné nováčky může hra působit velmi old-school – některé mechaniky jsou dnes už dost archaické a absence moderních vychytávek (jako kvalitní crafting) je znát. \n\nVerdikt \n\nThe Elder Scrolls IV: Oblivion Remastered je krásný a srdečný návrat do jedné z nejlepších herních říší všech dob. Není to revoluční předělání, ale poctivý remaster, který zachovává duši originálu a zároveň ho dělá přijatelnějším pro dnešní hráče. Pro fanoušky původní hry téměř povinnost. Pro nováčky zajímavý výlet do historie, která stále dokáže okouzlit."
-                },
-                 {
-                    id: 1778031727107,
                     title: "Crimson Desert",
                     image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3321460/669119c3747653f41a46c59f213168448d094e04/ss_669119c3747653f41a46c59f213168448d094e04.1920x1080.jpg",
                     images: [],
@@ -237,71 +205,6 @@ function loadData() {
             return [...arr].sort((a, b) => new Date(b.date) - new Date(a.date));
         }
 
-        // === AUTH FUNCTIONS ===
-        function switchAuthTab(n) {
-            document.getElementById('login-form').classList.toggle('hidden', n === 1);
-            document.getElementById('register-form').classList.toggle('hidden', n === 0);
-            document.getElementById('auth-tab-0').classList.toggle('tab-active', n === 0);
-            document.getElementById('auth-tab-1').classList.toggle('tab-active', n === 1);
-        }
-
-        function showAuthMessage(text, color) {
-            const msg = document.getElementById('auth-message');
-            msg.textContent = text;
-            msg.style.color = color === "red" ? "#ef4444" : "#10b981";
-        }
-
-        function registerUser() {
-            const username = document.getElementById('regUsername').value.trim();
-            const pass = document.getElementById('regPassword').value;
-            const pass2 = document.getElementById('regPassword2').value;
-
-            if (!username || !pass) return showAuthMessage("Vyplňte všechna pole", "red");
-            if (pass !== pass2) return showAuthMessage("Hesla se neshodují", "red");
-            if (username.toLowerCase() === "yukki") return showAuthMessage("Toto jméno je rezervováno pro admina", "red");
-
-            let users = JSON.parse(localStorage.getItem('yukki_users') || '[]');
-            if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
-                return showAuthMessage("Uživatel již existuje", "red");
-            }
-
-            users.push({ username, password: pass, role: "user" });
-            localStorage.setItem('yukki_users', JSON.stringify(users));
-
-            showAuthMessage("Registrace úspěšná! Můžeš se přihlásit.", "emerald");
-            setTimeout(() => switchAuthTab(0), 1800);
-        }
-
-        function adminLogin() {
-            const userInput = document.getElementById('loginUser').value.trim();
-            const passInput = document.getElementById('loginPass').value;
-
-            if (userInput === "yukki" && passInput === "2607") {
-                isAdmin = true;
-                currentUser = { username: "yukki", role: "admin" };
-                document.getElementById('loginText').innerHTML = '👑 ADMIN';
-                document.getElementById('adminBar').classList.remove('hidden');
-                toggleLogin();
-                renderNews(); renderReviews(); renderCommunity();
-            } else {
-                // Pokus o přihlášení běžného uživatele
-                let users = JSON.parse(localStorage.getItem('yukki_users') || '[]');
-                const user = users.find(u => u.username.toLowerCase() === userInput.toLowerCase() && u.password === passInput);
-                if (user) {
-                    currentUser = user;
-                    document.getElementById('loginText').innerHTML = `👤 ${user.username}`;
-                    toggleLogin();
-                } else {
-                    showAuthMessage("Špatné přihlašovací údaje", "red");
-                }
-            }
-        }
-
-        function toggleLogin() { 
-            document.getElementById('loginModal').classList.toggle('hidden'); 
-        }
-
-        // === ZBYTEK TVÉHO PŮVODNÍHO KÓDU (nezměněný) ===
         function renderNews() {
             const sorted = sortByDate(news);
             document.getElementById('news-container').innerHTML = sorted.map((n) => {
@@ -452,6 +355,18 @@ function loadData() {
             if (n === 2) renderReviews();
             if (n === 3) renderLeaderboard();
             if (n === 4) renderCommunity();
+        }
+
+        function toggleLogin() { document.getElementById('loginModal').classList.toggle('hidden'); }
+
+        function adminLogin() {
+            if (document.getElementById('loginUser').value === "yukki" && document.getElementById('loginPass').value === "yukki123") {
+                isAdmin = true;
+                document.getElementById('loginText').innerHTML = '👑 ADMIN';
+                document.getElementById('adminBar').classList.remove('hidden');
+                toggleLogin();
+                renderNews(); renderReviews(); renderCommunity();
+            } else alert("Špatné heslo! (yukki123)");
         }
 
         function showCreateModal(type) {
