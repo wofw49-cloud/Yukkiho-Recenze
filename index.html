@@ -67,7 +67,7 @@
     <main class="pt-24 max-w-7xl mx-auto px-6 pb-20">
         <!-- DOMŮ -->
         <div id="page-0">
-            <h1 class="text-6xl font-bold text-center mt-10 mb-2 neon title-font">Vítej zpátky, Yukki</h1>
+            <h1 class="text-6xl font-bold text-center mt-10 mb-2 neon title-font">Vítej zpátky, Poutníku</h1>
             <div id="hero-news" onclick="openDetail('news', 0)" class="cursor-pointer relative h-[65vh] rounded-3xl overflow-hidden mb-12 border border-red-500/30"></div>
             
             <h2 class="text-3xl font-bold mb-6 title-font">Nadcházející vydání</h2>
@@ -218,12 +218,10 @@
         function loadData() {
             news = [{
                 id: 1778031631685,
-                title: "Proč si PC hráči musejí počkat na Grand Theft Auto VI?",
+                title: "Proč si PC hráči musejí počkat na Grand Theft Auto VI? Marketingovou exkluzivitu má PlayStation",
                 image: "https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg?",
-                images: [],
-                video: "",
                 date: "2026-05-06",
-                content: "Hry od Rockstar Games vycházejí nejprve na konzole a až později na PC..."
+                content: "Hry od Rockstar Games vycházejí nejprve na konzole a až později na počítače. Stejné to bude i u GTA 6. Proč tomu tak je? Palčivé otázce se věnoval generální ředitel Take-Two Interactive. Potvrdil také marketingovou exkluzivitu PlayStationu.\nTahle odpověď PC hráče nepotěší. Rockstar se snaží nejprve obsloužit hlavní uživatelskou základnu, a to co nejlépe. Tím se myslí právě hráči na PlayStationu a Xboxu.\n„Rockstar vždy začíná na konzolích, protože právě tam vás hráči hodnotí podle toho, jak dobře zvládnete launch,“ vysvětlil Strauss Zelnick pro Bloomberg. Jinými slovy, pokud by start nevyšel podle představ, mohlo by to negativně ovlivnit i pozdější prodeje na dalších platformách.\nZároveň zdůraznil, že zpoždění PC verze nijak nesouvisí s marketingovou spoluprací se Sony u Grand Theft Auto VI. Jde o dlouhodobou strategii, kterou Rockstar používá už roky. Zajímavé je, že samotná data jdou proti této logice. Zelnick totiž zároveň připustil, že u velkých titulů dnes může PC tvořit klidně 45 až 50 % celkových prodejů. Pro srovnání – ještě v roce 2007 to bylo jen kolem 5 % u NBA 2K.\nPřesto se strategie nemění, protože konzole jsou pro Rockstar stále klíčovým startovním bodem a až následně přichází rozšíření na další platformy. Doufejme, že alespoň na PC verzi nebudeme čekat dlouho. Spekuluje se o vydání v první polovině roku 2027.\nVedle toho bylo potvrzeno i něco, o čem se spekulovalo už delší dobu. GTA 6 má marketingové partnerství se Sony. Hra tak bude v reklamních materiálech primárně spojována s konzolí PlayStation 5. To ale neznamená exkluzivní obsah. Jde čistě o to, že hra bude prezentována na PS5 a všude bude vidět logo PlayStationu. Je dost možné, že vznikne také bundle s konzolí a hrou."
             }];
 
             reviews = [
@@ -241,8 +239,7 @@
                     id: 1778031574329,
                     title: "MOUSE: P.I. For Hire",
                     image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2416450/298ff2fc3f6a700d022b8d3ec58047f2b426be03/header.jpg",
-                    images: [],
-                    video: "",
+                    platforms: ["PC", "PS5", "Xbox Series X|S"],
                     score: 82,
                     date: "2026-05-06",
                     content: "Stylová retro FPS, která tě dostane.\n\nVerdikt: Velmi doporučuji."
@@ -260,9 +257,9 @@
                     title: "Grand Theft Auto VI",
                     date: "2026-11-19",
                     platforms: ["PS5", "Xbox Series X|S"],
-                    image: "https://picsum.photos/id/1015/1200/700",
-                    description: "Kriminální sága dvojice Lucie a Jasona v moderním státě Leonida (Vice City). Nejpodrobnější open-world zážitek s důrazem na satiru dnešní kultury a sociálních sítí.",
-                    czech: true,
+                    image: "https://indian-tv.cz/uploads/00/f2f73c64d9ff4ae594f591cd103e0299/1762505917.jpg?",
+                    description: "Kriminální sága dvojice Lucie a Jasona v moderním státě Leonida (Vice City). Nejpokročilejší open-world zážitek s důrazem na satiru dnešní kultury a sociálních sítí.",
+                    czech: false,
                     earlyAccess: false
                 }
             ];
