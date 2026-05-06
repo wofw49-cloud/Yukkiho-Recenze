@@ -32,6 +32,14 @@
             background-color: #ef4444 !important;
             color: white;
         }
+
+        .kalendar-nadpis {
+            font-size: 3.8rem;
+            letter-spacing: 0.2em;
+            text-shadow: 0 0 30px #ef4444,
+                         0 0 60px #b91c1c,
+                         0 0 90px #991b1b;
+        }
     </style>
 </head>
 <body class="bg-zinc-950 text-white min-h-screen">
@@ -59,7 +67,7 @@
     <main class="pt-24 max-w-7xl mx-auto px-6 pb-20">
         <!-- DOMŮ -->
         <div id="page-0">
-            <h1 class="text-6xl font-bold text-center mt-10 mb-2 neon title-font">Vítej Poutníku</h1>
+            <h1 class="text-6xl font-bold text-center mt-10 mb-2 neon title-font">Vítej zpátky, Yukki</h1>
             <div id="hero-news" onclick="openDetail('news', 0)" class="cursor-pointer relative h-[65vh] rounded-3xl overflow-hidden mb-12 border border-red-500/30"></div>
             
             <h2 class="text-3xl font-bold mb-6 title-font">Nadcházející vydání</h2>
@@ -95,7 +103,7 @@
 
         <!-- KALENDÁŘ -->
         <div id="page-5" class="hidden">
-            <h2 class="text-5xl font-bold title-font mb-10 tracking-widest neon text-center">KALENDÁŘ VYDÁNÍ HER</h2>
+            <h2 class="kalendar-nadpis text-center mb-12">KALENDÁŘ VYDÁNÍ HER</h2>
             
             <div class="flex flex-wrap gap-3 justify-center mb-10" id="platform-filters">
                 <button onclick="filterByPlatform('all')" class="platform-btn active px-6 py-3 bg-red-600 rounded-2xl font-bold">VŠE</button>
@@ -155,6 +163,10 @@
             <div class="flex items-center gap-3 mb-4">
                 <input id="releaseCzech" type="checkbox" class="w-5 h-5 accent-red-600">
                 <label for="releaseCzech" class="text-white">Podporována čeština</label>
+            </div>
+            <div class="flex items-center gap-3 mb-6">
+                <input id="releaseEarlyAccess" type="checkbox" class="w-5 h-5 accent-red-600">
+                <label for="releaseEarlyAccess" class="text-white">Early Access / Preview</label>
             </div>
             <textarea id="releaseDescription" rows="4" placeholder="Krátký popis..." class="w-full mb-6 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4"></textarea>
             <div class="flex gap-4">
@@ -238,8 +250,8 @@
             ];
 
             communityLinks = [
-                { title: "YouTube", url: "https://www.youtube.com/@YukkiCZE", icon: "youtube" },
-                { title: "Instagram", url: "https://www.instagram.com/_yukki77_/", icon: "instagram" }
+                { title: "YouTube", url: "https://www.youtube.com/@YukkiCZE", icon: "fa-youtube" },
+                { title: "Instagram", url: "https://www.instagram.com/_yukki77_/", icon: "fa-instagram" }
             ];
 
             upcomingReleases = [
@@ -248,9 +260,10 @@
                     title: "Grand Theft Auto VI",
                     date: "2026-11-19",
                     platforms: ["PS5", "Xbox Series X|S"],
-                    image: "https://indian-tv.cz/uploads/00/388736b706db42bdaa00aa837f8dac05/1746543737.jpg?",
-                    description: "Kriminální sága dvojice Lucie a Jasona v moderním státě Leonida (Vice City). Nejpokročilejší open-world zážitek s důrazem na satiru dnešní kultury a sociálních sítí.",
-                    czech: false
+                    image: "https://picsum.photos/id/1015/1200/700",
+                    description: "Kriminální sága dvojice Lucie a Jasona v moderním státě Leonida (Vice City). Nejpodrobnější open-world zážitek s důrazem na satiru dnešní kultury a sociálních sítí.",
+                    czech: true,
+                    earlyAccess: false
                 }
             ];
         }
@@ -394,6 +407,7 @@
                             <div class="flex justify-between items-start">
                                 <div class="text-red-400 font-medium">${new Date(game.date).toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
                                 ${game.czech ? '<span class="text-3xl">🇨🇿</span>' : ''}
+                                ${game.earlyAccess ? '<span class="bg-yellow-600 text-xs px-3 py-1 rounded-full">EARLY ACCESS</span>' : ''}
                             </div>
                             <h3 class="text-2xl font-bold mt-3">${game.title}</h3>
                             <div class="flex flex-wrap gap-2 mt-4">
@@ -431,6 +445,7 @@
                 <p class="text-red-400 text-2xl mb-6">${dateStr}</p>
                 <p class="text-lg mb-6"><strong>Platformy:</strong> ${game.platforms.join(', ')}</p>
                 ${game.czech ? '<p class="inline-flex items-center gap-3 mb-6 text-green-400"><span class="text-4xl">🇨🇿</span> <span class="font-bold text-xl">Podporována čeština</span></p>' : ''}
+                ${game.earlyAccess ? '<p class="inline-flex items-center gap-3 mb-6 text-yellow-400"><span class="font-bold text-xl">EARLY ACCESS / PREVIEW</span></p>' : ''}
                 ${game.description ? `<p class="text-gray-200 leading-relaxed">${game.description}</p>` : ''}
             `;
 
@@ -512,6 +527,7 @@
                 document.getElementById('releaseImage').value = game.image;
                 document.getElementById('releaseDescription').value = game.description || '';
                 document.getElementById('releaseCzech').checked = !!game.czech;
+                document.getElementById('releaseEarlyAccess').checked = !!game.earlyAccess;
             } else {
                 document.getElementById('releaseModalTitle').textContent = "Nové vydání hry";
                 document.getElementById('releaseTitle').value = '';
@@ -520,6 +536,7 @@
                 document.getElementById('releaseImage').value = 'https://picsum.photos/id/1015/1200/700';
                 document.getElementById('releaseDescription').value = '';
                 document.getElementById('releaseCzech').checked = false;
+                document.getElementById('releaseEarlyAccess').checked = false;
             }
             document.getElementById('releaseModal').classList.remove('hidden');
         }
@@ -535,6 +552,7 @@
             const image = document.getElementById('releaseImage').value.trim();
             const description = document.getElementById('releaseDescription').value.trim();
             const czech = document.getElementById('releaseCzech').checked;
+            const earlyAccess = document.getElementById('releaseEarlyAccess').checked;
 
             if (!title || !date || !platformsStr) return alert("Název, datum a platformy jsou povinné!");
 
@@ -545,7 +563,8 @@
                 platforms: platformsStr.split(',').map(p => p.trim()),
                 image: image || "https://picsum.photos/id/237/1200/700",
                 description,
-                czech
+                czech,
+                earlyAccess
             };
 
             if (editingReleaseIndex !== null) {
