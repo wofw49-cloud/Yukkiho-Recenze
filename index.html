@@ -11,35 +11,20 @@
         :root { --red: #ff0000; --dark: #050505; }
         body { font-family: 'Montserrat', sans-serif; background-color: var(--dark); color: #fff; overflow-x: hidden; }
         .logo-font { font-family: 'Orbitron', sans-serif; letter-spacing: -2px; }
-        
-        .yukki-logo {
-            background: linear-gradient(90deg, var(--red) 0%, #800000 100%);
-            padding: 5px 20px; border-radius: 4px 15px 4px 15px;
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.3); transform: skewX(-5deg);
-        }
-
-        .nav-link { transition: 0.3s; font-weight: 800; font-size: 11px; text-transform: uppercase; opacity: 0.5; }
+        .yukki-logo { background: linear-gradient(90deg, var(--red) 0%, #800000 100%); padding: 5px 20px; border-radius: 4px 15px 4px 15px; box-shadow: 0 0 25px rgba(255, 0, 0, 0.3); transform: skewX(-5deg); }
+        .nav-link { transition: 0.3s; font-weight: 800; font-size: 11px; text-transform: uppercase; opacity: 0.5; cursor: pointer; }
         .tab-active { opacity: 1; color: var(--red) !important; position: relative; }
         .tab-active::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 3px; background: var(--red); }
-
         .glass { background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
         .card-hover:hover { border-color: var(--red); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(255,0,0,0.15); }
-
         .admin-ui { display: none !important; }
         body.logged-in .admin-ui { display: flex !important; }
-        
         .badge { font-size: 9px; font-weight: 900; padding: 2px 8px; border-radius: 3px; text-transform: uppercase; }
-        input, textarea { background: #111 !important; border: 1px solid #222 !important; color: white !important; padding: 12px; border-radius: 8px; width: 100%; }
-
-        /* VYLEPŠENÝ DETAIL MODAL */
-        #detailModal .modal-container {
-            max-height: 85vh; /* Maximální výška okna */
-            overflow-y: auto; /* Povolí scroll uvnitř */
-            scrollbar-width: thin;
-            scrollbar-color: var(--red) #111;
-        }
+        input, textarea, select { background: #111 !important; border: 1px solid #222 !important; color: white !important; padding: 12px; border-radius: 8px; width: 100%; }
+        #detailModal .modal-container { max-height: 85vh; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--red) #111; }
         #detailModal .modal-container::-webkit-scrollbar { width: 6px; }
         #detailModal .modal-container::-webkit-scrollbar-thumb { background: var(--red); border-radius: 10px; }
+        .plat-icon { font-size: 11px; opacity: 0.7; font-weight: 900; letter-spacing: 1px; }
     </style>
 </head>
 <body>
@@ -78,6 +63,15 @@
                 <div class="col-span-1"><input type="date" id="fRealDate"></div>
                 <div class="col-span-1" id="scoreWrap"><input type="number" id="fScore" placeholder="Hodnocení %"></div>
                 <div class="col-span-1 hidden" id="dateWrap"><input type="text" id="fDate" placeholder="Datum textově"></div>
+                <div class="col-span-2" id="platWrap">
+                    <p class="text-[10px] font-bold mb-2 opacity-50 uppercase">Platformy</p>
+                    <div class="flex gap-4">
+                        <label class="flex items-center gap-2 text-xs"><input type="checkbox" class="plat-check" value="pc"> PC</label>
+                        <label class="flex items-center gap-2 text-xs"><input type="checkbox" class="plat-check" value="ps5"> PS5</label>
+                        <label class="flex items-center gap-2 text-xs"><input type="checkbox" class="plat-check" value="xbox"> Xbox S|X</label>
+                        <label class="flex items-center gap-2 text-xs"><input type="checkbox" class="plat-check" value="switch"> Switch</label>
+                    </div>
+                </div>
                 <div class="col-span-2 flex gap-6 py-2">
                     <label class="flex items-center gap-2 cursor-pointer text-xs font-bold"><input type="checkbox" id="fDLC"> DLC</label>
                     <label class="flex items-center gap-2 cursor-pointer text-xs font-bold"><input type="checkbox" id="fEA"> EA</label>
@@ -99,8 +93,7 @@
     <script>
         let state = {
             news: [
-                { id: 1, title: "GTA VI: Rockstar potvrzuje podzim 2025", img: "https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg", content: "Nejočekávanější hra dekády má okno vydání.", rDate: "2024-05-16" },
-                { id: 2, title: "Novinky ze světa hardwaru", img: "https://gamingbolt.com/wp-content/uploads/2023/11/Subnautica-2.jpg", content: "Co nás čeká v roce 2024.", rDate: "2024-05-14" }
+                { id: 1, title: "GTA VI: Rockstar potvrzuje podzim 2025", img: "https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg", content: "Nejočekávanější hra dekády má okno vydání.", rDate: "2024-05-16" }
             ],
             reviews: [
                 { 
@@ -108,57 +101,43 @@
                     game: "ELDEN RING: Shadow of the Erdtree", 
                     score: 98, 
                     img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2778580/ss_9769407281276d7fd76d6221fe83c05defb0b998.1920x1080.jpg?t=1763403045", 
-                    rDate: "2024-05-20", 
+                    rDate: "2026-05-06", 
                     isDLC: true, 
-                    content: `Shadow of the Erdtree není jen klasické DLC. Je to spíš plnohodnotné rozšíření, které si bere všechno, co udělalo základní Elden Ring legendou, a posouvá to ještě dál – temnější, těžší, víc nekompromisní. 
-
-Už od prvních minut je jasné, že tohle není content pro casual hráče. Shadow Realm působí odcizeně, depresivně a zároveň neskutečně podmanivě. Level design je opět absolutní špička – FromSoftware si drží svůj standard, kde každá cesta někam vede, každá zkratka dává smysl a každé odbočení tě může zabít. 
-
-Atmosféra? Dusivá. Melancholická. Někdy až nepříjemně tichá. Přesně to, co chceš. 
-
-Souboje jsou brutálnější než kdy dřív. Bossové nejsou jen o patternu – jsou agresivnější, rychlejší a často ti nedají prostor na chybu. Tohle DLC tě nutí hrát líp. Adaptovat se. Přestat brečet a začít chápat mechaniky. 
-
-Nové buildy, zbraně a magie dávají hře fresh vibe. Konečně máš důvod experimentovat, nejen jet jednu OP věc dokola. A když už si myslíš, že jsi silný… DLC tě zase srazí na kolena. 
-
-Technicky je to skoro bezchybné. Optimalizace drží, art direction je insane a soundtrack zase trefuje přesně ten FromSoftware feeling – epický, ale zároveň úzkostný. 
-
-Jediná “nevýhoda”? Náročnost. Pro někoho až moc. Ale upřímně – tohle je přesně ten důvod, proč to funguje. 
-
-VERDIKT: Shadow of the Erdtree je DLC, které se nebojí být tvrdé, nefér a geniální zároveň. FromSoftware znovu dokazuje, že když jde o design, atmosféru a gameplay, hrají úplně jinou ligu.`
-                },
-                { id: 1, game: "DOOM Eternal", score: 95, img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/782330/header.jpg", content: "Rychlost a krev.", rDate: "2024-05-10" }
+                    content: "Shadow of the Erdtree není jen klasické DLC. Je to spíš plnohodnotné rozšíření, které si bere všechno, co udělalo základní Elden Ring legendou, a posouvá to ještě dál – temnější, těžší, víc nekompromisní.\n\nUž od prvních minut je jasné, že tohle není content pro casual hráče. Shadow Realm působí odcizeně, depresivně a zároveň neskutečně podmanivě. Level design je opět absolutní špička – FromSoftware si drží svůj standard, kde každá cesta někam vede, každá zkratka dává smysl a každé odbočení tě může zabít.\n\nAtmosféra? Dusivá. Melancholická. Někdy až nepříjemně tichá. Přesně to, co chceš.\n\nSouboje jsou brutálnější než kdy dřív. Bossové nejsou jen o patternu – jsou agresivnější, rychlejší a často ti nedají prostor na chybu. Tohle DLC tě nutí hrát líp. Adaptovat se. Přestat brečet a začít chápat mechaniky.\n\nNové buildy, zbraně a magie dávají hře fresh vibe. Konečně máš důvod experimentovat, nejen jet jednu OP věc dokola. A když už si myslíš, že jsi silný… DLC tě zase srazí na kolena.\n\nTechnicky je to skoro bezchybné. Optimalizace drží, art direction je insane a soundtrack zase trefuje přesně ten FromSoftware feeling – epický, ale zároveň úzkostný.\n\nJediná “nevýhoda”? Náročnost. Pro někoho až moc. Ale upřímně – tohle je přesně ten důvod, proč to funguje.\n\nVERDIKT: Shadow of the Erdtree je DLC, které se nebojí být tvrdé, nefér a geniální zároveň. FromSoftware znovu dokazuje, že když jde o design, atmosféru a gameplay, hrají úplně jinou ligu."
+                }
             ],
             calendar: [
-                { id: 1, game: "GTA VI", date: "Podzim 2025", img: "https://wccftech.com/wp-content/uploads/2023/12/GTA-VI-Logo-WCCF.jpg", cz: true, rDate: "2025-09-01" }
+                { id: 1, game: "Grand Theft Auto VI", date: "2026-11-19", img: "https://indian-tv.cz/uploads/00/f2f73c64d9ff4ae594f591cd103e0299/1762505917.jpg?", cz: false, rDate: "2026-11-19", platforms: ['ps5', 'xbox'] }
             ]
         };
 
-        // Zbytek funkcí (Auth, Tabs, Render, Form atd.)
+        const platLabels = { pc: 'PC', ps5: 'PS5', xbox: 'Xbox X|S', switch: 'Switch' };
+
         function handleAdminAuth() { if(document.body.classList.contains('logged-in')) { document.body.classList.remove('logged-in'); document.getElementById('authBtn').innerText = "Admin"; renderAll(); return; } if(prompt("Heslo:") === 'yukki123') { document.body.classList.add('logged-in'); document.getElementById('authBtn').innerText = "Odhlásit"; renderAll(); } }
         function switchTab(tab) { document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden')); document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('tab-active')); document.getElementById(`page-${tab}`).classList.remove('hidden'); document.getElementById(`tab-${tab}`).classList.add('tab-active'); window.scrollTo(0,0); renderAll(); }
         function renderAll() { state.news.sort((a,b) => new Date(b.rDate) - new Date(a.rDate)); state.reviews.sort((a,b) => new Date(b.rDate) - new Date(a.rDate)); state.calendar.sort((a,b) => new Date(a.rDate) - new Date(b.rDate)); renderHome(); renderNews(); renderReviews(); renderHallOfFame(); renderCalendar(); }
 
         function renderHome() {
-            const top = state.news[0];
-            const extras = state.news.slice(1, 5);
-            document.getElementById('hero-slot').innerHTML = `<div class="glass rounded-[40px] h-[500px] overflow-hidden relative cursor-pointer group" onclick="openDetail('news', ${top.id})"><img src="${top.img}" class="w-full h-full object-cover opacity-40 group-hover:scale-105 transition duration-1000"><div class="absolute bottom-12 left-12"><h1 class="text-5xl font-black logo-font italic leading-none">${top.title}</h1></div></div>`;
+            const top = state.news[0]; const extras = state.news.slice(1, 5);
+            document.getElementById('hero-slot').innerHTML = top ? `<div class="glass rounded-[40px] h-[500px] overflow-hidden relative cursor-pointer group" onclick="openDetail('news', ${top.id})"><img src="${top.img}" class="w-full h-full object-cover opacity-40 group-hover:scale-105 transition duration-1000"><div class="absolute bottom-12 left-12"><h1 class="text-5xl font-black logo-font italic leading-none">${top.title}</h1></div></div>` : '';
             document.getElementById('home-news-extra').innerHTML = extras.map(n => `<div class="glass p-4 rounded-2xl cursor-pointer card-hover relative group" onclick="switchTab('novinky')"><div class="admin-ui absolute top-2 right-2 gap-1 z-20"><button onclick="event.stopPropagation(); openForm('news', ${n.id})" class="w-6 h-6 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20"><i class="fa fa-pen text-[8px]"></i></button></div><img src="${n.img}" class="w-full h-32 object-cover rounded-xl mb-3 opacity-60"><h4 class="font-black text-xs uppercase italic leading-tight">${n.title}</h4></div>`).join('');
-            document.getElementById('home-cal').innerHTML = state.calendar.slice(0,3).map(g => `<div class="glass p-4 rounded-2xl flex items-center gap-4 cursor-pointer card-hover" onclick="switchTab('kalendar')"><img src="${g.img}" class="w-20 h-12 object-cover rounded-lg"><div><h4 class="font-black text-xs uppercase">${g.game}</h4><p class="text-red-600 font-bold text-[10px] uppercase">${g.date}</p></div></div>`).join('');
+            document.getElementById('home-cal').innerHTML = state.calendar.slice(0,3).map(g => `<div class="glass p-4 rounded-2xl flex items-center gap-4 cursor-pointer card-hover" onclick="switchTab('kalendar')"><img src="${g.img}" class="w-20 h-12 object-cover rounded-lg"><div><h4 class="font-black text-xs uppercase">${g.game}</h4><p class="text-[9px] opacity-40 font-bold uppercase">${(g.platforms||[]).map(p => platLabels[p]).join(' • ')}</p><p class="text-red-600 font-bold text-[10px] uppercase mt-1">${g.date}</p></div></div>`).join('');
             document.getElementById('home-rev').innerHTML = state.reviews.slice(0,3).map(r => `<div class="glass p-4 rounded-2xl flex justify-between items-center px-6 cursor-pointer card-hover" onclick="switchTab('recenze')"><div class="flex items-center gap-4"><img src="${r.img}" class="w-12 h-12 object-cover rounded-lg"><h4 class="font-black text-xs uppercase italic">${r.game}</h4></div><span class="text-red-600 font-black text-xl italic">${r.score}%</span></div>`).join('');
         }
 
         function renderNews() { document.getElementById('news-grid').innerHTML = state.news.map(n => `<div class="glass rounded-2xl overflow-hidden card-hover cursor-pointer relative group" onclick="openDetail('news', ${n.id})"><div class="admin-ui absolute top-4 right-4 gap-2 z-20"><button onclick="event.stopPropagation(); openForm('news', ${n.id})" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20"><i class="fa fa-pen text-[10px]"></i></button><button onclick="event.stopPropagation(); deleteEntry('news', ${n.id})" class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center"><i class="fa fa-trash text-[10px]"></i></button></div><img src="${n.img}" class="w-full h-52 object-cover opacity-80"><div class="p-6"><h3 class="font-black italic text-lg leading-tight uppercase">${n.title}</h3></div></div>`).join(''); }
-        function renderReviews() { document.getElementById('reviews-grid').innerHTML = state.reviews.map(r => `<div class="glass rounded-2xl p-4 card-hover cursor-pointer relative group" onclick="openDetail('reviews', ${r.id})"><div class="admin-ui absolute top-4 right-4 gap-2 z-20"><button onclick="event.stopPropagation(); openForm('reviews', ${r.id})" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center"><i class="fa fa-pen text-[10px]"></i></button><button onclick="event.stopPropagation(); deleteEntry('reviews', ${r.id})" class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center"><i class="fa fa-trash text-[10px]"></i></button></div><div class="relative mb-4"><img src="${r.img}" class="w-full h-40 object-cover rounded-xl"><div class="absolute top-2 left-2 flex gap-1">${r.isDLC ? '<span class="badge bg-blue-600">DLC</span>' : ''}${r.isEA ? '<span class="badge bg-amber-500">EA</span>' : ''}</div></div><div class="flex justify-between items-end"><h4 class="font-black text-[10px] uppercase w-2/3 leading-tight">${r.game}</h4><span class="text-3xl font-black text-red-600 italic">${r.score}%</span></div></div>`).join(''); }
+        function renderReviews() { document.getElementById('reviews-grid').innerHTML = state.reviews.map(r => `<div class="glass rounded-2xl p-4 card-hover cursor-pointer relative group" onclick="openDetail('reviews', ${r.id})"><div class="admin-ui absolute top-4 right-4 gap-2 z-20"><button onclick="event.stopPropagation(); openForm('reviews', ${r.id})" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20"><i class="fa fa-pen text-[10px]"></i></button><button onclick="event.stopPropagation(); deleteEntry('reviews', ${r.id})" class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center"><i class="fa fa-trash text-[10px]"></i></button></div><div class="relative mb-4"><img src="${r.img}" class="w-full h-40 object-cover rounded-xl"><div class="absolute top-2 left-2 flex gap-1">${r.isDLC ? '<span class="badge bg-blue-600">DLC</span>' : ''}${r.isEA ? '<span class="badge bg-amber-500">EA</span>' : ''}</div></div><div class="flex justify-between items-end"><h4 class="font-black text-[10px] uppercase w-2/3 leading-tight">${r.game}</h4><span class="text-3xl font-black text-red-600 italic">${r.score}%</span></div></div>`).join(''); }
         function renderHallOfFame() { const sorted = [...state.reviews].sort((a,b) => b.score - a.score); document.getElementById('hall-of-fame').innerHTML = sorted.map((r, i) => `<div class="glass p-6 rounded-3xl flex items-center justify-between border-l-4 border-red-600"><div class="flex items-center gap-8"><span class="text-4xl font-black italic opacity-10 w-10">${i+1}</span><img src="${r.img}" class="w-16 h-16 object-cover rounded-xl shadow-lg"><h3 class="text-xl font-black italic uppercase">${r.game}</h3></div><span class="text-4xl font-black text-red-600 italic">${r.score}%</span></div>`).join(''); }
-        function renderCalendar() { document.getElementById('calendar-grid').innerHTML = state.calendar.map(g => `<div class="glass p-8 rounded-[40px] text-center relative card-hover group"><div class="admin-ui absolute top-6 right-6 gap-2 z-20"><button onclick="openForm('calendar', ${g.id})" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center"><i class="fa fa-pen text-[10px]"></i></button><button onclick="deleteEntry('calendar', ${g.id})" class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center"><i class="fa fa-trash text-[10px]"></i></button></div>${g.cz ? `<img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Flag_of_the_Czech_Republic.svg" class="absolute top-6 left-6 w-6">` : ''}<img src="${g.img}" class="w-full h-44 object-cover rounded-3xl mb-6"><h3 class="text-2xl font-black italic uppercase mb-2">${g.game}</h3><p class="text-red-500 font-black text-xl italic">${g.date}</p></div>`).join(''); }
+        function renderCalendar() { document.getElementById('calendar-grid').innerHTML = state.calendar.map(g => `<div class="glass p-8 rounded-[40px] text-center relative card-hover group"><div class="admin-ui absolute top-6 right-6 gap-2 z-20"><button onclick="openForm('calendar', ${g.id})" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center"><i class="fa fa-pen text-[10px]"></i></button><button onclick="deleteEntry('calendar', ${g.id})" class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center"><i class="fa fa-trash text-[10px]"></i></button></div>${g.cz ? `<img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Flag_of_the_Czech_Republic.svg" class="absolute top-6 left-6 w-6">` : ''}<img src="${g.img}" class="w-full h-44 object-cover rounded-3xl mb-4"><h3 class="text-2xl font-black italic uppercase mb-1">${g.game}</h3><div class="flex justify-center gap-2 mb-3 text-[10px] font-black opacity-30 tracking-widest">${(g.platforms||[]).map(p => platLabels[p]).join(' | ')}</div><p class="text-red-500 font-black text-xl italic">${g.date}</p></div>`).join(''); }
 
         function openForm(type, id = null) {
             document.getElementById('formModal').classList.remove('hidden'); document.getElementById('formType').value = type; document.getElementById('mainForm').reset(); document.getElementById('editId').value = id || '';
             document.getElementById('scoreWrap').style.display = type === 'reviews' ? 'block' : 'none'; document.getElementById('dateWrap').style.display = type === 'calendar' ? 'block' : 'none';
-            if(id) { const item = state[type].find(x => x.id === id); document.getElementById('fName').value = item.game || item.title; document.getElementById('fImg').value = item.img; document.getElementById('fRealDate').value = item.rDate; document.getElementById('fScore').value = item.score || ''; document.getElementById('fDate').value = item.date || ''; document.getElementById('fContent').value = item.content || ''; document.getElementById('fDLC').checked = item.isDLC; document.getElementById('fEA').checked = item.isEA; document.getElementById('fCZ').checked = item.cz; }
+            document.getElementById('platWrap').style.display = type === 'calendar' ? 'block' : 'none';
+            if(id) { const item = state[type].find(x => x.id === id); document.getElementById('fName').value = item.game || item.title; document.getElementById('fImg').value = item.img; document.getElementById('fRealDate').value = item.rDate; document.getElementById('fScore').value = item.score || ''; document.getElementById('fDate').value = item.date || ''; document.getElementById('fContent').value = item.content || ''; document.getElementById('fDLC').checked = item.isDLC; document.getElementById('fEA').checked = item.isEA; document.getElementById('fCZ').checked = item.cz; (item.platforms||[]).forEach(p => { const cb = document.querySelector(`.plat-check[value="${p}"]`); if(cb) cb.checked = true; }); }
         }
         function closeForm() { document.getElementById('formModal').classList.add('hidden'); }
-        document.getElementById('mainForm').onsubmit = function(e) { e.preventDefault(); const type = document.getElementById('formType').value; const id = document.getElementById('editId').value; const entry = { id: id ? parseInt(id) : Date.now(), title: document.getElementById('fName').value, game: document.getElementById('fName').value, img: document.getElementById('fImg').value, rDate: document.getElementById('fRealDate').value || new Date().toISOString().split('T')[0], score: parseInt(document.getElementById('fScore').value), date: document.getElementById('fDate').value, content: document.getElementById('fContent').value, isDLC: document.getElementById('fDLC').checked, isEA: document.getElementById('fEA').checked, cz: document.getElementById('fCZ').checked }; if(id) { const i = state[type].findIndex(x => x.id == id); state[type][i] = entry; } else { state[type].push(entry); } renderAll(); closeForm(); };
+        document.getElementById('mainForm').onsubmit = function(e) { e.preventDefault(); const type = document.getElementById('formType').value; const id = document.getElementById('editId').value; const plats = Array.from(document.querySelectorAll('.plat-check:checked')).map(c => c.value); const entry = { id: id ? parseInt(id) : Date.now(), title: document.getElementById('fName').value, game: document.getElementById('fName').value, img: document.getElementById('fImg').value, rDate: document.getElementById('fRealDate').value || new Date().toISOString().split('T')[0], score: parseInt(document.getElementById('fScore').value), date: document.getElementById('fDate').value, content: document.getElementById('fContent').value, isDLC: document.getElementById('fDLC').checked, isEA: document.getElementById('fEA').checked, cz: document.getElementById('fCZ').checked, platforms: plats }; if(id) { const i = state[type].findIndex(x => x.id == id); state[type][i] = entry; } else { state[type].push(entry); } renderAll(); closeForm(); };
         function deleteEntry(type, id) { if(confirm('Smazat?')) { state[type] = state[type].filter(x => x.id !== id); renderAll(); } }
 
         function openDetail(type, id) {
@@ -172,10 +151,11 @@ VERDIKT: Shadow of the Erdtree je DLC, které se nebojí být tvrdé, nefér a g
                             ${item.isEA ? '<span class="badge bg-amber-500 text-black">EARLY ACCESS</span>' : ''}
                         </div>
                         <h2 class="text-4xl font-black italic uppercase leading-tight">${item.game || item.title}</h2>
+                        ${item.platforms ? `<div class="flex gap-3 mt-3 text-[10px] font-bold opacity-30 tracking-widest">${item.platforms.map(p => platLabels[p]).join(' | ')}</div>` : ''}
                     </div>
                     ${item.score ? `<div class="text-7xl font-black text-red-600 italic tracking-tighter">${item.score}%</div>` : ''}
                 </div>
-                <div class="text-lg text-zinc-300 leading-relaxed space-y-4 whitespace-pre-wrap">${item.content || 'Brzy doplníme podrobnosti...'}</div>
+                <div class="text-lg text-zinc-300 leading-relaxed space-y-4" style="white-space: pre-wrap;">${item.content.replace(/\\n/g, '\n') || 'Brzy doplníme podrobnosti...'}</div>
             `;
             document.getElementById('detailModal').classList.remove('hidden');
         }
