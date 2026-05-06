@@ -21,6 +21,18 @@
             box-shadow: 0 30px 60px -15px rgb(185 28 28 / 0.5);
         }
 
+        #detailModal .modal-content-wrapper {
+            max-height: calc(94vh - 300px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #ef4444 #27272a;
+        }
+
+        .platform-btn.active {
+            background-color: #ef4444 !important;
+            color: white;
+        }
+
         .kalendar-nadpis {
             font-size: 3.8rem;
             letter-spacing: 0.2em;
@@ -29,7 +41,6 @@
     </style>
 </head>
 <body class="bg-zinc-950 text-white min-h-screen">
-
     <nav class="bg-black border-b border-red-600 fixed w-full z-50">
         <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
             <div class="flex items-center gap-4">
@@ -90,7 +101,7 @@
 
         <!-- KALENDÁŘ -->
         <div id="page-5" class="hidden">
-            <h2 class="kalendar-nadpis text-center mb-8">KALENDÁŘ VYDÁNÍ HER</h2>
+            <h2 class="kalendar-nadpis text-center mb-12">KALENDÁŘ VYDÁNÍ HER</h2>
             
             <div class="flex flex-wrap gap-3 justify-center mb-10" id="platform-filters">
                 <button onclick="filterByPlatform('all')" class="platform-btn active px-6 py-3 bg-red-600 rounded-2xl font-bold">VŠE</button>
@@ -147,9 +158,13 @@
             <input id="releaseDate" type="date" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
             <input id="releasePlatforms" placeholder="Platformy (oddělené čárkou)" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
             <input id="releaseImage" placeholder="URL obrázku" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
-            <div class="flex items-center gap-3 mb-6">
+            <div class="flex items-center gap-3 mb-4">
                 <input id="releaseCzech" type="checkbox" class="w-5 h-5 accent-red-600">
                 <label for="releaseCzech" class="text-white">Podporována čeština</label>
+            </div>
+            <div class="flex items-center gap-3 mb-6">
+                <input id="releaseEarlyAccess" type="checkbox" class="w-5 h-5 accent-red-600">
+                <label for="releaseEarlyAccess" class="text-white">Early Access / Preview</label>
             </div>
             <textarea id="releaseDescription" rows="4" placeholder="Krátký popis..." class="w-full mb-6 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4"></textarea>
             <div class="flex gap-4">
@@ -192,6 +207,7 @@
         let reviews = [];
         let communityLinks = [];
         let upcomingReleases = [];
+        let currentFilter = 'all';
         let editingType = null;
         let editingIndex = null;
         let editingLinkIndex = null;
@@ -244,7 +260,8 @@
                     platforms: ["PS5", "Xbox Series X|S"],
                     image: "https://picsum.photos/id/1015/1200/700",
                     description: "Kriminální sága dvojice Lucie a Jasona v moderním státě Leonida (Vice City).",
-                    czech: true
+                    czech: true,
+                    earlyAccess: false
                 }
             ];
         }
@@ -253,6 +270,7 @@
             return [...arr].sort((a, b) => new Date(b.date) - new Date(a.date));
         }
 
+        // Render funkce (všechny kompletní)
         function renderNews() {
             const sorted = sortByDate(news);
             document.getElementById('news-container').innerHTML = sorted.map((n) => {
@@ -360,10 +378,7 @@
             container.innerHTML = latest.map((game, i) => `
                 <div onclick="openReleaseDetail(${i})" class="release-card bg-zinc-900 rounded-3xl p-6 border border-red-500/30 hover:border-red-500 cursor-pointer">
                     <img src="${game.image}" class="w-full h-40 object-cover rounded-2xl mb-4">
-                    <div class="flex justify-between items-start">
-                        <div class="text-red-400 text-sm font-medium">${new Date(game.date).toLocaleDateString('cs-CZ', {day:'numeric', month:'short'})}</div>
-                        ${game.czech ? '<span class="text-2xl">🇨🇿</span>' : ''}
-                    </div>
+                    <div class="text-red-400 text-sm font-medium">${new Date(game.date).toLocaleDateString('cs-CZ', {day:'numeric', month:'short'})}</div>
                     <h4 class="font-bold mt-2">${game.title}</h4>
                     <div class="text-xs text-gray-400">${game.platforms.join(' • ')}</div>
                 </div>
@@ -372,29 +387,47 @@
 
         function renderCalendar() {
             const container = document.getElementById('calendar-container');
-            const sorted = [...upcomingReleases].sort((a, b) => new Date(a.date) - new Date(b.date));
+            let filtered = upcomingReleases;
 
-            container.innerHTML = sorted.map((game, i) => `
-                <div onclick="openReleaseDetail(${i})" class="release-card bg-zinc-900 rounded-3xl overflow-hidden border border-red-500/30 hover:border-red-500 cursor-pointer">
-                    <img src="${game.image}" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <div class="flex justify-between items-start">
-                            <div class="text-red-400 font-medium">${new Date(game.date).toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
-                            ${game.czech ? '<span class="text-3xl">🇨🇿</span>' : ''}
+            if (currentFilter !== 'all') {
+                filtered = upcomingReleases.filter(game => game.platforms.some(p => p.includes(currentFilter)));
+            }
+
+            const sorted = [...filtered].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            container.innerHTML = sorted.map((game, i) => {
+                const globalIndex = upcomingReleases.indexOf(game);
+                return `
+                    <div onclick="openReleaseDetail(${globalIndex})" class="release-card bg-zinc-900 rounded-3xl overflow-hidden border border-red-500/30 hover:border-red-500 cursor-pointer">
+                        <img src="${game.image}" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <div class="flex justify-between items-start">
+                                <div class="text-red-400 font-medium">${new Date(game.date).toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
+                                ${game.czech ? '<span class="text-3xl">🇨🇿</span>' : ''}
+                                ${game.earlyAccess ? '<span class="bg-yellow-600 text-xs px-3 py-1 rounded-full">EARLY ACCESS</span>' : ''}
+                            </div>
+                            <h3 class="text-2xl font-bold mt-3">${game.title}</h3>
+                            <div class="flex flex-wrap gap-2 mt-4">
+                                ${game.platforms.map(p => `<span class="text-xs bg-zinc-800 px-3 py-1 rounded-full">${p}</span>`).join('')}
+                            </div>
+                            ${game.description ? `<p class="mt-4 text-gray-400 line-clamp-3">${game.description}</p>` : ''}
+                            ${isAdmin ? `
+                            <div class="flex gap-3 mt-6">
+                                <button onclick="event.stopImmediatePropagation(); editRelease(${globalIndex});" class="flex-1 py-3 bg-blue-600 rounded-xl">UPRAVIT</button>
+                                <button onclick="event.stopImmediatePropagation(); deleteRelease(${globalIndex});" class="flex-1 py-3 bg-red-600 rounded-xl">SMAZAT</button>
+                            </div>` : ''}
                         </div>
-                        <h3 class="text-2xl font-bold mt-3">${game.title}</h3>
-                        <div class="flex flex-wrap gap-2 mt-4">
-                            ${game.platforms.map(p => `<span class="text-xs bg-zinc-800 px-3 py-1 rounded-full">${p}</span>`).join('')}
-                        </div>
-                        ${game.description ? `<p class="mt-4 text-gray-400 line-clamp-3">${game.description}</p>` : ''}
-                        ${isAdmin ? `
-                        <div class="flex gap-3 mt-6">
-                            <button onclick="event.stopImmediatePropagation(); editRelease(${i});" class="flex-1 py-3 bg-blue-600 rounded-xl">UPRAVIT</button>
-                            <button onclick="event.stopImmediatePropagation(); deleteRelease(${i});" class="flex-1 py-3 bg-red-600 rounded-xl">SMAZAT</button>
-                        </div>` : ''}
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
+        }
+
+        function filterByPlatform(platform) {
+            currentFilter = platform;
+            document.querySelectorAll('.platform-btn').forEach(btn => {
+                btn.classList.toggle('active', (platform === 'all' && btn.textContent === 'VŠE') || btn.textContent === platform);
+            });
+            renderCalendar();
         }
 
         function openReleaseDetail(i) {
@@ -411,6 +444,7 @@
                 <p class="text-red-400 text-2xl mb-6">${dateStr}</p>
                 <p class="text-lg mb-6"><strong>Platformy:</strong> ${game.platforms.join(', ')}</p>
                 ${game.czech ? '<p class="inline-flex items-center gap-3 mb-6 text-green-400"><span class="text-4xl">🇨🇿</span> <span class="font-bold text-xl">Podporována čeština</span></p>' : ''}
+                ${game.earlyAccess ? '<p class="inline-flex items-center gap-3 mb-6 text-yellow-400"><span class="font-bold text-xl">EARLY ACCESS / PREVIEW</span></p>' : ''}
                 ${game.description ? `<p class="text-gray-200 leading-relaxed">${game.description}</p>` : ''}
             `;
 
@@ -489,6 +523,8 @@
                 document.getElementById('releasePlatforms').value = game.platforms.join(', ');
                 document.getElementById('releaseImage').value = game.image;
                 document.getElementById('releaseDescription').value = game.description || '';
+                document.getElementById('releaseCzech').checked = !!game.czech;
+                document.getElementById('releaseEarlyAccess').checked = !!game.earlyAccess;
             } else {
                 document.getElementById('releaseModalTitle').textContent = "Nové vydání hry";
                 document.getElementById('releaseTitle').value = '';
@@ -496,6 +532,8 @@
                 document.getElementById('releasePlatforms').value = 'PS5, Xbox Series X|S';
                 document.getElementById('releaseImage').value = 'https://picsum.photos/id/1015/1200/700';
                 document.getElementById('releaseDescription').value = '';
+                document.getElementById('releaseCzech').checked = false;
+                document.getElementById('releaseEarlyAccess').checked = false;
             }
             document.getElementById('releaseModal').classList.remove('hidden');
         }
@@ -510,6 +548,8 @@
             const platformsStr = document.getElementById('releasePlatforms').value.trim();
             const image = document.getElementById('releaseImage').value.trim();
             const description = document.getElementById('releaseDescription').value.trim();
+            const czech = document.getElementById('releaseCzech').checked;
+            const earlyAccess = document.getElementById('releaseEarlyAccess').checked;
 
             if (!title || !date || !platformsStr) return alert("Název, datum a platformy jsou povinné!");
 
@@ -520,7 +560,8 @@
                 platforms: platformsStr.split(',').map(p => p.trim()),
                 image: image || "https://picsum.photos/id/237/1200/700",
                 description,
-                czech: true
+                czech,
+                earlyAccess
             };
 
             if (editingReleaseIndex !== null) {
