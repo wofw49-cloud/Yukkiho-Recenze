@@ -79,7 +79,7 @@
     <button onclick="exportData()" class="px-6 py-3 bg-emerald-600 rounded-xl font-bold">📤 Export</button>
 </div>
 
-<!-- LOGIN, REGISTER, CREATE, DETAIL, LINK MODALY (všechny) -->
+<!-- LOGIN MODAL -->
 <div id="loginModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
     <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-md border border-red-500">
         <h2 class="text-3xl font-bold mb-6 text-center title-font">YUKKI ADMIN</h2>
@@ -89,6 +89,7 @@
     </div>
 </div>
 
+<!-- REGISTER MODAL -->
 <div id="registerModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
     <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-md border border-red-500">
         <h2 class="text-3xl font-bold mb-6 text-center title-font">Registrace</h2>
@@ -99,6 +100,7 @@
     </div>
 </div>
 
+<!-- CREATE MODAL -->
 <div id="createModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
     <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-2xl border border-red-500">
         <h2 class="text-3xl font-bold mb-6" id="modalTitle">Nová novinka</h2>
@@ -115,6 +117,7 @@
     </div>
 </div>
 
+<!-- DETAIL MODAL -->
 <div id="detailModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-start justify-center pt-8 pb-8 overflow-hidden">
     <div class="bg-zinc-900 rounded-3xl w-full max-w-6xl border border-red-500 overflow-hidden relative max-h-[94vh] flex flex-col">
         <button onclick="closeModal()" class="absolute top-6 right-6 z-20 w-14 h-14 bg-black/80 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-4xl font-light">✕</button>
@@ -133,6 +136,7 @@
     </div>
 </div>
 
+<!-- LINK MODAL -->
 <div id="linkModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
     <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-lg border border-red-500">
         <h2 class="text-3xl font-bold mb-6" id="linkModalTitle">Nový odkaz</h2>
@@ -148,13 +152,6 @@
 
 <script>
     let isAdmin = false;
-    let currentUser = null;
-    let users = JSON.parse(localStorage.getItem('yukki_users')) || [];
-    let comments = JSON.parse(localStorage.getItem('yukki_comments')) || {};
-
-    const ADMIN_USER = "yukki";
-    const ADMIN_PASS = "2607";
-
     let news = [];
     let reviews = [];
     let communityLinks = [];
@@ -163,78 +160,78 @@
     let editingLinkIndex = null;
 
     function loadData() {
-            news = [{
-                id: 1778037001738,
-                title: "Proč si PC hráči musejí počkat na Grand Theft Auto VI?",
-                image: "https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg?",
-                images: ["https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg?"],
-                video: "",
-                date: "2026-05-06",
-                content: "Hry od Rockstar Games vycházejí nejprve na konzole a až později na počítače. Stejné to bude i u GTA 6. Proč tomu tak je? Palčivé otázce se věnoval generální ředitel Take-Two Interactive. Potvrdil také marketingovou exkluzivitu PlayStationu.\n\nTahle odpověď PC hráče nepotěší. Rockstar se snaží nejprve obsloužit hlavní uživatelskou základnu, a to co nejlépe. Tím se myslí právě hráči na PlayStationu a Xboxu.\n\n„Rockstar vždy začíná na konzolích, protože právě tam vás hráči hodnotí podle toho, jak dobře zvládnete launch,“ vysvětlil Strauss Zelnick pro Bloomberg. Jinými slovy, pokud by start nevyšel podle představ, mohlo by to negativně ovlivnit i pozdější prodeje na dalších platformách.\n\nZároveň zdůraznil, že zpoždění PC verze nijak nesouvisí s marketingovou spoluprací se Sony u Grand Theft Auto VI. Jde o dlouhodobou strategii, kterou Rockstar používá už roky. Zajímavé je, že samotná data jdou proti této logice. Zelnick totiž zároveň připustil, že u velkých titulů dnes může PC tvořit klidně 45 až 50 % celkových prodejů. Pro srovnání – ještě v roce 2007 to bylo jen kolem 5 % u NBA 2K.\n\nPřesto se strategie nemění, protože konzole jsou pro Rockstar stále klíčovým startovním bodem a až následně přichází rozšíření na další platformy. Doufejme, že alespoň na PC verzi nebudeme čekat dlouho. Spekuluje se o vydání v první polovině roku 2027.\n\nVedle toho bylo potvrzeno i něco, o čem se spekulovalo už delší dobu. GTA 6 má marketingové partnerství se Sony. Hra tak bude v reklamních materiálech primárně spojována s konzolí PlayStation 5. To ale neznamená exkluzivní obsah. Jde čistě o to, že hra bude prezentována na PS5 a všude bude vidět logo PlayStationu. Je dost možné, že vznikne také bundle s konzolí a hrou."
-            }];
+        news = [{
+            id: 1778037001738,
+            title: "Proč si PC hráči musejí počkat na Grand Theft Auto VI?",
+            image: "https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg?",
+            images: ["https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg?"],
+            video: "",
+            date: "2026-05-06",
+            content: "Hry od Rockstar Games vycházejí nejprve na konzole a až později na počítače. Stejné to bude i u GTA 6. Proč tomu tak je? Palčivé otázce se věnoval generální ředitel Take-Two Interactive. Potvrdil také marketingovou exkluzivitu PlayStationu.\n\nTahle odpověď PC hráče nepotěší. Rockstar se snaží nejprve obsloužit hlavní uživatelskou základnu, a to co nejlépe. Tím se myslí právě hráči na PlayStationu a Xboxu.\n\n„Rockstar vždy začíná na konzolích, protože právě tam vás hráči hodnotí podle toho, jak dobře zvládnete launch,“ vysvětlil Strauss Zelnick pro Bloomberg. Jinými slovy, pokud by start nevyšel podle představ, mohlo by to negativně ovlivnit i pozdější prodeje na dalších platformách.\n\nZároveň zdůraznil, že zpoždění PC verze nijak nesouvisí s marketingovou spoluprací se Sony u Grand Theft Auto VI. Jde o dlouhodobou strategii, kterou Rockstar používá už roky. Zajímavé je, že samotná data jdou proti této logice. Zelnick totiž zároveň připustil, že u velkých titulů dnes může PC tvořit klidně 45 až 50 % celkových prodejů. Pro srovnání – ještě v roce 2007 to bylo jen kolem 5 % u NBA 2K.\n\nPřesto se strategie nemění, protože konzole jsou pro Rockstar stále klíčovým startovním bodem a až následně přichází rozšíření na další platformy. Doufejme, že alespoň na PC verzi nebudeme čekat dlouho. Spekuluje se o vydání v první polovině roku 2027.\n\nVedle toho bylo potvrzeno i něco, o čem se spekulovalo už delší dobu. GTA 6 má marketingové partnerství se Sony. Hra tak bude v reklamních materiálech primárně spojována s konzolí PlayStation 5. To ale neznamená exkluzivní obsah. Jde čistě o to, že hra bude prezentována na PS5 a všude bude vidět logo PlayStationu. Je dost možné, že vznikne také bundle s konzolí a hrou."
+        }];
 
-            reviews = [
-                {
-                    id: 1778037961299,
-                    title: "The Elder Scrolls IV: Oblivion Remastered",
-                    image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2623190/a7cee9165bb1bfc092c390c5cff215ce0e381dfc/header.jpg?t=1761681073",
-                    images: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2623190/a7cee9165bb1bfc092c390c5cff215ce0e381dfc/header.jpg?t=1761681073"],
-                    video: "",
-                    date: "2026-04-15",
-                    content: "The Elder Scrolls IV: Oblivion Remastered je hra, která na první pohled zaujme především tím, jak krásně ožila jedna z největších fantasy klasik. A naštěstí nejde jen o grafický facelift – pořád je to ten samý chaotický, obrovský a nezapomenutelný Oblivion, jen v modernějším kabátě.\nCo funguje dobře\nNejsilnější stránkou remasteru je bezesporu vizuální a atmosférický upgrade. Cyrodiil vypadá nádherně – nové textury, lepší nasvícení, dynamické počasí, realistické stíny a voda dělají z procházek krajinou opravdový zážitek. NPC tváře už nevypadají jako voskové figuríny a celkový dojem ze světa je výrazně příjemnější.\nSouboje díky vylepšeným animacím, lepším zásahům a svižnější magii působí mnohem uspokojivěji než v originále. Lukostřelba konečně funguje, meče mají váhu a přepracované UI a inventář výrazně zlepšují komfort hraní. Obrovský svět plný questů, frakcí a dungeonů je stále stejně návykový a legendární humor NPC dialogů pořád baví.\nCo hru sráží\nPřes všechny vylepšení zůstávají některé staré neduhy. Ikonické bugy přežily, AI nepřátel je občas na úrovni rohlíku a level scaling stále dokáže pěkně zamotat zážitek (bandita s daedrickým mečem v levelu 30 je pořád realita). Dabing zůstal stejný, takže občas máte pocit, že celá vesnice mluví jedním hlasem.\nPro úplné nováčky může hra působit velmi old-school – některé mechaniky jsou dnes už dost archaické a absence moderních vychytávek (jako kvalitní crafting) je znát.\nVerdikt\nThe Elder Scrolls IV: Oblivion Remastered je krásný a srdečný návrat do jedné z nejlepších herních říší všech dob. Není to revoluční předělání, ale poctivý remaster, který zachovává duši originálu a zároveň ho dělá přijatelnějším pro dnešní hráče.\nPro fanoušky původní hry téměř povinnost. Pro nováčky zajímavý výlet do historie, která stále dokáže okouzlit.",
-                    score: 90
-                },
-                {
-                    id: 1778037465077,
-                    title: "Mafia: The Old Country",
-                    image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1941540/d06980bb8f41737ca68da8eed40079347db09c84/header.jpg?t=1764177372",
-                    images: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1941540/d06980bb8f41737ca68da8eed40079347db09c84/header.jpg?t=1764177372"],
-                    video: "",
-                    date: "2025-09-29",
-                    content: "Mafia: The Old Country je přesně ten typ hry, který připomene, proč si série Mafia vybudovala tak silné jméno. Stylová atmosféra staré Itálie, důraz na příběh a soundtrack, který funguje i mimo samotné hraní, tvoří velmi solidní základ.\n\nPříběh stojí na osvědčených motivech – rodina, loajalita, zrada. Nejde o nic vyloženě nového, ale zpracování je natolik kvalitní, že to vůbec nevadí. Postavy působí uvěřitelně, dialogy mají správnou váhu a momenty se šéfem rodiny patří k tomu nejlepšímu, co hra nabízí.\n\nCo funguje dobře:\nSilná atmosféra a vizuální stylizace – prostředí venkova i měst působí autenticky a detailně.\nStřelba má solidní odezvu a působí uspokojivě.\nJízdní model je výrazně lepší než v minulosti – auta se konečně ovládají přirozeněji.\nČeský dabing a titulky výrazně posilují celkový zážitek a nostalgii.\n\nCo hru sráží:\nUmělá inteligence není vždy spolehlivá – nepřátelé občas reagují pomalu nebo nepřesvědčivě.\nNěkteré mise působí zbytečně výplňově a nenabízí nic nového.\nChybí volný režim po dohrání, což omezuje dlouhodobou hratelnost.\n\nVerdikt\nMafia: The Old Country není revoluční titul, ale představuje poctivý návrat ke kořenům série. Sází na silný příběh, atmosféru a styl, a i přes své nedostatky dokáže nabídnout velmi solidní zážitek.",
-                    score: 80
-                },
-                {
-                    id: 1778037293234,
-                    title: "Plants vs. Zombies: Replanted",
-                    image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3654560/2a3015b525e5d4da6d2c1a517d0a8c1504b1eee8/header.jpg?t=1763401327",
-                    images: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3654560/2a3015b525e5d4da6d2c1a517d0a8c1504b1eee8/header.jpg?t=1763401327"],
-                    video: "",
-                    date: "2026-02-24",
-                    content: "Po letech jsem se z nostalgie vrátil k obraně trávníku, tentokrát v remasterované podobě. Replanted nepřináší zásadní novinky, ale přesně plní to, co slibuje – modernější verzi osvědčené klasiky.\n\nPlusy\nModernizovaná grafika: Vizuální stránka působí čistě a ostře. Nové efekty a upravené textury hře dodávají svěžest, aniž by ztratila své původní kouzlo.\nOvěřená hratelnost: Herní mechaniky zůstaly beze změn, což je v tomto případě výhoda. Jednoduchý a návykový gameplay funguje i dnes bez problémů.\nStabilita a optimalizace: Hra běží plynule, bez výraznějších technických nedostatků.\nCena: Přibližně 20 € za kvalitní remaster je férová nabídka.\n\nMínusy\nMinimum nového obsahu: Hra nepřináší výraznější rozšíření ani nové mechaniky, což může být pro některé hráče zklamání.\nKrátká výdrž: Zkušení hráči projdou obsahem poměrně rychle a zážitek může působit krátkodobě.\nOmezená ambice: Replanted působí spíše jako pocta originálu než jako snaha značku posunout dál.\n\nVerdikt\nPlants vs. Zombies: Replanted je poctivě zpracovaný remaster, který staví na silných základech původní hry. Nepřináší nic zásadně nového, ale to, co nabízí, funguje velmi dobře. Pokud víte, co od něj očekávat, pravděpodobně budete spokojeni.",
-                    score: 82
-                },
-                {
-                    id: 1778037209163,
-                    title: "Quarantine Zone: The Last Check",
-                    image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3419520/c8562f1c2f8f054e5f8efeb536a0ba2490905033/header.jpg?t=1776795498",
-                    images: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3419520/c8562f1c2f8f054e5f8efeb536a0ba2490905033/header.jpg?t=1776795498"],
-                    video: "",
-                    date: "2026-02-25",
-                    content: "Quarantine Zone mě mile překvapila hlavně svým nápadem. Kontrolovat lidi na checkpointu během zombie apokalypsy zní jednoduše, ale ve skutečnosti jde o dost intenzivní a návykovou záležitost. Největší síla hry je v rozhodování – pustíš člověka dál, nebo tím riskuješ nákazu celé základny? Tenhle morální tlak funguje výborně a často tě nutí přemýšlet víc, než bys čekal.\n\nHra skvěle pracuje s napětím. Každý další příchozí může být problém a ty nikdy nemáš jistotu, jestli ses rozhodl správně. Právě tenhle „Papers, Please“ vibe v kombinaci se zombie tématikou dává hře silnou atmosféru.\n\nPo několika hodinách se ale začne projevovat repetitivnost. Herní smyčka se tolik nevyvíjí a některé mechaniky, hlavně kolem správy základny, by si zasloužily větší hloubku. Technická stránka navíc není úplně bez chyb, i když nic, co by hru vyloženě rozbíjelo.\n\nCelkově jsem se ale bavil víc, než jsem čekal. Quarantine Zone stojí hlavně na skvělém konceptu a atmosféře, které dokážou přebít její nedostatky.\n\nSilný nápad a napětí, které drží hru nad vodou. Dolů ji táhne opakování a menší technické nedostatky. Pokud máš rád Papers, Please styl s temnější zombie tématikou, tohle tě pravděpodobně chytne.",
-                    score: 78
-                },
-                {
-                    id: 1778037659901,
-                    title: "Crimson Desert",
-                    image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3321460/abd7dbdeaede8b6c9a6d40bf116ff2b883f2dd45/header.jpg?t=1777016399",
-                    images: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3321460/abd7dbdeaede8b6c9a6d40bf116ff2b883f2dd45/header.jpg?t=1777016399"],
-                    video: "",
-                    date: "2026-03-22",
-                    content: "Crimson Desert je přesně ten typ hry, který se snaží spojit velký otevřený svět, silný příběh a akční soubojový systém do jednoho masivního celku. A ve většině případů se mu to daří – i když ne bez kompromisů.\n\nCo funguje dobře\nNejvětší předností hry je samotný svět. Kontinent Pywel působí živě, rozmanitě a má co nabídnout – od měst přes divočinu až po různé aktivity jako lov, crafting nebo vedlejší činnosti.\n\nSoubojový systém je dynamický a má hloubku. Kombinování zbraní, schopností a interakce s prostředím dává soubojům energii a variabilitu, díky čemuž se jen tak neokoukají.\n\nPříběh drží klasickou linku pomsty, ztráty a znovuvybudování – není revoluční, ale funguje. Postavy mají prostor a hlavní hrdina Kliff má jasnou motivaci, která žene hru dopředu.\n\nCo hru sráží\nVelikost světa je zároveň její slabina. Ne všechny aktivity jsou stejně zajímavé a místy se dostaví pocit „výplně“, kdy plníš obsah jen proto, aby byl splněný.\n\nTechnický stav při vydání nebyl ideální. Hra sice postupně dostává patche, ale při launchi se objevovaly bugy a nedostatky, které kazily celkový dojem.\n\nUmělá inteligence a některé mise působí nevyváženě – jednou hra nabídne skvělý moment, jindy sklouzne do rutiny.\n\nVerdikt\nCrimson Desert je ambiciózní open-world RPG, které vyniká především rozsahem, soubojovým systémem a atmosférou. Není to bezchybná hra a její velikost jí občas spíš škodí, ale i tak jde o velmi silný titul, který dokáže pohltit na desítky hodin.",
-                    score: 86
-                },
-                {
-                    id: 1778037610764,
-                    title: "MOUSE: P.I. For Hire",
-                    image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2416450/298ff2fc3f6a700d022b8d3ec58047f2b426be03/header.jpg?t=1777393988",
-                    images: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2416450/298ff2fc3f6a700d022b8d3ec58047f2b426be03/header.jpg?t=1777393988"],
-                    video: "",
-                    date: "2026-04-18",
-                    content: "MOUSE: P.I. For Hire je hra, která na první pohled zaujme hlavně svým unikátním stylem – ale naštěstí nezůstává jen u něj. Jde o akční FPS zasazené do noir světa inspirovaného 30. lety, kde místo lidí vystupují antropomorfní postavy. Kombinace staré kreslené estetiky a klasické střílečky funguje překvapivě dobře.\n\nCo funguje dobře\nNejsilnější stránkou hry je bez debat audiovizuální styl. Černobílá „rubber hose“ animace připomínající staré kreslené filmy dává hře výraznou identitu a odlišuje ji od většiny současných FPS titulů.\n\nGameplay je svižný a přímočarý. Hra sází na klasické principy – rychlý pohyb, přestřelky a arény plné nepřátel. Zbraně mají dobrou odezvu a souboje dokážou být dynamické a zábavné.\n\nAtmosféru podporuje i povedený soundtrack v jazzovém duchu a solidní dabing, který dobře zapadá do detektivního noir stylu. Příběh není nijak přelomový, ale díky dialogům a postavám dokáže zaujmout.\n\nCo hru sráží\nPřes silnou prezentaci je herní jádro poměrně klasické. Po čase se může dostavit pocit repetitivnosti, zejména kvůli podobné struktuře soubojů a levelů.\n\nTempo není vždy ideálně vyvážené. Některé pasáže působí zdlouhavě a nové prvky nepřichází tak často, jak by bylo potřeba.\n\nUmělá inteligence nepřátel je spíše průměrná a občas nepůsobí příliš přesvědčivě.\n\nVerdikt\nMOUSE: P.I. For Hire je stylově výrazná hra, která boduje především atmosférou a vizuálním zpracováním. Hratelnost stojí na osvědčených základech, což je zároveň její výhoda i slabina.\n\nNejde o revoluci, ale o kvalitně zpracovaný titul, který si najde své publikum hlavně mezi fanoušky klasických FPS a netradiční estetiky.",
-                    score: 85
-                }
-            ];
+        reviews = [
+            {
+                id: 1778037961299,
+                title: "The Elder Scrolls IV: Oblivion Remastered",
+                image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2623190/a7cee9165bb1bfc092c390c5cff215ce0e381dfc/header.jpg?t=1761681073",
+                images: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2623190/a7cee9165bb1bfc092c390c5cff215ce0e381dfc/header.jpg?t=1761681073"],
+                video: "",
+                date: "2026-04-15",
+                content: "The Elder Scrolls IV: Oblivion Remastered je hra, která na první pohled zaujme především tím, jak krásně ožila jedna z největších fantasy klasik. A naštěstí nejde jen o grafický facelift – pořád je to ten samý chaotický, obrovský a nezapomenutelný Oblivion, jen v modernějším kabátě.\nCo funguje dobře\nNejsilnější stránkou remasteru je bezesporu vizuální a atmosférický upgrade. Cyrodiil vypadá nádherně – nové textury, lepší nasvícení, dynamické počasí, realistické stíny a voda dělají z procházek krajinou opravdový zážitek. NPC tváře už nevypadají jako voskové figuríny a celkový dojem ze světa je výrazně příjemnější.\nSouboje díky vylepšeným animacím, lepším zásahům a svižnější magii působí mnohem uspokojivěji než v originále. Lukostřelba konečně funguje, meče mají váhu a přepracované UI a inventář výrazně zlepšují komfort hraní. Obrovský svět plný questů, frakcí a dungeonů je stále stejně návykový a legendární humor NPC dialogů pořád baví.\nCo hru sráží\nPřes všechny vylepšení zůstávají některé staré neduhy. Ikonické bugy přežily, AI nepřátel je občas na úrovni rohlíku a level scaling stále dokáže pěkně zamotat zážitek (bandita s daedrickým mečem v levelu 30 je pořád realita). Dabing zůstal stejný, takže občas máte pocit, že celá vesnice mluví jedním hlasem.\nPro úplné nováčky může hra působit velmi old-school – některé mechaniky jsou dnes už dost archaické a absence moderních vychytávek (jako kvalitní crafting) je znát.\nVerdikt\nThe Elder Scrolls IV: Oblivion Remastered je krásný a srdečný návrat do jedné z nejlepších herních říší všech dob. Není to revoluční předělání, ale poctivý remaster, který zachovává duši originálu a zároveň ho dělá přijatelnějším pro dnešní hráče.\nPro fanoušky původní hry téměř povinnost. Pro nováčky zajímavý výlet do historie, která stále dokáže okouzlit.",
+                score: 90
+            },
+            {
+                id: 1778037465077,
+                title: "Mafia: The Old Country",
+                image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1941540/d06980bb8f41737ca68da8eed40079347db09c84/header.jpg?t=1764177372",
+                images: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1941540/d06980bb8f41737ca68da8eed40079347db09c84/header.jpg?t=1764177372"],
+                video: "",
+                date: "2025-09-29",
+                content: "Mafia: The Old Country je přesně ten typ hry, který připomene, proč si série Mafia vybudovala tak silné jméno. Stylová atmosféra staré Itálie, důraz na příběh a soundtrack, který funguje i mimo samotné hraní, tvoří velmi solidní základ.\n\nPříběh stojí na osvědčených motivech – rodina, loajalita, zrada. Nejde o nic vyloženě nového, ale zpracování je natolik kvalitní, že to vůbec nevadí. Postavy působí uvěřitelně, dialogy mají správnou váhu a momenty se šéfem rodiny patří k tomu nejlepšímu, co hra nabízí.\n\nCo funguje dobře:\nSilná atmosféra a vizuální stylizace – prostředí venkova i měst působí autenticky a detailně.\nStřelba má solidní odezvu a působí uspokojivě.\nJízdní model je výrazně lepší než v minulosti – auta se konečně ovládají přirozeněji.\nČeský dabing a titulky výrazně posilují celkový zážitek a nostalgii.\n\nCo hru sráží:\nUmělá inteligence není vždy spolehlivá – nepřátelé občas reagují pomalu nebo nepřesvědčivě.\nNěkteré mise působí zbytečně výplňově a nenabízí nic nového.\nChybí volný režim po dohrání, což omezuje dlouhodobou hratelnost.\n\nVerdikt\nMafia: The Old Country není revoluční titul, ale představuje poctivý návrat ke kořenům série. Sází na silný příběh, atmosféru a styl, a i přes své nedostatky dokáže nabídnout velmi solidní zážitek.",
+                score: 80
+            },
+            {
+                id: 1778037293234,
+                title: "Plants vs. Zombies: Replanted",
+                image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3654560/2a3015b525e5d4da6d2c1a517d0a8c1504b1eee8/header.jpg?t=1763401327",
+                images: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3654560/2a3015b525e5d4da6d2c1a517d0a8c1504b1eee8/header.jpg?t=1763401327"],
+                video: "",
+                date: "2026-02-24",
+                content: "Po letech jsem se z nostalgie vrátil k obraně trávníku, tentokrát v remasterované podobě. Replanted nepřináší zásadní novinky, ale přesně plní to, co slibuje – modernější verzi osvědčené klasiky.\n\nPlusy\nModernizovaná grafika: Vizuální stránka působí čistě a ostře. Nové efekty a upravené textury hře dodávají svěžest, aniž by ztratila své původní kouzlo.\nOvěřená hratelnost: Herní mechaniky zůstaly beze změn, což je v tomto případě výhoda. Jednoduchý a návykový gameplay funguje i dnes bez problémů.\nStabilita a optimalizace: Hra běží plynule, bez výraznějších technických nedostatků.\nCena: Přibližně 20 € za kvalitní remaster je férová nabídka.\n\nMínusy\nMinimum nového obsahu: Hra nepřináší výraznější rozšíření ani nové mechaniky, což může být pro některé hráče zklamání.\nKrátká výdrž: Zkušení hráči projdou obsahem poměrně rychle a zážitek může působit krátkodobě.\nOmezená ambice: Replanted působí spíše jako pocta originálu než jako snaha značku posunout dál.\n\nVerdikt\nPlants vs. Zombies: Replanted je poctivě zpracovaný remaster, který staví na silných základech původní hry. Nepřináší nic zásadně nového, ale to, co nabízí, funguje velmi dobře. Pokud víte, co od něj očekávat, pravděpodobně budete spokojeni.",
+                score: 82
+            },
+            {
+                id: 1778037209163,
+                title: "Quarantine Zone: The Last Check",
+                image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3419520/c8562f1c2f8f054e5f8efeb536a0ba2490905033/header.jpg?t=1776795498",
+                images: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3419520/c8562f1c2f8f054e5f8efeb536a0ba2490905033/header.jpg?t=1776795498"],
+                video: "",
+                date: "2026-02-25",
+                content: "Quarantine Zone mě mile překvapila hlavně svým nápadem. Kontrolovat lidi na checkpointu během zombie apokalypsy zní jednoduše, ale ve skutečnosti jde o dost intenzivní a návykovou záležitost. Největší síla hry je v rozhodování – pustíš člověka dál, nebo tím riskuješ nákazu celé základny? Tenhle morální tlak funguje výborně a často tě nutí přemýšlet víc, než bys čekal.\n\nHra skvěle pracuje s napětím. Každý další příchozí může být problém a ty nikdy nemáš jistotu, jestli ses rozhodl správně. Právě tenhle „Papers, Please“ vibe v kombinaci se zombie tématikou dává hře silnou atmosféru.\n\nPo několika hodinách se ale začne projevovat repetitivnost. Herní smyčka se tolik nevyvíjí a některé mechaniky, hlavně kolem správy základny, by si zasloužily větší hloubku. Technická stránka navíc není úplně bez chyb, i když nic, co by hru vyloženě rozbíjelo.\n\nCelkově jsem se ale bavil víc, než jsem čekal. Quarantine Zone stojí hlavně na skvělém konceptu a atmosféře, které dokážou přebít její nedostatky.\n\nSilný nápad a napětí, které drží hru nad vodou. Dolů ji táhne opakování a menší technické nedostatky. Pokud máš rád Papers, Please styl s temnější zombie tématikou, tohle tě pravděpodobně chytne.",
+                score: 78
+            },
+            {
+                id: 1778037659901,
+                title: "Crimson Desert",
+                image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3321460/abd7dbdeaede8b6c9a6d40bf116ff2b883f2dd45/header.jpg?t=1777016399",
+                images: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3321460/abd7dbdeaede8b6c9a6d40bf116ff2b883f2dd45/header.jpg?t=1777016399"],
+                video: "",
+                date: "2026-03-22",
+                content: "Crimson Desert je přesně ten typ hry, který se snaží spojit velký otevřený svět, silný příběh a akční soubojový systém do jednoho masivního celku. A ve většině případů se mu to daří – i když ne bez kompromisů.\n\nCo funguje dobře\nNejvětší předností hry je samotný svět. Kontinent Pywel působí živě, rozmanitě a má co nabídnout – od měst přes divočinu až po různé aktivity jako lov, crafting nebo vedlejší činnosti.\n\nSoubojový systém je dynamický a má hloubku. Kombinování zbraní, schopností a interakce s prostředím dává soubojům energii a variabilitu, díky čemuž se jen tak neokoukají.\n\nPříběh drží klasickou linku pomsty, ztráty a znovuvybudování – není revoluční, ale funguje. Postavy mají prostor a hlavní hrdina Kliff má jasnou motivaci, která žene hru dopředu.\n\nCo hru sráží\nVelikost světa je zároveň její slabina. Ne všechny aktivity jsou stejně zajímavé a místy se dostaví pocit „výplně“, kdy plníš obsah jen proto, aby byl splněný.\n\nTechnický stav při vydání nebyl ideální. Hra sice postupně dostává patche, ale při launchi se objevovaly bugy a nedostatky, které kazily celkový dojem.\n\nUmělá inteligence a některé mise působí nevyváženě – jednou hra nabídne skvělý moment, jindy sklouzne do rutiny.\n\nVerdikt\nCrimson Desert je ambiciózní open-world RPG, které vyniká především rozsahem, soubojovým systémem a atmosférou. Není to bezchybná hra a její velikost jí občas spíš škodí, ale i tak jde o velmi silný titul, který dokáže pohltit na desítky hodin.",
+                score: 86
+            },
+            {
+                id: 1778037610764,
+                title: "MOUSE: P.I. For Hire",
+                image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2416450/298ff2fc3f6a700d022b8d3ec58047f2b426be03/header.jpg?t=1777393988",
+                images: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2416450/298ff2fc3f6a700d022b8d3ec58047f2b426be03/header.jpg?t=1777393988"],
+                video: "",
+                date: "2026-04-18",
+                content: "MOUSE: P.I. For Hire je hra, která na první pohled zaujme hlavně svým unikátním stylem – ale naštěstí nezůstává jen u něj. Jde o akční FPS zasazené do noir světa inspirovaného 30. lety, kde místo lidí vystupují antropomorfní postavy. Kombinace staré kreslené estetiky a klasické střílečky funguje překvapivě dobře.\n\nCo funguje dobře\nNejsilnější stránkou hry je bez debat audiovizuální styl. Černobílá „rubber hose“ animace připomínající staré kreslené filmy dává hře výraznou identitu a odlišuje ji od většiny současných FPS titulů.\n\nGameplay je svižný a přímočarý. Hra sází na klasické principy – rychlý pohyb, přestřelky a arény plné nepřátel. Zbraně mají dobrou odezvu a souboje dokážou být dynamické a zábavné.\n\nAtmosféru podporuje i povedený soundtrack v jazzovém duchu a solidní dabing, který dobře zapadá do detektivního noir stylu. Příběh není nijak přelomový, ale díky dialogům a postavám dokáže zaujmout.\n\nCo hru sráží\nPřes silnou prezentaci je herní jádro poměrně klasické. Po čase se může dostavit pocit repetitivnosti, zejména kvůli podobné struktuře soubojů a levelů.\n\nTempo není vždy ideálně vyvážené. Některé pasáže působí zdlouhavě a nové prvky nepřichází tak často, jak by bylo potřeba.\n\nUmělá inteligence nepřátel je spíše průměrná a občas nepůsobí příliš přesvědčivě.\n\nVerdikt\nMOUSE: P.I. For Hire je stylově výrazná hra, která boduje především atmosférou a vizuálním zpracováním. Hratelnost stojí na osvědčených základech, což je zároveň její výhoda i slabina.\n\nNejde o revoluci, ale o kvalitně zpracovaný titul, který si najde své publikum hlavně mezi fanoušky klasických FPS a netradiční estetiky.",
+                score: 85
+            }
+        ];
 
         communityLinks = [
             { title: "YouTube", url: "https://www.youtube.com/@YukkiCZE", icon: "fa-youtube" },
@@ -263,7 +260,7 @@
             id: Date.now(),
             title: title,
             image: "https://via.placeholder.com/800x400?text=Nový+obrázek",
-            images: document.getElementById('postImages').value.split(',').map(u => u.trim()).filter(Boolean),
+            images: document.getElementById('postImages').value.split(',').map(u => u.trim()).filter(u => u),
             video: document.getElementById('postVideo').value.trim(),
             date: document.getElementById('postDate').value,
             content: document.getElementById('postContent').value,
@@ -290,7 +287,7 @@
         document.getElementById('createModal').classList.add('hidden');
     }
 
-    // ... (ostatní funkce jako renderNews, renderReviews, openDetail, switchTab, adminLogin atd. jsou stejné jako v předchozím kódu)
+    // Zbytek funkcí (renderHome, renderNews, renderReviews, switchTab, adminLogin atd.) zůstává stejný jako v předchozích verzích
 
     window.onload = () => {
         loadData();
