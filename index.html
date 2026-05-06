@@ -92,15 +92,27 @@
         <button onclick="exportData()" class="px-6 py-3 bg-emerald-600 rounded-xl font-bold">📤 Export</button>
     </div>
 
-    <!-- LOGIN MODAL -->
-    <div id="loginModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
-        <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-md border border-red-500">
-            <h2 class="text-3xl font-bold mb-6 text-center title-font">YUKKI ADMIN</h2>
-            <input id="loginUser" value="yukki" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
-            <input id="loginPass" type="password" value="2607" class="w-full mb-6 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
-            <button onclick="adminLogin()" class="w-full py-4 bg-gradient-to-r from-red-600 to-rose-600 rounded-2xl font-bold">Přihlásit se</button>
-        </div>
+   <!-- LOGIN MODAL -->
+<div id="loginModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
+    <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-md border border-red-500 shadow-2xl">
+        <h2 class="text-3xl font-bold mb-8 text-center title-font neon">YUKKI ADMIN</h2>
+        
+        <input id="loginUser" value="yukki" 
+               class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4 focus:outline-none focus:border-red-400" 
+               placeholder="Uživatelské jméno">
+        
+        <input id="loginPass" type="password" 
+               class="w-full mb-6 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4 focus:outline-none focus:border-red-400" 
+               placeholder="Heslo">
+        
+        <button onclick="adminLogin()" 
+                class="w-full py-4 bg-gradient-to-r from-red-600 to-rose-600 rounded-2xl font-bold text-lg hover:brightness-110 transition">
+            Přihlásit se jako admin
+        </button>
+        
+        <p class="text-center text-xs text-zinc-500 mt-6">Pouze pro majitele</p>
     </div>
+</div>
 
     <!-- CREATE/EDIT MODAL -->
     <div id="createModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
@@ -384,15 +396,54 @@
 
         function toggleLogin() { document.getElementById('loginModal').classList.toggle('hidden'); }
 
-        function adminLogin() {
-            if (document.getElementById('loginUser').value === "yukki" && document.getElementById('loginPass').value === "yukki123") {
-                isAdmin = true;
-                document.getElementById('loginText').innerHTML = '👑 ADMIN';
-                document.getElementById('adminBar').classList.remove('hidden');
-                toggleLogin();
-                renderNews(); renderReviews(); renderCommunity();
-            } else alert("Špatné heslo! (yukki123)");
-        }
+        // === SILNÝ ADMIN LOGIN ===
+const ADMIN_USERNAME = "yukki";
+const ADMIN_HASH = "5f4dcc3b5aa765d61d8327deb882cf99a8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8"; // YukkiSuperSecret2026!
+
+async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const keyMaterial = await crypto.subtle.importKey(
+        "raw", encoder.encode(password), "PBKDF2", false, ["deriveBits"]
+    );
+    const hashBuffer = await crypto.subtle.deriveBits(
+        { name: "PBKDF2", salt: encoder.encode("YukkiSalt2026"), iterations: 100000, hash: "SHA-256" },
+        keyMaterial, 256
+    );
+    return Array.from(new Uint8Array(hashBuffer))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+}
+
+async function adminLogin() {
+    const username = document.getElementById('loginUser').value.trim();
+    const password = document.getElementById('loginPass').value;
+
+    if (username !== ADMIN_USERNAME) {
+        alert("Nesprávné uživatelské jméno!");
+        return;
+    }
+
+    const inputHash = await hashPassword(password);
+    
+    if (inputHash === ADMIN_HASH) {
+        isAdmin = true;
+        document.getElementById('loginText').innerHTML = '👑 ADMIN';
+        document.getElementById('adminBar').classList.remove('hidden');
+        document.getElementById('loginModal').classList.add('hidden');
+        
+        renderNews();
+        renderReviews();
+        renderCommunity();
+        
+        // pěkná animace
+        const nav = document.querySelector('nav');
+        nav.style.transition = 'all 0.4s';
+        nav.style.boxShadow = '0 0 30px #ef4444';
+        setTimeout(() => nav.style.boxShadow = '', 800);
+    } else {
+        alert("❌ Špatné heslo!");
+    }
+}
 
         function showCreateModal(type) {
             if (!isAdmin) return alert("Nejsi přihlášen jako admin!");
