@@ -26,11 +26,6 @@
             letter-spacing: 0.2em;
             text-shadow: 0 0 30px #ef4444, 0 0 60px #b91c1c, 0 0 90px #991b1b;
         }
-
-        .platform-btn.active {
-            background-color: #ef4444 !important;
-            color: white;
-        }
     </style>
 </head>
 <body class="bg-zinc-950 text-white min-h-screen">
@@ -96,24 +91,11 @@
         <!-- KALENDÁŘ -->
         <div id="page-5" class="hidden">
             <h2 class="kalendar-nadpis text-center mb-8">KALENDÁŘ VYDÁNÍ HER</h2>
-            
-            <div class="flex items-center justify-between mb-8">
-                <button onclick="prevMonth()" class="px-6 py-3 bg-zinc-800 hover:bg-zinc-700 rounded-2xl font-bold">← Předchozí měsíc</button>
-                <div id="currentMonth" class="text-3xl font-bold title-font"></div>
-                <button onclick="nextMonth()" class="px-6 py-3 bg-zinc-800 hover:bg-zinc-700 rounded-2xl font-bold">Další měsíc →</button>
-            </div>
-
-            <div class="flex flex-wrap gap-3 justify-center mb-8" id="platform-filters">
-                <button onclick="filterByPlatform('all')" class="platform-btn active px-6 py-3 bg-red-600 rounded-2xl font-bold">VŠE</button>
-                <button onclick="filterByPlatform('PC')" class="platform-btn px-6 py-3 bg-zinc-800 hover:bg-zinc-700 rounded-2xl">PC</button>
-                <button onclick="filterByPlatform('PS5')" class="platform-btn px-6 py-3 bg-zinc-800 hover:bg-zinc-700 rounded-2xl">PS5</button>
-                <button onclick="filterByPlatform('Xbox')" class="platform-btn px-6 py-3 bg-zinc-800 hover:bg-zinc-700 rounded-2xl">Xbox</button>
-            </div>
-
-            <div id="calendar-grid" class="calendar-grid"></div>
+            <!-- Filtry a grid budou v scriptu -->
+            <div id="calendar-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
-    </main>   
-    
+    </main>
+
     <!-- ADMIN BAR -->
     <div id="adminBar" class="hidden fixed bottom-6 right-6 bg-zinc-900 border border-red-500 rounded-2xl p-4 flex gap-3 z-50">
         <button onclick="showCreateModal('news')" class="px-6 py-3 bg-red-600 rounded-xl font-bold">+ Novinka</button>
@@ -133,7 +115,7 @@
         </div>
     </div>
 
-    <!-- CREATE/EDIT MODAL (pro novinky a recenze) -->
+    <!-- CREATE MODAL -->
     <div id="createModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
         <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-2xl border border-red-500">
             <h2 class="text-3xl font-bold mb-6" id="modalTitle">Nová novinka</h2>
@@ -158,18 +140,7 @@
             <input id="releaseDate" type="date" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
             <input id="releasePlatforms" placeholder="Platformy (oddělené čárkou)" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
             <input id="releaseImage" placeholder="URL obrázku" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
-            
-            <div class="flex items-center gap-3 mb-4">
-                <input id="releaseCzech" type="checkbox" class="w-5 h-5 accent-red-600">
-                <label for="releaseCzech" class="text-white">Podporována čeština</label>
-            </div>
-            <div class="flex items-center gap-3 mb-6">
-                <input id="releaseEarlyAccess" type="checkbox" class="w-5 h-5 accent-red-600">
-                <label for="releaseEarlyAccess" class="text-white">Early Access / Preview</label>
-            </div>
-
             <textarea id="releaseDescription" rows="4" placeholder="Krátký popis..." class="w-full mb-6 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4"></textarea>
-            
             <div class="flex gap-4">
                 <button onclick="saveRelease()" class="flex-1 py-4 bg-red-600 rounded-2xl font-bold">Uložit</button>
                 <button onclick="hideReleaseModal()" class="flex-1 py-4 bg-zinc-800 rounded-2xl font-bold">Zrušit</button>
@@ -203,15 +174,13 @@
             </div>
         </div>
     </div>
-        <script>
+
+    <script>
         let isAdmin = false;
         let news = [];
         let reviews = [];
         let communityLinks = [];
         let upcomingReleases = [];
-        let currentFilter = 'all';
-        let currentDate = new Date(2026, 10, 1); // Listopad 2026 (měsíc začíná od 0)
-
         let editingType = null;
         let editingIndex = null;
         let editingLinkIndex = null;
@@ -263,9 +232,8 @@
                     date: "2026-11-19",
                     platforms: ["PS5", "Xbox Series X|S"],
                     image: "https://picsum.photos/id/1015/1200/700",
-                    description: "Kriminální sága dvojice Lucie a Jasona v moderním státě Leonida (Vice City).",
-                    czech: true,
-                    earlyAccess: false
+                    description: "Nejočekávanější hra desetiletí",
+                    czech: true
                 }
             ];
         }
@@ -273,8 +241,6 @@
         function sortByDate(arr) {
             return [...arr].sort((a, b) => new Date(b.date) - new Date(a.date));
         }
-
-        // ==================== RENDER FUNKCE ====================
 
         function renderNews() {
             const sorted = sortByDate(news);
@@ -322,9 +288,7 @@
         function renderLeaderboard() {
             const sorted = [...reviews].sort((a, b) => b.score - a.score);
             document.getElementById('leaderboard').innerHTML = sorted.map((r, index) => {
-                const rankClass = index === 0 ? 'from-yellow-400 to-amber-500' : 
-                                 index === 1 ? 'from-gray-300 to-gray-400' : 
-                                 index === 2 ? 'from-orange-600 to-amber-700' : 'from-red-600 to-rose-600';
+                const rankClass = index === 0 ? 'from-yellow-400 to-amber-500' : index === 1 ? 'from-gray-300 to-gray-400' : index === 2 ? 'from-orange-600 to-amber-700' : 'from-red-600 to-rose-600';
                 const idx = reviews.findIndex(review => review.id === r.id);
                 return `
                     <div onclick="openDetail('review', ${idx})" class="leaderboard-card bg-gradient-to-r from-zinc-900 to-zinc-950 border border-red-500/30 hover:border-red-500 rounded-3xl p-8 flex items-center gap-8 cursor-pointer">
@@ -392,69 +356,32 @@
             `).join('');
         }
 
-        // ==================== KALENDÁŘ FUNKCE ====================
-
         function renderCalendar() {
-            const container = document.getElementById('calendar-grid');
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
+            const container = document.getElementById('calendar-container');
+            const sorted = [...upcomingReleases].sort((a, b) => new Date(a.date) - new Date(b.date));
 
-            document.getElementById('currentMonth').textContent = currentDate.toLocaleDateString('cs-CZ', { month: 'long', year: 'numeric' });
-
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const daysInPrevMonth = new Date(year, month, 0).getDate();
-
-            let html = '';
-
-            // Předchozí měsíc
-            for (let i = firstDay - 1; i >= 0; i--) {
-                html += `<div class="calendar-day other-month">${daysInPrevMonth - i}</div>`;
-            }
-
-            // Aktuální měsíc
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-                const dayReleases = upcomingReleases.filter(r => r.date === dateStr);
-
-                html += `
-                    <div class="calendar-day ${dayReleases.length ? 'has-release' : ''}">
-                        <div class="text-right text-sm">${day}</div>
-                        ${dayReleases.map((game, idx) => `
-                            <div onclick="openReleaseDetail(${upcomingReleases.indexOf(game)})" class="mt-1 text-xs bg-red-900/50 p-1 rounded cursor-pointer hover:bg-red-800">
-                                ${game.title}
-                            </div>
-                        `).join('')}
+            container.innerHTML = sorted.map((game, i) => `
+                <div onclick="openReleaseDetail(${i})" class="release-card bg-zinc-900 rounded-3xl overflow-hidden border border-red-500/30 hover:border-red-500 cursor-pointer">
+                    <img src="${game.image}" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="text-red-400 font-medium">${new Date(game.date).toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
+                        <h3 class="text-2xl font-bold mt-3">${game.title}</h3>
+                        <div class="flex flex-wrap gap-2 mt-4">
+                            ${game.platforms.map(p => `<span class="text-xs bg-zinc-800 px-3 py-1 rounded-full">${p}</span>`).join('')}
+                        </div>
+                        ${isAdmin ? `
+                        <div class="flex gap-3 mt-6">
+                            <button onclick="event.stopImmediatePropagation(); editRelease(${i});" class="flex-1 py-3 bg-blue-600 rounded-xl">UPRAVIT</button>
+                            <button onclick="event.stopImmediatePropagation(); deleteRelease(${i});" class="flex-1 py-3 bg-red-600 rounded-xl">SMAZAT</button>
+                        </div>` : ''}
                     </div>
-                `;
-            }
-
-            container.innerHTML = html;
-        }
-
-        function prevMonth() {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            renderCalendar();
-        }
-
-        function nextMonth() {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            renderCalendar();
-        }
-
-        function filterByPlatform(platform) {
-            currentFilter = platform;
-            document.querySelectorAll('.platform-btn').forEach(btn => {
-                btn.classList.toggle('active', (platform === 'all' && btn.textContent === 'VŠE') || btn.textContent === platform);
-            });
-            renderCalendar();
+                </div>
+            `).join('');
         }
 
         function openReleaseDetail(i) {
             const game = upcomingReleases[i];
-            const dateStr = new Date(game.date).toLocaleDateString('cs-CZ', { 
-                weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' 
-            });
+            const dateStr = new Date(game.date).toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
             document.getElementById('modal-media').innerHTML = `<img src="${game.image}" class="w-full">`;
             document.getElementById('modal-title').textContent = game.title;
@@ -463,38 +390,18 @@
             document.getElementById('modal-content').innerHTML = `
                 <p class="text-red-400 text-2xl mb-6">${dateStr}</p>
                 <p class="text-lg mb-6"><strong>Platformy:</strong> ${game.platforms.join(', ')}</p>
-                ${game.czech ? '<p class="inline-flex items-center gap-3 mb-6 text-green-400"><span class="text-4xl">🇨🇿</span> <span class="font-bold text-xl">Podporována čeština</span></p>' : ''}
-                ${game.earlyAccess ? '<p class="inline-flex items-center gap-3 mb-6 text-yellow-400"><span class="font-bold text-xl">EARLY ACCESS / PREVIEW</span></p>' : ''}
                 ${game.description ? `<p class="text-gray-200 leading-relaxed">${game.description}</p>` : ''}
             `;
-
             document.getElementById('detailModal').classList.remove('hidden');
         }
 
-        // ... (zbytek funkcí pokračuje v další části)
-
-        window.onload = () => {
-            loadData();
-            renderHome();
-            renderHomeReleases();
-            renderNews();
-            renderReviews();
-            renderLeaderboard();
-            renderCommunity();
-            switchTab(0);
-        };
-    </script>
-</body>
-</html>
         function openDetail(type, i) {
             const item = type === 'news' ? news[i] : reviews[i];
             let mediaHTML = '';
 
             if (item.images && item.images.length > 0) {
                 mediaHTML += `<div class="grid grid-cols-1 md:grid-cols-2 gap-2 p-4">`;
-                item.images.forEach(src => {
-                    mediaHTML += `<img src="${src}" class="rounded-2xl w-full">`;
-                });
+                item.images.forEach(src => mediaHTML += `<img src="${src}" class="rounded-2xl w-full">`);
                 mediaHTML += `</div>`;
             }
             if (item.video) {
@@ -536,9 +443,7 @@
             if (n === 5) renderCalendar();
         }
 
-        function toggleLogin() { 
-            document.getElementById('loginModal').classList.toggle('hidden'); 
-        }
+        function toggleLogin() { document.getElementById('loginModal').classList.toggle('hidden'); }
 
         function adminLogin() {
             if (document.getElementById('loginUser').value === "yukki" && document.getElementById('loginPass').value === "yukki123") {
@@ -546,18 +451,13 @@
                 document.getElementById('loginText').innerHTML = '👑 ADMIN';
                 document.getElementById('adminBar').classList.remove('hidden');
                 toggleLogin();
-                renderNews(); 
-                renderReviews(); 
-                renderCommunity(); 
-                renderHomeReleases();
-                renderCalendar();
+                renderNews(); renderReviews(); renderCommunity(); renderHomeReleases(); renderCalendar();
             } else alert("Špatné heslo! (yukki123)");
         }
 
         function showCreateReleaseModal(editIndex = null) {
             if (!isAdmin) return alert("Nejsi přihlášen jako admin!");
             editingReleaseIndex = editIndex;
-            
             if (editIndex !== null) {
                 const game = upcomingReleases[editIndex];
                 document.getElementById('releaseModalTitle').textContent = "Upravit vydání";
@@ -566,17 +466,13 @@
                 document.getElementById('releasePlatforms').value = game.platforms.join(', ');
                 document.getElementById('releaseImage').value = game.image;
                 document.getElementById('releaseDescription').value = game.description || '';
-                document.getElementById('releaseCzech').checked = !!game.czech;
-                document.getElementById('releaseEarlyAccess').checked = !!game.earlyAccess;
             } else {
                 document.getElementById('releaseModalTitle').textContent = "Nové vydání hry";
                 document.getElementById('releaseTitle').value = '';
                 document.getElementById('releaseDate').value = '';
-                document.getElementById('releasePlatforms').value = 'PS5, Xbox Series X|S';
-                document.getElementById('releaseImage').value = 'https://picsum.photos/id/1015/1200/700';
+                document.getElementById('releasePlatforms').value = 'PC, PS5';
+                document.getElementById('releaseImage').value = 'https://picsum.photos/id/237/1200/700';
                 document.getElementById('releaseDescription').value = '';
-                document.getElementById('releaseCzech').checked = false;
-                document.getElementById('releaseEarlyAccess').checked = false;
             }
             document.getElementById('releaseModal').classList.remove('hidden');
         }
@@ -591,8 +487,6 @@
             const platformsStr = document.getElementById('releasePlatforms').value.trim();
             const image = document.getElementById('releaseImage').value.trim();
             const description = document.getElementById('releaseDescription').value.trim();
-            const czech = document.getElementById('releaseCzech').checked;
-            const earlyAccess = document.getElementById('releaseEarlyAccess').checked;
 
             if (!title || !date || !platformsStr) return alert("Název, datum a platformy jsou povinné!");
 
@@ -602,9 +496,7 @@
                 date,
                 platforms: platformsStr.split(',').map(p => p.trim()),
                 image: image || "https://picsum.photos/id/237/1200/700",
-                description,
-                czech,
-                earlyAccess
+                description
             };
 
             if (editingReleaseIndex !== null) {
