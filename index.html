@@ -101,23 +101,26 @@
         </div>
     </div>
 
-    <!-- DETAIL MODAL - HEZKÝ PODÉLNÝ -->
+    <!-- DETAIL MODAL - ŠIROKÝ A ČITELNÝ -->
     <div id="detailModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
-        <div class="bg-zinc-900 rounded-3xl w-full max-w-4xl border border-purple-500 overflow-hidden">
+        <div class="bg-zinc-900 rounded-3xl w-full max-w-5xl border border-purple-500 overflow-hidden relative">
+            <!-- Zavírací tlačítko -->
+            <button onclick="closeModal()" 
+                    class="absolute top-6 right-6 z-10 w-12 h-12 bg-black/80 hover:bg-black text-white rounded-full flex items-center justify-center text-3xl font-light">
+                ✕
+            </button>
+
             <div id="modal-image" class="w-full aspect-video bg-black"></div>
-            <div class="p-8">
+            
+            <div class="p-10">
                 <h2 id="modal-title" class="text-4xl font-bold title-font"></h2>
                 
-                <div class="flex items-center gap-6 mt-3">
-                    <p id="modal-date" class="text-purple-400 text-lg"></p>
-                    <div id="modal-score" class="text-5xl font-bold text-purple-400"></div>
+                <div class="flex items-center gap-8 mt-4">
+                    <p id="modal-date" class="text-purple-400 text-xl"></p>
+                    <div id="modal-score" class="text-6xl font-bold text-purple-400"></div>
                 </div>
 
-                <div id="modal-content" class="mt-8 text-gray-300 leading-relaxed text-[17px] whitespace-pre-wrap"></div>
-                
-                <button onclick="closeModal()" class="mt-10 px-10 py-4 bg-zinc-800 hover:bg-zinc-700 rounded-2xl font-medium">
-                    Zavřít
-                </button>
+                <div id="modal-content" class="mt-10 text-gray-200 leading-relaxed text-[17.5px] whitespace-pre-wrap"></div>
             </div>
         </div>
     </div>
@@ -130,35 +133,9 @@
         let editingIndex = null;
 
         function loadData() {
-            news = [
-                {
-                    "id": 1778031631685,
-                    "title": "Proč si PC hráči musejí počkat na Grand Theft Auto VI? Marketingovou exkluzivitu má PlayStation",
-                    "image": "https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg?",
-                    "date": "2026-05-06",
-                    "content": "Hry od Rockstar Games vycházejí nejprve na konzole a až později na počítače. Stejné to bude i u GTA 6..."
-                }
-            ];
-
-            reviews = [
-                {
-                    "id": 1778031727108,
-                    "title": "Crimson Desert",
-                    "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3321460/669119c3747653f41a46c59f213168448d094e04/ss_669119c3747653f41a46c59f213168448d094e04.1920x1080.jpg?t=1777016399",
-                    "score": 68,
-                    "date": "2026-03-22",
-                    "content": "Crimson Desert je jeden z největších a nejambicióznějších open-world titulů posledních let od tvůrců Black Desert Online..."
-                },
-                {
-                    "id": 1778031574329,
-                    "title": "MOUSE: P.I. For Hire",
-                    "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2416450/298ff2fc3f6a700d022b8d3ec58047f2b426be03/header.jpg?t=1777393988",
-                    "score": 82,
-                    "date": "2026-05-06",
-                    "content": "MOUSE: P.I. For Hire je přesně ten druh hry, který ti zůstane v hlavě ještě dlouho poté, co ji dokončíš..."
-                }
-            ];
-
+            // Tvoje data
+            news = [ /* tvá novinka */ ];
+            reviews = [ /* tvé recenze */ ];
             sortAll();
         }
 
