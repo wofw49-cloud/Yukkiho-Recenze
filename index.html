@@ -3,163 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YUKKI • Pro Gaming Hub</title>
+    <title>YUKKI • NexGen Gaming Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        :root { --red: #ff0000; --dark: #050505; }
-        body { font-family: 'Montserrat', sans-serif; background-color: var(--dark); color: #fff; overflow-x: hidden; }
-        .logo-font { font-family: 'Orbitron', sans-serif; letter-spacing: -2px; }
-        .yukki-logo { background: linear-gradient(90deg, var(--red) 0%, #800000 100%); padding: 5px 20px; border-radius: 4px 15px 4px 15px; box-shadow: 0 0 25px rgba(255, 0, 0, 0.3); transform: skewX(-5deg); }
-        .nav-link { transition: 0.3s; font-weight: 800; font-size: 11px; text-transform: uppercase; opacity: 0.5; cursor: pointer; }
-        .tab-active { opacity: 1; color: var(--red) !important; position: relative; }
-        .tab-active::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 3px; background: var(--red); }
-        .glass { background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
+        :root { --red: #ff0000; --dark: #020202; --card: rgba(15, 15, 15, 0.9); }
+        * { cursor: default; }
+        body { font-family: 'Montserrat', sans-serif; background-color: var(--dark); color: #fff; overflow-x: hidden; scroll-behavior: smooth; }
         
-        /* --- NOVÝ UPGRADE: Glow a efekty karet --- */
-        .card-hover { 
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            border: 1px solid rgba(255,255,255,0.05);
+        .logo-font { font-family: 'Orbitron', sans-serif; letter-spacing: -2px; }
+        .yukki-logo { 
+            background: linear-gradient(90deg, var(--red) 0%, #4a0000 100%); 
+            padding: 8px 25px; border-radius: 4px 20px 4px 20px; 
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5); transform: skewX(-10deg); transition: 0.5s;
         }
-        .card-hover:hover { 
-            border-color: var(--red); 
-            transform: translateY(-8px) scale(1.02); 
-            box-shadow: 0 15px 40px rgba(255, 0, 0, 0.25);
-            background: rgba(25, 25, 25, 0.9);
-        }
-        .plat-tag { font-size: 9px; font-weight: 900; color: rgba(255,255,255,0.4); letter-spacing: 1px; text-transform: uppercase; }
-        /* ----------------------------------------- */
+        .yukki-logo:hover { transform: skewX(-10deg) scale(1.1); box-shadow: 0 0 50px var(--red); }
 
-        .admin-ui { display: none !important; }
-        body.logged-in .admin-ui { display: flex !important; }
-        .badge { font-size: 9px; font-weight: 900; padding: 2px 8px; border-radius: 3px; text-transform: uppercase; }
-        input, textarea, select { background: #111 !important; border: 1px solid #222 !important; color: white !important; padding: 12px; border-radius: 8px; width: 100%; }
-        #detailModal .modal-container { max-height: 85vh; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--red) #111; }
-        #detailModal .modal-container::-webkit-scrollbar { width: 6px; }
-        #detailModal .modal-container::-webkit-scrollbar-thumb { background: var(--red); border-radius: 10px; }
+        .nav-link { transition: 0.3s; font-weight: 800; font-size: 11px; text-transform: uppercase; opacity: 0.5; cursor: pointer; }
+        .tab-active { opacity: 1; color: var(--red) !important; text-shadow: 0 0 10px var(--red); }
+        
+        .glass { background: var(--card); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.03); }
+        
+        .card-hover { transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); position: relative; overflow: hidden; }
+        .card-hover:hover { border-color: var(--red); transform: translateY(-12px) scale(1.02); box-shadow: 0 25px 50px rgba(255, 0, 0, 0.3); }
+
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+        .badge { font-size: 9px; font-weight: 900; padding: 3px 10px; border-radius: 5px; text-transform: uppercase; }
+        .plat-tag { font-size: 9px; font-weight: 900; color: rgba(255,255,255,0.3); letter-spacing: 1px; }
+
+        /* Animace pulzování pro Hero */
+        @keyframes pulse-slow { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.6; } }
+        .hero-bg-animate { animation: pulse-slow 5s infinite; }
     </style>
 </head>
 <body>
 
-    <nav class="bg-black/95 fixed w-full z-[100] border-b border-white/5">
+    <div class="bg-red-600 h-1 w-full fixed top-0 z-[110]"></div>
+    <nav class="bg-black/90 fixed w-full z-[100] border-b border-white/5 backdrop-blur-md">
         <div class="max-w-[1400px] mx-auto px-6 h-20 flex items-center justify-between">
-            <div class="flex items-center gap-4 cursor-pointer" onclick="switchTab('domu')">
-                <div class="yukki-logo"><span class="logo-font text-2xl italic">YUKKI</span></div>
+            <div class="flex items-center gap-8 cursor-pointer" onclick="switchTab('domu')">
+                <div class="yukki-logo"><span class="logo-font text-2xl italic text-white">YUKKI</span></div>
             </div>
             <div class="hidden md:flex gap-10">
-                <button onclick="switchTab('domu')" class="nav-link tab-active" id="tab-domu">Domů</button>
-                <button onclick="switchTab('novinky')" class="nav-link" id="tab-novinky">Novinky</button>
-                <button onclick="switchTab('recenze')" class="nav-link" id="tab-recenze">Recenze</button>
+                <button onclick="switchTab('domu')" class="nav-link tab-active" id="tab-domu">Centrála</button>
+                <button onclick="switchTab('novinky')" class="nav-link" id="tab-novinky">Zprávy</button>
+                <button onclick="switchTab('recenze')" class="nav-link" id="tab-recenze">Verdikty</button>
                 <button onclick="switchTab('zebricek')" class="nav-link" id="tab-zebricek">Žebříček</button>
-                <button onclick="switchTab('kalendar')" class="nav-link" id="tab-kalendar">Kalendář</button>
+                <button onclick="switchTab('kalendar')" class="nav-link" id="tab-kalendar">Radar</button>
             </div>
             <button onclick="handleAdminAuth()" id="authBtn" class="bg-zinc-900 border border-white/10 px-6 py-2 rounded-lg font-black text-[10px] uppercase hover:bg-red-600 transition-all">Admin</button>
         </div>
     </nav>
 
     <main class="pt-32 pb-20 max-w-[1400px] mx-auto px-6">
-        <div id="page-domu" class="page-content"><div id="hero-slot"></div><div class="mt-12"><h2 class="text-lg font-black mb-6 italic opacity-50 cursor-pointer hover:text-red-600 inline-block" onclick="switchTab('novinky')">DALŠÍ ČLÁNKY <i class="fa fa-chevron-right text-[10px] ml-2"></i></h2><div id="home-news-extra" class="grid grid-cols-1 md:grid-cols-4 gap-6"></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-16"><section><h2 class="text-xl font-black mb-8 italic flex items-center gap-3 cursor-pointer hover:text-red-600 transition" onclick="switchTab('kalendar')"><span class="w-1.5 h-6 bg-red-600"></span>KALENDÁŘ VYDÁNÍ</h2><div id="home-cal" class="space-y-4"></div></section><section><h2 class="text-xl font-black mb-8 italic flex items-center gap-3 cursor-pointer hover:text-red-600 transition" onclick="switchTab('recenze')"><span class="w-1.5 h-6 bg-white"></span>POSLEDNÍ RECENZE</h2><div id="home-rev" class="space-y-4"></div></section></div></div>
-        <div id="page-novinky" class="page-content hidden"><div class="flex justify-between items-end mb-12"><h2 class="text-6xl font-black italic tracking-tighter uppercase text-red-600">Novinky</h2><button onclick="openForm('news')" class="admin-ui bg-red-600 px-6 py-2 rounded font-bold text-xs">+ NOVÝ ČLÁNEK</button></div><div id="news-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div></div>
-        <div id="page-recenze" class="page-content hidden"><div class="flex justify-between items-end mb-12"><h2 class="text-6xl font-black italic tracking-tighter uppercase text-red-600">Recenze</h2><button onclick="openForm('reviews')" class="admin-ui bg-red-600 px-6 py-2 rounded font-bold text-xs">+ NOVÁ RECENZE</button></div><div id="reviews-grid" class="grid grid-cols-1 md:grid-cols-4 gap-6"></div></div>
-        <div id="page-zebricek" class="page-content hidden"><h2 class="text-5xl font-black italic text-center mb-16 uppercase">SÍŇ SLÁVY</h2><div id="hall-of-fame" class="max-w-4xl mx-auto space-y-4"></div></div>
-        <div id="page-kalendar" class="page-content hidden"><div class="flex justify-between items-center mb-12"><h2 class="text-6xl font-black italic tracking-tighter uppercase text-red-600">Kalendář</h2><button onclick="openForm('calendar')" class="admin-ui bg-red-600 px-6 py-2 rounded font-bold text-xs">+ PŘIDAT</button></div><div id="calendar-grid" class="grid grid-cols-1 md:grid-cols-3 gap-10"></div></div>
+        <div id="page-domu" class="page-content">
+            <div id="hero-slot"></div>
+            <div class="mt-12 grid grid-cols-1 md:grid-cols-4 gap-6" id="home-news-extra"></div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 mt-20">
+                <section>
+                    <h2 class="text-2xl font-black mb-8 italic flex items-center gap-3"><span class="w-1.5 h-6 bg-red-600 shadow-[0_0_10px_red]"></span>RELEASES</h2>
+                    <div id="home-cal" class="space-y-4"></div>
+                </section>
+                <section>
+                    <h2 class="text-2xl font-black mb-8 italic flex items-center gap-3"><span class="w-1.5 h-6 bg-white shadow-[0_0_10px_white]"></span>LATEST REVIEWS</h2>
+                    <div id="home-rev" class="space-y-4"></div>
+                </section>
+            </div>
+        </div>
+
+        <div id="page-novinky" class="page-content hidden"><div class="mb-12"><h2 class="text-6xl font-black italic uppercase text-red-600">Newsroom</h2></div><div id="news-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div></div>
+        <div id="page-recenze" class="page-content hidden"><div class="mb-12"><h2 class="text-6xl font-black italic uppercase text-red-600">Reviews</h2></div><div id="reviews-grid" class="grid grid-cols-1 md:grid-cols-4 gap-6"></div></div>
+        <div id="page-zebricek" class="page-content hidden text-center"><h2 class="text-6xl font-black italic mb-16 uppercase">Hall of Fame</h2><div id="hall-of-fame" class="max-w-4xl mx-auto space-y-4 text-left"></div></div>
+        <div id="page-kalendar" class="page-content hidden"><div class="mb-12"><h2 class="text-6xl font-black italic uppercase text-red-600">Radar</h2></div><div id="calendar-grid" class="grid grid-cols-1 md:grid-cols-3 gap-10"></div></div>
     </main>
 
-    <div id="formModal" class="hidden fixed inset-0 z-[200] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4">
-        <div class="bg-zinc-900 border border-white/10 w-full max-w-2xl rounded-3xl p-8 shadow-2xl">
-            <h3 class="text-2xl font-black italic mb-8 text-red-600 uppercase">Administrace</h3>
-            <form id="mainForm" class="grid grid-cols-2 gap-4">
-                <input type="hidden" id="editId"><input type="hidden" id="formType">
-                <div class="col-span-2"><input type="text" id="fName" placeholder="Název" required></div>
-                <div class="col-span-1"><input type="text" id="fImg" placeholder="URL Obrázku" required></div>
-                <div class="col-span-1"><input type="date" id="fRealDate"></div>
-                <div class="col-span-1" id="scoreWrap"><input type="number" id="fScore" placeholder="Hodnocení %"></div>
-                <div class="col-span-1 hidden" id="dateWrap"><input type="text" id="fDate" placeholder="Datum textově"></div>
-                <div class="col-span-2" id="platWrap">
-                    <p class="text-[10px] font-bold mb-2 opacity-50 uppercase">Platformy</p>
-                    <div class="flex gap-4">
-                        <label class="flex items-center gap-2 text-xs"><input type="checkbox" class="plat-check" value="pc"> PC</label>
-                        <label class="flex items-center gap-2 text-xs"><input type="checkbox" class="plat-check" value="ps5"> PS5</label>
-                        <label class="flex items-center gap-2 text-xs"><input type="checkbox" class="plat-check" value="xbox"> Xbox S|X</label>
-                        <label class="flex items-center gap-2 text-xs"><input type="checkbox" class="plat-check" value="switch"> Switch 2</label>
-                    </div>
-                </div>
-                <div class="col-span-2 flex gap-6 py-2">
-                    <label class="flex items-center gap-2 cursor-pointer text-xs font-bold"><input type="checkbox" id="fDLC"> DLC</label>
-                    <label class="flex items-center gap-2 cursor-pointer text-xs font-bold"><input type="checkbox" id="fEA"> EA</label>
-                    <label class="flex items-center gap-2 cursor-pointer text-xs font-bold" id="czWrap"><input type="checkbox" id="fCZ"> CZ</label>
-                </div>
-                <div class="col-span-2"><textarea id="fContent" rows="4" placeholder="Obsah..."></textarea></div>
-                <div class="col-span-2 flex gap-4 mt-4"><button type="button" onclick="closeForm()" class="flex-1 font-bold opacity-50">ZRUŠIT</button><button type="submit" class="flex-1 py-4 bg-red-600 rounded-xl font-black italic">ULOŽIT</button></div>
-            </form>
-        </div>
-    </div>
-
-    <div id="detailModal" class="hidden fixed inset-0 z-[150] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-hidden">
-        <div class="modal-container bg-zinc-900 border border-white/10 w-full max-w-4xl rounded-[40px] relative shadow-2xl overflow-hidden">
-            <button onclick="closeDetail()" class="absolute top-6 right-8 text-4xl font-light hover:text-red-600 z-50">&times;</button>
+    <div id="detailModal" class="hidden fixed inset-0 z-[150] bg-black/95 backdrop-blur-2xl flex items-center justify-center p-4">
+        <div class="modal-container bg-zinc-950 border border-white/5 w-full max-w-5xl rounded-[40px] relative shadow-2xl overflow-y-auto max-h-[90vh]">
+            <button onclick="closeDetail()" class="absolute top-6 right-8 text-5xl font-thin hover:text-red-600 z-50">&times;</button>
             <div id="detailContent" class="p-8 md:p-12"></div>
         </div>
     </div>
 
     <script>
+        const platLabels = { pc: 'PC', ps5: 'PS5', xbox: 'XBOX', switch: 'NSW 2' };
+
         let state = {
             news: [
-                { id: 3, title: "Sony se má u PlayStationu 6 poučit z chyb Xboxu", img: "https://indian-tv.cz/uploads/ls/c1611a4a8fcd4083837042b2ef4994a8/1749806929.jpg?", rDate: "2026-05-07", content: "Spekulace kolem nové generace konzolí nabírají na síle a stále častěji se mluví o tom, že PlayStation 6 dorazí hned ve více variantách. Z této informace některým hráčům hrůzou vstávají vlasy na hlavě, protože vědí, jaký problém mají vývojáři kvůli Xboxu Series S..." },
-                { id: 2, title: "Game Pass je v květnu hodně zajímavý. Hlavními lákadly jsou Forza Horizon 6 a Subnautica 2", img: "https://indian-tv.cz/uploads/ls/36e56838c4764a7492018688930ce83e/1777998805.jpg?", rDate: "2026-05-06", content: "Microsoft odhalil první vlnu květnové nabídky pro Game Pass. Rozhodně je na co se těšit. Největší pozornost na sebe strhává především Forza Horizon 6 a Subnautica 2..." },
-                { id: 1, title: "Proč si PC hráči musejí počkat na Grand Theft Auto VI? Marketingovou exkluzivitu má PlayStation", img: "https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg", rDate: "2026-05-05", content: "Hry od Rockstar Games vycházejí nejprve na konzole a až později na počítače. Stejné to bude i u GTA 6..." }
+                { id: 101, title: "Sony se má u PlayStationu 6 poučit z chyb Xboxu", img: "https://indian-tv.cz/uploads/ls/c1611a4a8fcd4083837042b2ef4994a8/1749806929.jpg?", rDate: "2026-05-07", content: "Spekulace kolem nové generace konzolí nabírají na síle. PlayStation 6 má přinést revoluci v AI upscalingu." },
+                { id: 102, title: "Game Pass v květnu: Forza Horizon 6 a Subnautica 2", img: "https://indian-tv.cz/uploads/ls/36e56838c4764a7492018688930ce83e/1777998805.jpg?", rDate: "2026-05-06", content: "Microsoft odhalil bombastickou nabídku pro tento měsíc." },
+                { id: 103, title: "Proč si PC hráči musejí počkat na Grand Theft Auto VI?", img: "https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg", rDate: "2026-05-05", content: "Rockstar Games tradičně upřednostňují konzole kvůli exkluzivním smlouvám se Sony." },
+                { id: 104, title: "Zaklínač 4: Vývojáři slibují návrat ke kořenům", img: "https://cdn.mos.cms.futurecdn.net/ZpE6Q6v7T6X2R6V7X2R6V7.jpg", rDate: "2026-05-04", content: "Nová sága začíná a Unreal Engine 5 vypadá naprosto neuvěřitelně." }
             ],
             reviews: [
-                { id: 4, game: "Life is Strange: Reunion", score: 82, img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2624870/1a9fd711feebe3921055079f367ecfd2af9fafe6/ss_1a9fd711feebe3921055079f367ecfd2af9fafe6.1920x1080.jpg", rDate: "2026-04-27", isDLC: false, content: "Návrat Max a Chloe, který jsme si všichni přáli, ale báli jsme se ho. Reunion úspěšně napravuje přešlapy předchozích dílů..." },
-                { id: 3, game: "ELDEN RING: Shadow of the Erdtree", score: 98, img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2778580/ss_9769407281276d7fd76d6221fe83c05defb0b998.1920x1080.jpg", rDate: "2026-05-06", isDLC: true, content: "Shadow of the Erdtree není jen klasické DLC. Je to spíš plnohodnotné rozšíření..." },
-                { id: 1, game: "Crimson Desert", score: 78, img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3321460/da5b8d5347b66aa994119fc7052ca43896971da9/ss_da5b8d5347b66aa994119fc7052ca43896971da9.1920x1080.jpg", rDate: "2026-03-25", isDLC: false, content: "Crimson Desert od Pearl Abyss je ambiciózní open-world akční RPG..." },
-                { id: 2, game: "Kingdom Come: Deliverance II", score: 95, img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1771300/ss_935ddb59f90bc2c21c706132cb9b446fe7851c19.1920x1080.jpg", rDate: "2026-02-11", isDLC: false, cz: true, content: "Jindra se vrací a je to jízda, na kterou jsme čekali roky..." }
+                { id: 201, game: "Kingdom Come: Deliverance II", score: 95, img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1771300/header.jpg", rDate: "2026-02-11", cz: true, content: "Jindra se vrací v životní formě. Kutná Hora bere dech a hratelnost je vybroušená k dokonalosti." },
+                { id: 202, game: "ELDEN RING: Shadow of the Erdtree", score: 98, img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2778580/header.jpg", rDate: "2026-05-06", isDLC: true, content: "Nejlepší DLC všech dob. Tečka." },
+                { id: 203, game: "Hades II", score: 92, img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1145350/header.jpg", rDate: "2026-05-01", isEA: true, content: "Návykovější než jednička. Supergiant Games opět trefili desítku." },
+                { id: 204, game: "Life is Strange: Reunion", score: 82, img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2624870/header.jpg", rDate: "2026-04-27", content: "Max a Chloe jsou zpět. Emotivní jízda pro fanoušky originálu." }
             ],
             calendar: [
-                { id: 3, game: "LEGO Batman: Legacy of the Dark Knight", date: "22. května 2026", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2215200/26d8ea3f288ffaa1fe9956620cbd920f10b171f4/ss_26d8ea3f288ffaa1fe9956620cbd920f10b171f4.1920x1080.jpg", cz: true, rDate: "2026-05-22", platforms: ['pc', 'ps5', 'xbox', 'switch'] },
-                { id: 4, game: "Yoshi and the Mysterious Book", date: "21. května 2026", img: "https://static.digitecgalaxus.ch/im/Files/7/7/5/9/1/4/8/0/Yoshi%20and%20the%20Mysterious%20Book%20Digitec%20Vorschau%20Preview21.png", cz: false, rDate: "2026-05-21", platforms: ['switch'] },
-                { id: 1, game: "Grand Theft Auto VI", date: "19. listopadu 2026", img: "https://indian-tv.cz/uploads/00/f2f73c64d9ff4ae594f591cd103e0299/1762505917.jpg?", cz: false, rDate: "2026-11-19", platforms: ['ps5', 'xbox'] },
-                { id: 2, game: "Subnautica 2", date: "14. května 2026", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1962700/787e2315a1eb5aaba73c4f75e6f7d7d8835fa260/ss_787e2315a1eb5aaba73c4f75e6f7d7d8835fa260.1920x1080.jpg", isEA: true, cz: false, rDate: "2026-05-14", platforms: ['pc', 'xbox'] }
+                { id: 301, game: "Grand Theft Auto VI", date: "19. listopadu 2026", img: "https://indian-tv.cz/uploads/00/f2f73c64d9ff4ae594f591cd103e0299/1762505917.jpg?", rDate: "2026-11-19", platforms: ['ps5', 'xbox'], video: "QdBZY2fkU-0" },
+                { id: 302, game: "DOOM: The Dark Ages", date: "12. června 2026", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2513400/header.jpg", rDate: "2026-06-12", platforms: ['pc', 'ps5', 'xbox'], video: "4_D-v6O6rYI", cz: true },
+                { id: 303, game: "LEGO Batman: Legacy", date: "22. května 2026", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2215200/header.jpg", rDate: "2026-05-22", platforms: ['pc', 'ps5', 'switch'], video: "z659S9kM6pI", cz: true },
+                { id: 304, game: "Subnautica 2", date: "Podzim 2026", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1926570/header.jpg", rDate: "2026-09-01", platforms: ['pc', 'xbox'], video: "pXU8lSAs7mY" }
             ]
         };
 
-        const platLabels = { pc: 'PC', ps5: 'PS5', xbox: 'Xbox X|S', switch: 'Switch 2' };
+        function switchTab(tab) {
+            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('tab-active'));
+            document.getElementById(`page-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-${tab}`).classList.add('tab-active');
+            renderAll();
+        }
 
-        function handleAdminAuth() { if(document.body.classList.contains('logged-in')) { document.body.classList.remove('logged-in'); document.getElementById('authBtn').innerText = "Admin"; renderAll(); return; } if(prompt("Heslo:") === 'yukki123') { document.body.classList.add('logged-in'); document.getElementById('authBtn').innerText = "Odhlásit"; renderAll(); } }
-        function switchTab(tab) { document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden')); document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('tab-active')); document.getElementById(`page-${tab}`).classList.remove('hidden'); document.getElementById(`tab-${tab}`).classList.add('tab-active'); window.scrollTo(0,0); renderAll(); }
-        function renderAll() { state.news.sort((a,b) => new Date(b.rDate) - new Date(a.rDate)); state.reviews.sort((a,b) => new Date(b.rDate) - new Date(a.rDate)); state.calendar.sort((a,b) => new Date(a.rDate) - new Date(b.rDate)); renderHome(); renderNews(); renderReviews(); renderHallOfFame(); renderCalendar(); }
+        function renderAll() {
+            renderHome(); renderNews(); renderReviews(); renderCalendar(); renderHallOfFame();
+        }
 
         function renderHome() {
-            const top = state.news[0]; const extras = state.news.slice(1, 5);
-            document.getElementById('hero-slot').innerHTML = top ? `<div class="glass rounded-[40px] h-[500px] overflow-hidden relative cursor-pointer group" onclick="openDetail('news', ${top.id})"><img src="${top.img}" class="w-full h-full object-cover opacity-40 group-hover:scale-105 transition duration-1000"><div class="absolute bottom-12 left-12"><h1 class="text-5xl font-black logo-font italic leading-none group-hover:text-red-600 transition">${top.title}</h1></div></div>` : '';
-            document.getElementById('home-news-extra').innerHTML = extras.map(n => `<div class="glass p-4 rounded-2xl cursor-pointer card-hover relative group" onclick="openDetail('news', ${n.id})"><img src="${n.img}" class="w-full h-32 object-cover rounded-xl mb-3 opacity-60"><h4 class="font-black text-xs uppercase italic leading-tight">${n.title}</h4></div>`).join('');
-            document.getElementById('home-cal').innerHTML = state.calendar.slice(0,3).map(g => `<div class="glass p-4 rounded-2xl flex items-center gap-4 cursor-pointer card-hover" onclick="switchTab('kalendar')"><img src="${g.img}" class="w-24 h-14 object-cover rounded-lg shadow-lg"><div><h4 class="font-black text-xs uppercase tracking-tighter">${g.game}</h4><div class="flex gap-2 mt-1 mb-1">${(g.platforms||[]).map(p => `<span class="text-[8px] font-bold opacity-30 uppercase">${platLabels[p]}</span>`).join('<span class="opacity-10">|</span>')}</div><p class="text-red-600 font-black text-[10px] uppercase">${g.date}</p></div></div>`).join('');
-            document.getElementById('home-rev').innerHTML = state.reviews.slice(0,3).map(r => `<div class="glass p-4 rounded-2xl flex justify-between items-center px-6 cursor-pointer card-hover" onclick="openDetail('reviews', ${r.id})"><div class="flex items-center gap-4"><img src="${r.img}" class="w-12 h-12 object-cover rounded-lg shadow-md"><h4 class="font-black text-xs uppercase italic">${r.game}</h4></div><span class="text-red-600 font-black text-xl italic">${r.score}%</span></div>`).join('');
+            const top = state.news[0];
+            const heroSlot = document.getElementById('hero-slot');
+            if(heroSlot) {
+                heroSlot.innerHTML = `<div class="glass rounded-[50px] h-[550px] overflow-hidden relative cursor-pointer group card-hover" onclick="openDetail('news', ${top.id})">
+                    <img src="${top.img}" class="w-full h-full object-cover opacity-40 group-hover:scale-105 transition duration-1000 hero-bg-animate">
+                    <div class="absolute bottom-16 left-16"><h1 class="text-6xl font-black logo-font italic uppercase group-hover:text-red-600 transition">${top.title}</h1></div>
+                </div>`;
+            }
+
+            document.getElementById('home-news-extra').innerHTML = state.news.slice(1,5).map(n => `
+                <div class="glass p-5 rounded-3xl cursor-pointer card-hover" onclick="openDetail('news', ${n.id})">
+                    <img src="${n.img}" class="w-full h-32 object-cover rounded-xl mb-4 opacity-60">
+                    <h4 class="font-black text-[10px] uppercase italic leading-tight">${n.title}</h4>
+                </div>`).join('');
+
+            document.getElementById('home-cal').innerHTML = state.calendar.slice(0,4).map(g => `
+                <div class="glass p-4 rounded-2xl flex items-center justify-between cursor-pointer card-hover" onclick="openDetail('calendar', ${g.id})">
+                    <div class="flex items-center gap-4">
+                        <img src="${g.img}" class="w-16 h-10 object-cover rounded-lg shadow-lg">
+                        <div><h4 class="font-black text-xs uppercase italic">${g.game}</h4><p class="text-red-600 font-black text-[9px] uppercase">${g.date}</p></div>
+                    </div>
+                    ${g.video ? '<i class="fa fa-play-circle text-red-600 opacity-30 group-hover:opacity-100 text-xl transition"></i>' : ''}
+                </div>`).join('');
+
+            document.getElementById('home-rev').innerHTML = state.reviews.slice(0,4).map(r => `
+                <div class="glass p-4 rounded-2xl flex justify-between items-center px-6 cursor-pointer card-hover" onclick="openDetail('reviews', ${r.id})">
+                    <h4 class="font-black text-xs uppercase italic">${r.game}</h4>
+                    <span class="text-red-600 font-black text-xl italic">${r.score}%</span>
+                </div>`).join('');
         }
 
-        function renderNews() { document.getElementById('news-grid').innerHTML = state.news.map(n => `<div class="glass rounded-2xl overflow-hidden card-hover cursor-pointer relative group" onclick="openDetail('news', ${n.id})"><div class="admin-ui absolute top-4 right-4 gap-2 z-20"><button onclick="event.stopPropagation(); openForm('news', ${n.id})" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20"><i class="fa fa-pen text-[10px]"></i></button><button onclick="event.stopPropagation(); deleteEntry('news', ${n.id})" class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center"><i class="fa fa-trash text-[10px]"></i></button></div><img src="${n.img}" class="w-full h-52 object-cover opacity-80"><div class="p-6"><h3 class="font-black italic text-lg leading-tight uppercase">${n.title}</h3></div></div>`).join(''); }
-        function renderReviews() { document.getElementById('reviews-grid').innerHTML = state.reviews.map(r => `<div class="glass rounded-2xl p-4 card-hover cursor-pointer relative group" onclick="openDetail('reviews', ${r.id})"><div class="admin-ui absolute top-4 right-4 gap-2 z-20"><button onclick="event.stopPropagation(); openForm('reviews', ${r.id})" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20"><i class="fa fa-pen text-[10px]"></i></button><button onclick="event.stopPropagation(); deleteEntry('reviews', ${r.id})" class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center"><i class="fa fa-trash text-[10px]"></i></button></div><div class="relative mb-4"><img src="${r.img}" class="w-full h-40 object-cover rounded-xl"><div class="absolute top-2 left-2 flex gap-1">${r.isDLC ? '<span class="badge bg-blue-600">DLC</span>' : ''}${r.isEA ? '<span class="badge bg-amber-500">EA</span>' : ''}</div></div><div class="flex justify-between items-end"><h4 class="font-black text-[10px] uppercase w-2/3 leading-tight">${r.game}</h4><span class="text-3xl font-black text-red-600 italic">${r.score}%</span></div></div>`).join(''); }
-        function renderHallOfFame() { const sorted = [...state.reviews].sort((a,b) => b.score - a.score); document.getElementById('hall-of-fame').innerHTML = sorted.map((r, i) => `<div class="glass p-6 rounded-3xl flex items-center justify-between border-l-4 border-red-600 mb-4"><div class="flex items-center gap-8"><span class="text-4xl font-black italic opacity-10 w-10">${i+1}</span><img src="${r.img}" class="w-16 h-16 object-cover rounded-xl shadow-lg"><h3 class="text-xl font-black italic uppercase">${r.game}</h3></div><span class="text-4xl font-black text-red-600 italic">${r.score}%</span></div>`).join(''); }
-        function renderCalendar() { document.getElementById('calendar-grid').innerHTML = state.calendar.map(g => `<div class="glass p-8 rounded-[40px] text-center relative card-hover group"><div class="admin-ui absolute top-6 right-6 gap-2 z-20"><button onclick="openForm('calendar', ${g.id})" class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20"><i class="fa fa-pen text-[10px]"></i></button><button onclick="deleteEntry('calendar', ${g.id})" class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center"><i class="fa fa-trash text-[10px]"></i></button></div>${g.cz ? `<div class="absolute top-6 left-6 flex items-center gap-2 bg-white/5 px-3 py-1 rounded-full border border-white/10"><img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Flag_of_the_Czech_Republic.svg" class="w-4"><span class="text-[9px] font-black uppercase tracking-tighter">CZ</span></div>` : ''}<img src="${g.img}" class="w-full h-44 object-cover rounded-3xl mb-6 shadow-2xl"><h3 class="text-2xl font-black italic uppercase mb-2 tracking-tighter">${g.game}</h3><div class="flex justify-center gap-2 mb-4">${(g.platforms||[]).map(p => `<span class="plat-tag">${platLabels[p]}</span>`).join('<span class="opacity-20">•</span>')}</div><p class="text-red-500 font-black text-xl italic bg-red-500/10 py-2 rounded-xl border border-red-500/20">${g.date}</p></div>`).join(''); }
-
-        function openForm(type, id = null) {
-            document.getElementById('formModal').classList.remove('hidden'); document.getElementById('formType').value = type; document.getElementById('mainForm').reset(); document.getElementById('editId').value = id || '';
-            document.getElementById('scoreWrap').style.display = type === 'reviews' ? 'block' : 'none'; document.getElementById('dateWrap').style.display = type === 'calendar' ? 'block' : 'none';
-            document.getElementById('platWrap').style.display = type === 'calendar' ? 'block' : 'none';
-            if(id) { const item = state[type].find(x => x.id === id); document.getElementById('fName').value = item.game || item.title; document.getElementById('fImg').value = item.img; document.getElementById('fRealDate').value = item.rDate; document.getElementById('fScore').value = item.score || ''; document.getElementById('fDate').value = item.date || ''; document.getElementById('fContent').value = item.content || ''; document.getElementById('fDLC').checked = item.isDLC; document.getElementById('fEA').checked = item.isEA; document.getElementById('fCZ').checked = item.cz; (item.platforms||[]).forEach(p => { const cb = document.querySelector(`.plat-check[value="${p}"]`); if(cb) cb.checked = true; }); }
-        }
-        function closeForm() { document.getElementById('formModal').classList.add('hidden'); }
-        document.getElementById('mainForm').onsubmit = function(e) { e.preventDefault(); const type = document.getElementById('formType').value; const id = document.getElementById('editId').value; const plats = Array.from(document.querySelectorAll('.plat-check:checked')).map(c => c.value); const entry = { id: id ? parseInt(id) : Date.now(), title: document.getElementById('fName').value, game: document.getElementById('fName').value, img: document.getElementById('fImg').value, rDate: document.getElementById('fRealDate').value || new Date().toISOString().split('T')[0], score: parseInt(document.getElementById('fScore').value), date: document.getElementById('fDate').value, content: document.getElementById('fContent').value, isDLC: document.getElementById('fDLC').checked, isEA: document.getElementById('fEA').checked, cz: document.getElementById('fCZ').checked, platforms: plats }; if(id) { const i = state[type].findIndex(x => x.id == id); state[type][i] = entry; } else { state[type].push(entry); } renderAll(); closeForm(); };
-        function deleteEntry(type, id) { if(confirm('Smazat?')) { state[type] = state[type].filter(x => x.id !== id); renderAll(); } }
+        function renderNews() { document.getElementById('news-grid').innerHTML = state.news.map(n => `<div class="glass rounded-3xl overflow-hidden card-hover cursor-pointer group" onclick="openDetail('news', ${n.id})"><img src="${n.img}" class="w-full h-56 object-cover opacity-80 group-hover:opacity-100 transition"><div class="p-8"><h3 class="font-black italic text-xl uppercase group-hover:text-red-600 transition">${n.title}</h3></div></div>`).join(''); }
+        function renderReviews() { document.getElementById('reviews-grid').innerHTML = state.reviews.map(r => `<div class="glass rounded-3xl p-6 card-hover cursor-pointer group" onclick="openDetail('reviews', ${r.id})"><div class="relative mb-4"><img src="${r.img}" class="w-full h-44 object-cover rounded-2xl"><div class="absolute top-3 left-3 flex gap-2">${r.isDLC ? '<span class="badge bg-blue-600">DLC</span>' : ''}${r.cz ? '<span class="badge bg-green-600 font-black">CZ</span>' : ''}</div></div><div class="flex justify-between items-end"><h4 class="font-black text-xs uppercase italic w-2/3">${r.game}</h4><span class="text-3xl font-black text-red-600 italic">${r.score}%</span></div></div>`).join(''); }
+        function renderCalendar() { document.getElementById('calendar-grid').innerHTML = state.calendar.map(g => `<div class="glass p-10 rounded-[40px] text-center card-hover cursor-pointer group" onclick="openDetail('calendar', ${g.id})">${g.cz ? '<div class="badge bg-red-600 mb-4 inline-block">ČEŠTINA</div>' : ''}<img src="${g.img}" class="w-full h-48 object-cover rounded-3xl mb-8 shadow-2xl group-hover:scale-105 transition"><h3 class="text-2xl font-black italic uppercase mb-4">${g.game}</h3><div class="flex justify-center gap-3 mb-6">${g.platforms.map(p => `<span class="plat-tag">${platLabels[p]}</span>`).join(' • ')}</div><div class="text-red-600 font-black italic text-xl">${g.date}</div></div>`).join(''); }
+        function renderHallOfFame() { const sorted = [...state.reviews].sort((a,b) => b.score - a.score); document.getElementById('hall-of-fame').innerHTML = sorted.map((r, i) => `<div class="glass p-8 rounded-[30px] flex items-center justify-between border-l-8 border-red-600 card-hover cursor-pointer" onclick="openDetail('reviews', ${r.id})"><div class="flex items-center gap-10"><span class="text-5xl font-black italic opacity-10">${i+1}</span><img src="${r.img}" class="w-20 h-12 object-cover rounded-xl shadow-xl"><h3 class="text-xl font-black italic uppercase">${r.game}</h3></div><span class="text-4xl font-black text-red-600 italic">${r.score}%</span></div>`).join(''); }
 
         function openDetail(type, id) {
             const item = state[type].find(x => x.id === id);
-            document.getElementById('detailContent').innerHTML = `<img src="${item.img}" class="w-full h-64 object-cover rounded-3xl mb-8 shadow-xl"><div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-8 border-b border-white/5 pb-8"><div><div class="flex gap-2 mb-3">${item.isDLC ? '<span class="badge bg-blue-600 text-white">EXPANSION / DLC</span>' : ''}${item.isEA ? '<span class="badge bg-amber-500 text-black">EARLY ACCESS</span>' : ''}</div><h2 class="text-4xl font-black italic uppercase leading-tight">${item.game || item.title}</h2>${item.platforms ? `<div class="flex gap-3 mt-3 text-[10px] font-bold opacity-30 tracking-widest">${item.platforms.map(p => platLabels[p]).join(' | ')}</div>` : ''}</div>${item.score ? `<div class="text-7xl font-black text-red-600 italic tracking-tighter">${item.score}%</div>` : ''}</div><div class="text-lg text-zinc-300 leading-relaxed space-y-4" style="white-space: pre-wrap;">${item.content || 'Brzy doplníme podrobnosti...'}</div>`;
+            let media = `<img src="${item.img}" class="w-full h-96 object-cover rounded-[40px] mb-10 shadow-2xl">`;
+            
+            if (item.video) {
+                // Oprava pro embedding YouTube bez chyb
+                media = `<div class="video-container mb-10">
+                    <iframe src="https://www.youtube.com/embed/${item.video}?autoplay=1&rel=0&modestbranding=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>`;
+            }
+
+            document.getElementById('detailContent').innerHTML = `
+                ${media}
+                <div class="flex flex-col md:flex-row justify-between items-start gap-10 mb-10 border-b border-white/5 pb-10">
+                    <div class="flex-1">
+                        <h2 class="text-6xl font-black italic uppercase leading-none mb-6">${item.game || item.title}</h2>
+                        ${item.platforms ? `<div class="flex gap-4">${item.platforms.map(p => `<span class="plat-tag bg-white/5 px-4 py-2 rounded-lg">${platLabels[p]}</span>`).join('')}</div>` : ''}
+                    </div>
+                    ${item.score ? `<div class="text-8xl font-black text-red-600 italic tracking-tighter">${item.score}%</div>` : ''}
+                </div>
+                <p class="text-xl text-zinc-400 leading-relaxed font-medium">${item.content}</p>
+                <div class="mt-12 flex gap-4">
+                    <button onclick="closeDetail()" class="bg-red-600 px-10 py-4 rounded-2xl font-black italic uppercase hover:scale-105 transition">Zavřít</button>
+                    ${item.video ? `<a href="https://youtube.com/watch?v=${item.video}" target="_blank" class="bg-white/5 px-10 py-4 rounded-2xl font-black italic uppercase flex items-center gap-2"><i class="fa-brands fa-youtube"></i> Otevřít na YT</a>` : ''}
+                </div>
+            `;
             document.getElementById('detailModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
         }
-        function closeDetail() { document.getElementById('detailModal').classList.add('hidden'); }
-        window.onload = () => renderAll();
+
+        function closeDetail() {
+            document.getElementById('detailModal').classList.add('hidden');
+            document.getElementById('detailContent').innerHTML = '';
+            document.body.style.overflow = 'auto';
+        }
+
+        function handleAdminAuth() { if(prompt("Kód:") === 'yukki123') document.body.classList.add('logged-in'); }
+        window.onload = renderAll;
     </script>
 </body>
 </html>
