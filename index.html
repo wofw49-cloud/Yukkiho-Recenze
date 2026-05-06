@@ -21,28 +21,20 @@
             box-shadow: 0 30px 60px -15px rgb(185 28 28 / 0.5);
         }
 
-        #detailModal .modal-content-wrapper {
-            max-height: calc(94vh - 300px);
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: #ef4444 #27272a;
+        .kalendar-nadpis {
+            font-size: 3.8rem;
+            letter-spacing: 0.2em;
+            text-shadow: 0 0 30px #ef4444, 0 0 60px #b91c1c, 0 0 90px #991b1b;
         }
 
         .platform-btn.active {
             background-color: #ef4444 !important;
             color: white;
         }
-
-        .kalendar-nadpis {
-            font-size: 3.8rem;
-            letter-spacing: 0.2em;
-            text-shadow: 0 0 30px #ef4444,
-                         0 0 60px #b91c1c,
-                         0 0 90px #991b1b;
-        }
     </style>
 </head>
 <body class="bg-zinc-950 text-white min-h-screen">
+
     <nav class="bg-black border-b border-red-600 fixed w-full z-50">
         <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
             <div class="flex items-center gap-4">
@@ -67,7 +59,7 @@
     <main class="pt-24 max-w-7xl mx-auto px-6 pb-20">
         <!-- DOMŮ -->
         <div id="page-0">
-            <h1 class="text-6xl font-bold text-center mt-10 mb-2 neon title-font">Vítej zpátky, Poutníku</h1>
+            <h1 class="text-6xl font-bold text-center mt-10 mb-2 neon title-font">Vítej zpátky, Yukki</h1>
             <div id="hero-news" onclick="openDetail('news', 0)" class="cursor-pointer relative h-[65vh] rounded-3xl overflow-hidden mb-12 border border-red-500/30"></div>
             
             <h2 class="text-3xl font-bold mb-6 title-font">Nadcházející vydání</h2>
@@ -103,19 +95,25 @@
 
         <!-- KALENDÁŘ -->
         <div id="page-5" class="hidden">
-            <h2 class="kalendar-nadpis text-center mb-12">KALENDÁŘ VYDÁNÍ HER</h2>
+            <h2 class="kalendar-nadpis text-center mb-8">KALENDÁŘ VYDÁNÍ HER</h2>
             
-            <div class="flex flex-wrap gap-3 justify-center mb-10" id="platform-filters">
+            <div class="flex items-center justify-between mb-8">
+                <button onclick="prevMonth()" class="px-6 py-3 bg-zinc-800 hover:bg-zinc-700 rounded-2xl font-bold">← Předchozí měsíc</button>
+                <div id="currentMonth" class="text-3xl font-bold title-font"></div>
+                <button onclick="nextMonth()" class="px-6 py-3 bg-zinc-800 hover:bg-zinc-700 rounded-2xl font-bold">Další měsíc →</button>
+            </div>
+
+            <div class="flex flex-wrap gap-3 justify-center mb-8" id="platform-filters">
                 <button onclick="filterByPlatform('all')" class="platform-btn active px-6 py-3 bg-red-600 rounded-2xl font-bold">VŠE</button>
                 <button onclick="filterByPlatform('PC')" class="platform-btn px-6 py-3 bg-zinc-800 hover:bg-zinc-700 rounded-2xl">PC</button>
                 <button onclick="filterByPlatform('PS5')" class="platform-btn px-6 py-3 bg-zinc-800 hover:bg-zinc-700 rounded-2xl">PS5</button>
                 <button onclick="filterByPlatform('Xbox')" class="platform-btn px-6 py-3 bg-zinc-800 hover:bg-zinc-700 rounded-2xl">Xbox</button>
             </div>
 
-            <div id="calendar-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            <div id="calendar-grid" class="calendar-grid"></div>
         </div>
-    </main>
-
+    </main>   
+    
     <!-- ADMIN BAR -->
     <div id="adminBar" class="hidden fixed bottom-6 right-6 bg-zinc-900 border border-red-500 rounded-2xl p-4 flex gap-3 z-50">
         <button onclick="showCreateModal('news')" class="px-6 py-3 bg-red-600 rounded-xl font-bold">+ Novinka</button>
@@ -135,7 +133,7 @@
         </div>
     </div>
 
-    <!-- CREATE/EDIT MODAL -->
+    <!-- CREATE/EDIT MODAL (pro novinky a recenze) -->
     <div id="createModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
         <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-2xl border border-red-500">
             <h2 class="text-3xl font-bold mb-6" id="modalTitle">Nová novinka</h2>
@@ -160,6 +158,7 @@
             <input id="releaseDate" type="date" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
             <input id="releasePlatforms" placeholder="Platformy (oddělené čárkou)" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
             <input id="releaseImage" placeholder="URL obrázku" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
+            
             <div class="flex items-center gap-3 mb-4">
                 <input id="releaseCzech" type="checkbox" class="w-5 h-5 accent-red-600">
                 <label for="releaseCzech" class="text-white">Podporována čeština</label>
@@ -168,7 +167,9 @@
                 <input id="releaseEarlyAccess" type="checkbox" class="w-5 h-5 accent-red-600">
                 <label for="releaseEarlyAccess" class="text-white">Early Access / Preview</label>
             </div>
+
             <textarea id="releaseDescription" rows="4" placeholder="Krátký popis..." class="w-full mb-6 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4"></textarea>
+            
             <div class="flex gap-4">
                 <button onclick="saveRelease()" class="flex-1 py-4 bg-red-600 rounded-2xl font-bold">Uložit</button>
                 <button onclick="hideReleaseModal()" class="flex-1 py-4 bg-zinc-800 rounded-2xl font-bold">Zrušit</button>
@@ -202,14 +203,15 @@
             </div>
         </div>
     </div>
-
-    <script>
+        <script>
         let isAdmin = false;
         let news = [];
         let reviews = [];
         let communityLinks = [];
         let upcomingReleases = [];
         let currentFilter = 'all';
+        let currentDate = new Date(2026, 10, 1); // Listopad 2026 (měsíc začíná od 0)
+
         let editingType = null;
         let editingIndex = null;
         let editingLinkIndex = null;
@@ -218,10 +220,12 @@
         function loadData() {
             news = [{
                 id: 1778031631685,
-                title: "Proč si PC hráči musejí počkat na Grand Theft Auto VI? Marketingovou exkluzivitu má PlayStation",
+                title: "Proč si PC hráči musejí počkat na Grand Theft Auto VI?",
                 image: "https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg?",
+                images: [],
+                video: "",
                 date: "2026-05-06",
-                content: "Hry od Rockstar Games vycházejí nejprve na konzole a až později na počítače. Stejné to bude i u GTA 6. Proč tomu tak je? Palčivé otázce se věnoval generální ředitel Take-Two Interactive. Potvrdil také marketingovou exkluzivitu PlayStationu.\nTahle odpověď PC hráče nepotěší. Rockstar se snaží nejprve obsloužit hlavní uživatelskou základnu, a to co nejlépe. Tím se myslí právě hráči na PlayStationu a Xboxu.\n„Rockstar vždy začíná na konzolích, protože právě tam vás hráči hodnotí podle toho, jak dobře zvládnete launch,“ vysvětlil Strauss Zelnick pro Bloomberg. Jinými slovy, pokud by start nevyšel podle představ, mohlo by to negativně ovlivnit i pozdější prodeje na dalších platformách.\nZároveň zdůraznil, že zpoždění PC verze nijak nesouvisí s marketingovou spoluprací se Sony u Grand Theft Auto VI. Jde o dlouhodobou strategii, kterou Rockstar používá už roky. Zajímavé je, že samotná data jdou proti této logice. Zelnick totiž zároveň připustil, že u velkých titulů dnes může PC tvořit klidně 45 až 50 % celkových prodejů. Pro srovnání – ještě v roce 2007 to bylo jen kolem 5 % u NBA 2K.\nPřesto se strategie nemění, protože konzole jsou pro Rockstar stále klíčovým startovním bodem a až následně přichází rozšíření na další platformy. Doufejme, že alespoň na PC verzi nebudeme čekat dlouho. Spekuluje se o vydání v první polovině roku 2027.\nVedle toho bylo potvrzeno i něco, o čem se spekulovalo už delší dobu. GTA 6 má marketingové partnerství se Sony. Hra tak bude v reklamních materiálech primárně spojována s konzolí PlayStation 5. To ale neznamená exkluzivní obsah. Jde čistě o to, že hra bude prezentována na PS5 a všude bude vidět logo PlayStationu. Je dost možné, že vznikne také bundle s konzolí a hrou."
+                content: "Hry od Rockstar Games vycházejí nejprve na konzole a až později na PC..."
             }];
 
             reviews = [
@@ -239,7 +243,8 @@
                     id: 1778031574329,
                     title: "MOUSE: P.I. For Hire",
                     image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2416450/298ff2fc3f6a700d022b8d3ec58047f2b426be03/header.jpg",
-                    platforms: ["PC", "PS5", "Xbox Series X|S"],
+                    images: [],
+                    video: "",
                     score: 82,
                     date: "2026-05-06",
                     content: "Stylová retro FPS, která tě dostane.\n\nVerdikt: Velmi doporučuji."
@@ -257,9 +262,9 @@
                     title: "Grand Theft Auto VI",
                     date: "2026-11-19",
                     platforms: ["PS5", "Xbox Series X|S"],
-                    image: "https://indian-tv.cz/uploads/00/f2f73c64d9ff4ae594f591cd103e0299/1762505917.jpg?",
-                    description: "Kriminální sága dvojice Lucie a Jasona v moderním státě Leonida (Vice City). Nejpokročilejší open-world zážitek s důrazem na satiru dnešní kultury a sociálních sítí.",
-                    czech: false,
+                    image: "https://picsum.photos/id/1015/1200/700",
+                    description: "Kriminální sága dvojice Lucie a Jasona v moderním státě Leonida (Vice City).",
+                    czech: true,
                     earlyAccess: false
                 }
             ];
@@ -268,6 +273,8 @@
         function sortByDate(arr) {
             return [...arr].sort((a, b) => new Date(b.date) - new Date(a.date));
         }
+
+        // ==================== RENDER FUNKCE ====================
 
         function renderNews() {
             const sorted = sortByDate(news);
@@ -385,45 +392,60 @@
             `).join('');
         }
 
-        function renderCalendar() {
-            const container = document.getElementById('calendar-container');
-            let filtered = upcomingReleases;
+        // ==================== KALENDÁŘ FUNKCE ====================
 
-            if (currentFilter !== 'all') {
-                filtered = upcomingReleases.filter(game => game.platforms.some(p => p.includes(currentFilter)));
+        function renderCalendar() {
+            const container = document.getElementById('calendar-grid');
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+
+            document.getElementById('currentMonth').textContent = currentDate.toLocaleDateString('cs-CZ', { month: 'long', year: 'numeric' });
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+            let html = '';
+
+            // Předchozí měsíc
+            for (let i = firstDay - 1; i >= 0; i--) {
+                html += `<div class="calendar-day other-month">${daysInPrevMonth - i}</div>`;
             }
 
-            const sorted = [...filtered].sort((a, b) => new Date(a.date) - new Date(b.date));
+            // Aktuální měsíc
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+                const dayReleases = upcomingReleases.filter(r => r.date === dateStr);
 
-            container.innerHTML = sorted.map((game, i) => {
-                const globalIndex = upcomingReleases.indexOf(game);
-                return `
-                    <div onclick="openReleaseDetail(${globalIndex})" class="release-card bg-zinc-900 rounded-3xl overflow-hidden border border-red-500/30 hover:border-red-500 cursor-pointer">
-                        <img src="${game.image}" class="w-full h-48 object-cover">
-                        <div class="p-6">
-                            <div class="flex justify-between items-start">
-                                <div class="text-red-400 font-medium">${new Date(game.date).toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
-                                ${game.czech ? '<span class="text-3xl">🇨🇿</span>' : ''}
-                                ${game.earlyAccess ? '<span class="bg-yellow-600 text-xs px-3 py-1 rounded-full">EARLY ACCESS</span>' : ''}
+                html += `
+                    <div class="calendar-day ${dayReleases.length ? 'has-release' : ''}">
+                        <div class="text-right text-sm">${day}</div>
+                        ${dayReleases.map((game, idx) => `
+                            <div onclick="openReleaseDetail(${upcomingReleases.indexOf(game)})" class="mt-1 text-xs bg-red-900/50 p-1 rounded cursor-pointer hover:bg-red-800">
+                                ${game.title}
                             </div>
-                            <h3 class="text-2xl font-bold mt-3">${game.title}</h3>
-                            <div class="flex flex-wrap gap-2 mt-4">
-                                ${game.platforms.map(p => `<span class="text-xs bg-zinc-800 px-3 py-1 rounded-full">${p}</span>`).join('')}
-                            </div>
-                            ${game.description ? `<p class="mt-4 text-gray-400 line-clamp-3">${game.description}</p>` : ''}
-                        </div>
+                        `).join('')}
                     </div>
                 `;
-            }).join('');
+            }
+
+            container.innerHTML = html;
+        }
+
+        function prevMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
         }
 
         function filterByPlatform(platform) {
             currentFilter = platform;
             document.querySelectorAll('.platform-btn').forEach(btn => {
-                btn.classList.toggle('active', 
-                    (platform === 'all' && btn.textContent === 'VŠE') || 
-                    btn.textContent === platform
-                );
+                btn.classList.toggle('active', (platform === 'all' && btn.textContent === 'VŠE') || btn.textContent === platform);
             });
             renderCalendar();
         }
@@ -449,6 +471,21 @@
             document.getElementById('detailModal').classList.remove('hidden');
         }
 
+        // ... (zbytek funkcí pokračuje v další části)
+
+        window.onload = () => {
+            loadData();
+            renderHome();
+            renderHomeReleases();
+            renderNews();
+            renderReviews();
+            renderLeaderboard();
+            renderCommunity();
+            switchTab(0);
+        };
+    </script>
+</body>
+</html>
         function openDetail(type, i) {
             const item = type === 'news' ? news[i] : reviews[i];
             let mediaHTML = '';
@@ -499,7 +536,9 @@
             if (n === 5) renderCalendar();
         }
 
-        function toggleLogin() { document.getElementById('loginModal').classList.toggle('hidden'); }
+        function toggleLogin() { 
+            document.getElementById('loginModal').classList.toggle('hidden'); 
+        }
 
         function adminLogin() {
             if (document.getElementById('loginUser').value === "yukki" && document.getElementById('loginPass').value === "yukki123") {
@@ -507,7 +546,11 @@
                 document.getElementById('loginText').innerHTML = '👑 ADMIN';
                 document.getElementById('adminBar').classList.remove('hidden');
                 toggleLogin();
-                renderNews(); renderReviews(); renderCommunity(); renderHomeReleases();
+                renderNews(); 
+                renderReviews(); 
+                renderCommunity(); 
+                renderHomeReleases();
+                renderCalendar();
             } else alert("Špatné heslo! (yukki123)");
         }
 
