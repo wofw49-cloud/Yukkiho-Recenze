@@ -39,23 +39,33 @@
 
     <main class="pt-24 max-w-7xl mx-auto px-6 pb-20">
 
+        <!-- DOMŮ -->
         <div id="page-0">
             <h1 class="text-6xl font-bold text-center mt-10 mb-2 neon title-font">Vítej zpátky, Yukki</h1>
-            <div id="hero-news" class="cursor-pointer relative h-[65vh] rounded-3xl overflow-hidden mb-12 border border-purple-500/30"></div>
+            
+            <!-- Hlavní novinka -->
+            <div id="hero-news" onclick="openDetail('news', 0)" class="cursor-pointer relative h-[60vh] rounded-3xl overflow-hidden mb-12 border border-purple-500/30"></div>
+
+            <!-- Poslední recenze na domů -->
+            <h2 class="text-3xl font-bold mb-6">Poslední recenze</h2>
+            <div id="home-reviews" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
         </div>
 
+        <!-- NOVINKY -->
         <div id="page-1" class="hidden">
             <h2 class="text-4xl font-bold title-font mb-8">NOVINKY</h2>
             <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
         </div>
 
+        <!-- RECENZE -->
         <div id="page-2" class="hidden">
             <h2 class="text-4xl font-bold title-font mb-8">RECENZE</h2>
             <div id="reviews-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
         </div>
 
+        <!-- ŽEBŘÍČKY -->
         <div id="page-3" class="hidden">
-            <h2 class="text-4xl font-bold title-font mb-8">ŽEBŘÍČKY</h2>
+            <h2 class="text-4xl font-bold title-font mb-8">YUKKI ŽEBŘÍČEK</h2>
             <div id="leaderboard" class="space-y-4"></div>
         </div>
     </main>
@@ -67,7 +77,7 @@
         <button onclick="exportData()" class="px-6 py-3 bg-emerald-600 rounded-xl">📤 Export</button>
     </div>
 
-    <!-- LOGIN -->
+    <!-- LOGIN + MODALS (stejné jako dříve) -->
     <div id="loginModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
         <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-md border border-purple-500">
             <h2 class="text-3xl font-bold mb-6 text-center title-font">YUKKI ADMIN</h2>
@@ -77,7 +87,6 @@
         </div>
     </div>
 
-    <!-- CREATE MODAL -->
     <div id="createModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
         <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-2xl border border-purple-500">
             <h2 class="text-3xl font-bold mb-6" id="modalTitle">Nová novinka</h2>
@@ -89,4 +98,188 @@
             
             <div class="flex gap-4 mt-6">
                 <button onclick="savePost()" class="flex-1 py-4 bg-purple-600 rounded-2xl font-bold">Uložit</button>
-                <button onclick
+                <button onclick="hideCreateModal()" class="flex-1 py-4 bg-zinc-800 rounded-2xl font-bold">Zrušit</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isAdmin = false;
+        let news = [];
+        let reviews = [];
+        let editingType = null;
+        let editingIndex = null;
+
+        function loadData() {
+            news = JSON.parse(localStorage.getItem('yukki_news') || '[]');
+            reviews = JSON.parse(localStorage.getItem('yukki_reviews') || '[]');
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('yukki_news', JSON.stringify(news));
+            localStorage.setItem('yukki_reviews', JSON.stringify(reviews));
+        }
+
+        function exportData() {
+            const data = {news, reviews};
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "yukki_data.json";
+            a.click();
+            alert("Data stažena!");
+        }
+
+        function renderHome() {
+            // Hlavní novinka
+            if (news.length > 0) {
+                const n = news[0];
+                document.getElementById('hero-news').innerHTML = `
+                    <img src="${n.image}" class="absolute inset-0 w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/70"></div>
+                    <div class="absolute bottom-12 left-12 right-12">
+                        <h2 class="text-5xl font-bold title-font">${n.title}</h2>
+                        <p class="text-xl text-gray-300 mt-4">${n.content.substring(0, 180)}...</p>
+                    </div>
+                `;
+            }
+
+            // Poslední recenze na domů
+            const homeReviews = document.getElementById('home-reviews');
+            homeReviews.innerHTML = reviews.slice(0, 3).map(r => `
+                <div class="bg-zinc-900 rounded-3xl p-6 cursor-pointer" onclick="openDetail('review', ${reviews.indexOf(r)})">
+                    <img src="${r.image}" class="w-full h-40 object-cover rounded-2xl mb-4">
+                    <h4 class="font-bold">${r.title}</h4>
+                    <div class="text-4xl font-bold text-purple-400">${r.score}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderNews() {
+            document.getElementById('news-container').innerHTML = news.map((n, i) => `
+                <div class="bg-zinc-900 rounded-3xl overflow-hidden">
+                    <img src="${n.image}" class="w-full h-56 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold">${n.title}</h3>
+                        <p class="text-purple-400 text-sm">${n.date}</p>
+                        <p class="mt-4">${n.content}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderReviews() {
+            document.getElementById('reviews-container').innerHTML = reviews.map((r, i) => `
+                <div class="bg-zinc-900 rounded-3xl overflow-hidden">
+                    <img src="${r.image}" class="w-full h-56 object-cover">
+                    <div class="p-6">
+                        <div class="flex justify-between">
+                            <h3 class="text-2xl font-bold">${r.title}</h3>
+                            <div class="text-5xl font-bold text-purple-400">${r.score}</div>
+                        </div>
+                        <p class="text-purple-400 text-sm">${r.date}</p>
+                        <p class="mt-4">${r.content}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderLeaderboard() {
+            const sorted = [...reviews].sort((a,b) => b.score - a.score);
+            document.getElementById('leaderboard').innerHTML = sorted.map(r => `
+                <div class="bg-zinc-900 rounded-3xl p-6 flex justify-between items-center">
+                    <div class="flex items-center gap-4">
+                        <img src="${r.image}" class="w-16 h-16 object-cover rounded-xl">
+                        <h3 class="text-xl font-bold">${r.title}</h3>
+                    </div>
+                    <div class="text-5xl font-bold text-purple-400">${r.score}</div>
+                </div>
+            `).join('');
+        }
+
+        function openDetail(type, i) {
+            const item = type === 'news' ? news[i] : reviews[i];
+            document.getElementById('modal-image').innerHTML = `<img src="${item.image}" class="w-full">`;
+            document.getElementById('modal-title').textContent = item.title;
+            document.getElementById('modal-date').textContent = item.date + (type === 'review' ? ` • ${item.score}%` : '');
+            document.getElementById('modal-content').textContent = item.content;
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+
+        function switchTab(n) {
+            document.querySelectorAll('[id^="page-"]').forEach(p => p.classList.add('hidden'));
+            document.getElementById(`page-${n}`).classList.remove('hidden');
+            if (n === 2) renderReviews();
+            if (n === 3) renderLeaderboard();
+        }
+
+        function toggleLogin() {
+            document.getElementById('loginModal').classList.toggle('hidden');
+        }
+
+        function adminLogin() {
+            if (document.getElementById('loginUser').value === "yukki" && document.getElementById('loginPass').value === "yukki123") {
+                isAdmin = true;
+                document.getElementById('loginText').innerHTML = '👑 YUKKI';
+                document.getElementById('adminBar').classList.remove('hidden');
+                toggleLogin();
+            } else {
+                alert("Špatné heslo! (yukki123)");
+            }
+        }
+
+        function showCreateModal(type) {
+            if (!isAdmin) return alert("Nejsi přihlášen jako admin!");
+            editingIndex = null;
+            editingType = type;
+            document.getElementById('modalTitle').textContent = type === 'news' ? "Nová novinka" : "Nová recenze";
+            document.getElementById('postTitle').value = '';
+            document.getElementById('postImage').value = '';
+            document.getElementById('postScore').value = type === 'review' ? '80' : '';
+            document.getElementById('postDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('postContent').value = '';
+            document.getElementById('createModal').classList.remove('hidden');
+        }
+
+        function hideCreateModal() {
+            document.getElementById('createModal').classList.add('hidden');
+        }
+
+        function savePost() {
+            const title = document.getElementById('postTitle').value;
+            const image = document.getElementById('postImage').value || "https://picsum.photos/id/237/1200/700";
+            const score = parseInt(document.getElementById('postScore').value) || 0;
+            const date = document.getElementById('postDate').value;
+            const content = document.getElementById('postContent').value;
+
+            if (!title || !content) return alert("Název a obsah jsou povinné!");
+
+            if (editingType === 'news') {
+                news.unshift({id: Date.now(), title, image, date, content});
+            } else {
+                reviews.unshift({id: Date.now(), title, image, score, date, content});
+            }
+
+            hideCreateModal();
+            renderNews();
+            renderReviews();
+            renderLeaderboard();
+            alert("Přidáno!");
+        }
+
+        window.onload = () => {
+            loadData();
+            renderHome();
+            renderNews();
+            renderReviews();
+            renderLeaderboard();
+            switchTab(0);
+        };
+    </script>
+</body>
+</html>
