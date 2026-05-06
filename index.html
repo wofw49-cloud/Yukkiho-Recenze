@@ -16,6 +16,7 @@
 </head>
 <body class="bg-zinc-950 text-white min-h-screen">
 
+    <!-- NAV -->
     <nav class="bg-black border-b border-purple-600 fixed w-full z-50">
         <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
             <div class="flex items-center gap-4">
@@ -30,7 +31,7 @@
                 <button onclick="switchTab(3)" class="pb-1 px-4 hover:text-purple-400" id="tab-3">ŽEBŘÍČKY</button>
             </div>
 
-            <button onclick="toggleLogin()" class="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-bold flex items-center gap-2">
+            <button onclick="toggleLogin()" class="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-bold flex items-center gap-2" id="loginBtn">
                 <i class="fas fa-user"></i>
                 <span id="loginText">PŘIHLÁSIT SE</span>
             </button>
@@ -69,4 +70,261 @@
 
     <!-- ADMIN BAR -->
     <div id="adminBar" class="hidden fixed bottom-6 right-6 bg-zinc-900 border border-purple-500 rounded-2xl p-4 flex gap-3 z-50">
-        <button onclick="showCreateModal('
+        <button onclick="showCreateModal('news')" class="px-6 py-3 bg-purple-600 rounded-xl">+ Novinka</button>
+        <button onclick="showCreateModal('review')" class="px-6 py-3 bg-purple-600 rounded-xl">+ Recenze</button>
+        <button onclick="exportData()" class="px-6 py-3 bg-emerald-600 rounded-xl">📤 Export</button>
+    </div>
+
+    <!-- LOGIN MODAL -->
+    <div id="loginModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
+        <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-md border border-purple-500">
+            <h2 class="text-3xl font-bold mb-6 text-center title-font">YUKKI ADMIN</h2>
+            <input id="loginUser" value="yukki" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
+            <input id="loginPass" type="password" value="yukki123" class="w-full mb-6 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
+            <button onclick="adminLogin()" class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-bold">Přihlásit se</button>
+        </div>
+    </div>
+
+    <!-- CREATE/EDIT MODAL -->
+    <div id="createModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
+        <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-2xl border border-purple-500">
+            <h2 class="text-3xl font-bold mb-6" id="modalTitle">Nová novinka</h2>
+            <input id="postTitle" placeholder="Název" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
+            <input id="postImage" placeholder="URL fotky" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
+            <input id="postScore" type="number" placeholder="Hodnocení % (jen recenze)" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
+            <input id="postDate" type="date" class="w-full mb-6 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
+            <textarea id="postContent" rows="8" placeholder="Obsah..." class="w-full bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4"></textarea>
+            
+            <div class="flex gap-4 mt-6">
+                <button onclick="savePost()" class="flex-1 py-4 bg-purple-600 rounded-2xl font-bold">Uložit</button>
+                <button onclick="hideCreateModal()" class="flex-1 py-4 bg-zinc-800 rounded-2xl font-bold">Zrušit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DETAIL MODAL -->
+    <div id="detailModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
+        <div class="bg-zinc-900 rounded-3xl w-full max-w-3xl border border-purple-500 overflow-hidden">
+            <div id="modal-image" class="w-full"></div>
+            <div class="p-8">
+                <h2 id="modal-title" class="text-4xl font-bold title-font"></h2>
+                <p id="modal-date" class="text-purple-400 mt-2"></p>
+                <p id="modal-content" class="mt-6 text-gray-300 whitespace-pre-wrap"></p>
+                <button onclick="closeModal()" class="mt-8 px-8 py-3 bg-zinc-800 rounded-2xl">Zavřít</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isAdmin = false;
+        let news = [];
+        let reviews = [];
+        let editingType = null;
+        let editingIndex = null;
+
+        function loadData() {
+            news = JSON.parse(localStorage.getItem('yukki_news') || '[]');
+            reviews = JSON.parse(localStorage.getItem('yukki_reviews') || '[]');
+        }
+
+        function exportData() {
+            const data = {news, reviews};
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = "yukki_data.json";
+            a.click();
+        }
+
+        function renderHome() {
+            if (news.length > 0) {
+                const n = news[0];
+                document.getElementById('hero-news').innerHTML = `
+                    <img src="${n.image}" class="absolute inset-0 w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/70"></div>
+                    <div class="absolute bottom-12 left-12 right-12">
+                        <h2 class="text-5xl font-bold title-font">${n.title}</h2>
+                        <p class="text-xl text-gray-300 mt-4">${n.content.substring(0, 180)}...</p>
+                    </div>
+                `;
+            }
+            // Poslední recenze na domů
+            document.getElementById('home-reviews').innerHTML = reviews.slice(0, 3).map((r, i) => `
+                <div onclick="openDetail('review', ${i})" class="bg-zinc-900 rounded-3xl p-6 cursor-pointer">
+                    <img src="${r.image}" class="w-full h-40 object-cover rounded-2xl mb-4">
+                    <h4 class="font-bold">${r.title}</h4>
+                    <div class="text-4xl font-bold text-purple-400">${r.score}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderNews() {
+            document.getElementById('news-container').innerHTML = news.map((n, i) => `
+                <div class="bg-zinc-900 rounded-3xl overflow-hidden">
+                    <img src="${n.image}" class="w-full h-56 object-cover" onclick="openDetail('news', ${i})">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold">${n.title}</h3>
+                        <p class="text-purple-400 text-sm">${n.date}</p>
+                        <p class="mt-4 line-clamp-3">${n.content}</p>
+                        ${isAdmin ? `
+                        <div class="flex gap-3 mt-6">
+                            <button onclick="event.stopImmediatePropagation(); editItem('news', ${i});" class="flex-1 py-3 bg-blue-600 rounded-xl">UPRAVIT</button>
+                            <button onclick="event.stopImmediatePropagation(); deleteItem('news', ${i});" class="flex-1 py-3 bg-red-600 rounded-xl">SMAZAT</button>
+                        </div>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderReviews() {
+            document.getElementById('reviews-container').innerHTML = reviews.map((r, i) => `
+                <div class="bg-zinc-900 rounded-3xl overflow-hidden">
+                    <img src="${r.image}" class="w-full h-56 object-cover" onclick="openDetail('review', ${i})">
+                    <div class="p-6">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-2xl font-bold">${r.title}</h3>
+                            <div class="text-5xl font-bold text-purple-400">${r.score}</div>
+                        </div>
+                        <p class="text-purple-400 text-sm">${r.date}</p>
+                        <p class="mt-4 line-clamp-4">${r.content}</p>
+                        ${isAdmin ? `
+                        <div class="flex gap-3 mt-6">
+                            <button onclick="event.stopImmediatePropagation(); editItem('review', ${i});" class="flex-1 py-3 bg-blue-600 rounded-xl">UPRAVIT</button>
+                            <button onclick="event.stopImmediatePropagation(); deleteItem('review', ${i});" class="flex-1 py-3 bg-red-600 rounded-xl">SMAZAT</button>
+                        </div>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderLeaderboard() {
+            const sorted = [...reviews].sort((a, b) => b.score - a.score);
+            document.getElementById('leaderboard').innerHTML = sorted.map(r => `
+                <div class="bg-zinc-900 rounded-3xl p-6 flex justify-between items-center">
+                    <div class="flex items-center gap-4">
+                        <img src="${r.image}" class="w-16 h-16 object-cover rounded-xl">
+                        <h3 class="text-xl font-bold">${r.title}</h3>
+                    </div>
+                    <div class="text-5xl font-bold text-purple-400">${r.score}</div>
+                </div>
+            `).join('');
+        }
+
+        function openDetail(type, i) {
+            const item = type === 'news' ? news[i] : reviews[i];
+            document.getElementById('modal-image').innerHTML = `<img src="${item.image}" class="w-full">`;
+            document.getElementById('modal-title').textContent = item.title;
+            document.getElementById('modal-date').textContent = item.date + (type === 'review' ? ` • ${item.score}%` : '');
+            document.getElementById('modal-content').textContent = item.content;
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+
+        function switchTab(n) {
+            document.querySelectorAll('[id^="page-"]').forEach(p => p.classList.add('hidden'));
+            document.getElementById(`page-${n}`).classList.remove('hidden');
+            if (n === 2) renderReviews();
+            if (n === 3) renderLeaderboard();
+        }
+
+        function toggleLogin() {
+            document.getElementById('loginModal').classList.toggle('hidden');
+        }
+
+        function adminLogin() {
+            if (document.getElementById('loginUser').value === "yukki" && document.getElementById('loginPass').value === "yukki123") {
+                isAdmin = true;
+                document.getElementById('loginText').innerHTML = '👑 YUKKI';
+                document.getElementById('adminBar').classList.remove('hidden');
+                document.getElementById('loginModal').classList.add('hidden');
+            } else {
+                alert("Špatné jméno nebo heslo!\n\nJméno: yukki\nHeslo: yukki123");
+            }
+        }
+
+        function showCreateModal(type) {
+            if (!isAdmin) return alert("Musíš se nejdřív přihlásit jako admin!");
+            editingIndex = null;
+            editingType = type;
+            document.getElementById('modalTitle').textContent = type === 'news' ? "Nová novinka" : "Nová recenze";
+            document.getElementById('postTitle').value = '';
+            document.getElementById('postImage').value = '';
+            document.getElementById('postScore').value = type === 'review' ? '80' : '';
+            document.getElementById('postDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('postContent').value = '';
+            document.getElementById('createModal').classList.remove('hidden');
+        }
+
+        function hideCreateModal() {
+            document.getElementById('createModal').classList.add('hidden');
+        }
+
+        function savePost() {
+            const title = document.getElementById('postTitle').value.trim();
+            const image = document.getElementById('postImage').value || "https://picsum.photos/id/237/1200/700";
+            const score = parseInt(document.getElementById('postScore').value) || 0;
+            const date = document.getElementById('postDate').value;
+            const content = document.getElementById('postContent').value.trim();
+
+            if (!title || !content) return alert("Název a obsah jsou povinné!");
+
+            if (editingType === 'news') {
+                if (editingIndex !== null) {
+                    news[editingIndex] = { ...news[editingIndex], title, image, date, content };
+                } else {
+                    news.unshift({id: Date.now(), title, image, date, content});
+                }
+            } else {
+                if (editingIndex !== null) {
+                    reviews[editingIndex] = { ...reviews[editingIndex], title, image, score, date, content };
+                } else {
+                    reviews.unshift({id: Date.now(), title, image, score, date, content});
+                }
+            }
+
+            hideCreateModal();
+            renderHome();
+            renderNews();
+            renderReviews();
+            renderLeaderboard();
+            alert("Hotovo!");
+        }
+
+        function editItem(type, i) {
+            editingType = type;
+            editingIndex = i;
+            const item = type === 'news' ? news[i] : reviews[i];
+            document.getElementById('modalTitle').textContent = type === 'news' ? "Upravit novinku" : "Upravit recenzi";
+            document.getElementById('postTitle').value = item.title;
+            document.getElementById('postImage').value = item.image;
+            document.getElementById('postScore').value = item.score || '';
+            document.getElementById('postDate').value = item.date;
+            document.getElementById('postContent').value = item.content;
+            document.getElementById('createModal').classList.remove('hidden');
+        }
+
+        function deleteItem(type, i) {
+            if (confirm("Opravdu chceš smazat?")) {
+                if (type === 'news') news.splice(i, 1);
+                else reviews.splice(i, 1);
+                renderNews();
+                renderReviews();
+                renderLeaderboard();
+                renderHome();
+            }
+        }
+
+        window.onload = () => {
+            loadData();
+            renderHome();
+            renderNews();
+            renderReviews();
+            renderLeaderboard();
+            switchTab(0);
+        };
+    </script>
+</body>
+</html>
