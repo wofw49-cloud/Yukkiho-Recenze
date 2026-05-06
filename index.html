@@ -17,69 +17,67 @@
 <body class="bg-zinc-950 text-white min-h-screen">
 
     <nav class="bg-black border-b border-purple-600 fixed w-full z-50">
-        <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center text-3xl">🌀</div>
-                <span class="text-4xl font-bold tracking-widest neon title-font">YUKKI</span>
+        <div class="max-w-7xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center text-2xl">🌀</div>
+                <span class="text-3xl font-bold tracking-widest neon title-font">YUKKI</span>
             </div>
 
-            <div class="flex gap-8 text-lg font-medium">
-                <button onclick="switchTab(0)" class="tab-active pb-1 px-4" id="tab-0">DOMŮ</button>
-                <button onclick="switchTab(1)" class="pb-1 px-4 hover:text-purple-400" id="tab-1">NOVINKY</button>
-                <button onclick="switchTab(2)" class="pb-1 px-4 hover:text-purple-400" id="tab-2">RECENZE</button>
-                <button onclick="switchTab(3)" class="pb-1 px-4 hover:text-purple-400" id="tab-3">ŽEBŘÍČKY</button>
+            <div class="hidden md:flex gap-6 text-base font-medium">
+                <button onclick="switchTab(0)" class="tab-active pb-1 px-3" id="tab-0">DOMŮ</button>
+                <button onclick="switchTab(1)" class="pb-1 px-3 hover:text-purple-400" id="tab-1">NOVINKY</button>
+                <button onclick="switchTab(2)" class="pb-1 px-3 hover:text-purple-400" id="tab-2">RECENZE</button>
+                <button onclick="switchTab(3)" class="pb-1 px-3 hover:text-purple-400" id="tab-3">ŽEBŘÍČKY</button>
             </div>
 
-            <button onclick="toggleLogin()" class="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-bold flex items-center gap-2">
+            <button onclick="toggleLogin()" class="px-5 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-bold flex items-center gap-2 text-sm">
                 <i class="fas fa-user"></i>
                 <span id="loginText">PŘIHLÁSIT SE</span>
             </button>
         </div>
     </nav>
 
-    <main class="pt-24 max-w-7xl mx-auto px-6 pb-20">
+    <main class="pt-20 md:pt-24 max-w-7xl mx-auto px-4 md:px-6 pb-20">
 
         <!-- DOMŮ -->
         <div id="page-0">
-            <h1 class="text-6xl font-bold text-center mt-10 mb-2 neon title-font">Vítej zpátky, Yukki</h1>
+            <h1 class="text-5xl md:text-6xl font-bold text-center mt-8 mb-3 neon title-font">Vítej zpátky, Yukki</h1>
             
-            <!-- Hlavní novinka -->
-            <div id="hero-news" onclick="openDetail('news', 0)" class="cursor-pointer relative h-[60vh] rounded-3xl overflow-hidden mb-12 border border-purple-500/30"></div>
+            <div id="hero-news" onclick="openDetail('news', 0)" class="cursor-pointer relative h-[50vh] md:h-[65vh] rounded-3xl overflow-hidden mb-12 border border-purple-500/30"></div>
 
-            <!-- Poslední recenze na domů -->
-            <h2 class="text-3xl font-bold mb-6">Poslední recenze</h2>
-            <div id="home-reviews" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 title-font">Poslední recenze</h2>
+            <div id="home-reviews" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
 
         <!-- NOVINKY -->
         <div id="page-1" class="hidden">
             <h2 class="text-4xl font-bold title-font mb-8">NOVINKY</h2>
-            <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+            <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
         </div>
 
         <!-- RECENZE -->
         <div id="page-2" class="hidden">
             <h2 class="text-4xl font-bold title-font mb-8">RECENZE</h2>
-            <div id="reviews-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+            <div id="reviews-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
 
         <!-- ŽEBŘÍČKY -->
         <div id="page-3" class="hidden">
-            <h2 class="text-4xl font-bold title-font mb-8">YUKKI ŽEBŘÍČEK</h2>
+            <h2 class="text-4xl font-bold title-font mb-8">ŽEBŘÍČKY</h2>
             <div id="leaderboard" class="space-y-4"></div>
         </div>
     </main>
 
     <!-- ADMIN BAR -->
-    <div id="adminBar" class="hidden fixed bottom-6 right-6 bg-zinc-900 border border-purple-500 rounded-2xl p-4 flex gap-3 z-50">
-        <button onclick="showCreateModal('news')" class="px-6 py-3 bg-purple-600 rounded-xl">+ Novinka</button>
-        <button onclick="showCreateModal('review')" class="px-6 py-3 bg-purple-600 rounded-xl">+ Recenze</button>
-        <button onclick="exportData()" class="px-6 py-3 bg-emerald-600 rounded-xl">📤 Export</button>
+    <div id="adminBar" class="hidden fixed bottom-6 right-6 bg-zinc-900 border border-purple-500 rounded-2xl p-4 flex flex-col sm:flex-row gap-3 z-50">
+        <button onclick="showCreateModal('news')" class="px-6 py-3 bg-purple-600 rounded-xl text-sm">+ Novinka</button>
+        <button onclick="showCreateModal('review')" class="px-6 py-3 bg-purple-600 rounded-xl text-sm">+ Recenze</button>
+        <button onclick="exportData()" class="px-6 py-3 bg-emerald-600 rounded-xl text-sm">📤 Export</button>
     </div>
 
-    <!-- LOGIN + MODALS (stejné jako dříve) -->
+    <!-- LOGIN + MODALS (zjednodušené) -->
     <div id="loginModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
-        <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-md border border-purple-500">
+        <div class="bg-zinc-900 p-8 rounded-3xl w-full max-w-md border border-purple-500">
             <h2 class="text-3xl font-bold mb-6 text-center title-font">YUKKI ADMIN</h2>
             <input id="loginUser" value="yukki" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
             <input id="loginPass" type="password" value="yukki123" class="w-full mb-6 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
@@ -87,28 +85,10 @@
         </div>
     </div>
 
-    <div id="createModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
-        <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-2xl border border-purple-500">
-            <h2 class="text-3xl font-bold mb-6" id="modalTitle">Nová novinka</h2>
-            <input id="postTitle" placeholder="Název" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
-            <input id="postImage" placeholder="URL fotky" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
-            <input id="postScore" type="number" placeholder="Hodnocení % (jen recenze)" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
-            <input id="postDate" type="date" class="w-full mb-6 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
-            <textarea id="postContent" rows="8" placeholder="Obsah..." class="w-full bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4"></textarea>
-            
-            <div class="flex gap-4 mt-6">
-                <button onclick="savePost()" class="flex-1 py-4 bg-purple-600 rounded-2xl font-bold">Uložit</button>
-                <button onclick="hideCreateModal()" class="flex-1 py-4 bg-zinc-800 rounded-2xl font-bold">Zrušit</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         let isAdmin = false;
         let news = [];
         let reviews = [];
-        let editingType = null;
-        let editingIndex = null;
 
         function loadData() {
             news = JSON.parse(localStorage.getItem('yukki_news') || '[]');
@@ -132,38 +112,35 @@
         }
 
         function renderHome() {
-            // Hlavní novinka
             if (news.length > 0) {
                 const n = news[0];
                 document.getElementById('hero-news').innerHTML = `
                     <img src="${n.image}" class="absolute inset-0 w-full h-full object-cover">
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-black/70"></div>
-                    <div class="absolute bottom-12 left-12 right-12">
-                        <h2 class="text-5xl font-bold title-font">${n.title}</h2>
-                        <p class="text-xl text-gray-300 mt-4">${n.content.substring(0, 180)}...</p>
+                    <div class="absolute bottom-8 left-6 right-6">
+                        <h2 class="text-4xl md:text-5xl font-bold title-font">${n.title}</h2>
+                        <p class="text-lg text-gray-300 mt-3">${n.content.substring(0, 160)}...</p>
                     </div>
                 `;
             }
 
-            // Poslední recenze na domů
-            const homeReviews = document.getElementById('home-reviews');
-            homeReviews.innerHTML = reviews.slice(0, 3).map(r => `
-                <div class="bg-zinc-900 rounded-3xl p-6 cursor-pointer" onclick="openDetail('review', ${reviews.indexOf(r)})">
+            document.getElementById('home-reviews').innerHTML = reviews.slice(0, 3).map((r, i) => `
+                <div onclick="openDetail('review', ${i})" class="bg-zinc-900 rounded-3xl p-5 cursor-pointer">
                     <img src="${r.image}" class="w-full h-40 object-cover rounded-2xl mb-4">
-                    <h4 class="font-bold">${r.title}</h4>
-                    <div class="text-4xl font-bold text-purple-400">${r.score}</div>
+                    <h4 class="font-bold text-lg">${r.title}</h4>
+                    <div class="text-4xl font-bold text-purple-400 mt-1">${r.score}</div>
                 </div>
             `).join('');
         }
 
         function renderNews() {
             document.getElementById('news-container').innerHTML = news.map((n, i) => `
-                <div class="bg-zinc-900 rounded-3xl overflow-hidden">
-                    <img src="${n.image}" class="w-full h-56 object-cover">
+                <div onclick="openDetail('news', ${i})" class="bg-zinc-900 rounded-3xl overflow-hidden cursor-pointer">
+                    <img src="${n.image}" class="w-full h-52 object-cover">
                     <div class="p-6">
-                        <h3 class="text-2xl font-bold">${n.title}</h3>
-                        <p class="text-purple-400 text-sm">${n.date}</p>
-                        <p class="mt-4">${n.content}</p>
+                        <h3 class="text-xl font-bold">${n.title}</h3>
+                        <p class="text-purple-400 text-sm mt-1">${n.date}</p>
+                        <p class="mt-3">${n.content}</p>
                     </div>
                 </div>
             `).join('');
@@ -171,29 +148,16 @@
 
         function renderReviews() {
             document.getElementById('reviews-container').innerHTML = reviews.map((r, i) => `
-                <div class="bg-zinc-900 rounded-3xl overflow-hidden">
-                    <img src="${r.image}" class="w-full h-56 object-cover">
+                <div onclick="openDetail('review', ${i})" class="bg-zinc-900 rounded-3xl overflow-hidden cursor-pointer">
+                    <img src="${r.image}" class="w-full h-52 object-cover">
                     <div class="p-6">
                         <div class="flex justify-between">
-                            <h3 class="text-2xl font-bold">${r.title}</h3>
-                            <div class="text-5xl font-bold text-purple-400">${r.score}</div>
+                            <h3 class="text-xl font-bold">${r.title}</h3>
+                            <div class="text-4xl font-bold text-purple-400">${r.score}</div>
                         </div>
-                        <p class="text-purple-400 text-sm">${r.date}</p>
+                        <p class="text-purple-400 text-sm mt-1">${r.date}</p>
                         <p class="mt-4">${r.content}</p>
                     </div>
-                </div>
-            `).join('');
-        }
-
-        function renderLeaderboard() {
-            const sorted = [...reviews].sort((a,b) => b.score - a.score);
-            document.getElementById('leaderboard').innerHTML = sorted.map(r => `
-                <div class="bg-zinc-900 rounded-3xl p-6 flex justify-between items-center">
-                    <div class="flex items-center gap-4">
-                        <img src="${r.image}" class="w-16 h-16 object-cover rounded-xl">
-                        <h3 class="text-xl font-bold">${r.title}</h3>
-                    </div>
-                    <div class="text-5xl font-bold text-purple-400">${r.score}</div>
                 </div>
             `).join('');
         }
@@ -214,8 +178,6 @@
         function switchTab(n) {
             document.querySelectorAll('[id^="page-"]').forEach(p => p.classList.add('hidden'));
             document.getElementById(`page-${n}`).classList.remove('hidden');
-            if (n === 2) renderReviews();
-            if (n === 3) renderLeaderboard();
         }
 
         function toggleLogin() {
@@ -235,8 +197,6 @@
 
         function showCreateModal(type) {
             if (!isAdmin) return alert("Nejsi přihlášen jako admin!");
-            editingIndex = null;
-            editingType = type;
             document.getElementById('modalTitle').textContent = type === 'news' ? "Nová novinka" : "Nová recenze";
             document.getElementById('postTitle').value = '';
             document.getElementById('postImage').value = '';
@@ -266,9 +226,9 @@
             }
 
             hideCreateModal();
+            renderHome();
             renderNews();
             renderReviews();
-            renderLeaderboard();
             alert("Přidáno!");
         }
 
@@ -277,7 +237,6 @@
             renderHome();
             renderNews();
             renderReviews();
-            renderLeaderboard();
             switchTab(0);
         };
     </script>
