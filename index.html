@@ -36,7 +36,7 @@
                 <div class="w-12 h-12 bg-gradient-to-br from-red-600 to-rose-600 rounded-2xl flex items-center justify-center text-3xl">🌀</div>
                 <span class="text-4xl font-bold tracking-widest neon title-font">YUKKI</span>
             </div>
-           <div class="flex gap-8 text-lg font-medium">
+   <div class="flex gap-8 text-lg font-medium">
     <button onclick="switchTab(0)" class="tab-active pb-1 px-4" id="tab-0">DOMŮ</button>
     <button onclick="switchTab(1)" class="pb-1 px-4 hover:text-red-400" id="tab-1">NOVINKY</button>
     <button onclick="switchTab(2)" class="pb-1 px-4 hover:text-red-400" id="tab-2">RECENZE</button>
@@ -55,9 +55,14 @@
         <!-- DOMŮ -->
         <div id="page-0">
             <h1 class="text-6xl font-bold text-center mt-10 mb-2 neon title-font">Vítej poutníku</h1>
-            <div id="hero-news" onclick="openDetail('news', 0)" class="cursor-pointer relative h-[65vh] rounded-3xl overflow-hidden mb-12 border border-red-500/30"></div>
-            <h2 class="text-3xl font-bold mb-6 title-font">Poslední recenze</h2>
-            <div id="home-reviews" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+<div id="hero-news" onclick="openDetail('news', 0)" class="cursor-pointer relative h-[65vh] rounded-3xl overflow-hidden mb-12 border border-red-500/30"></div>
+
+<!-- NOVÉ: Nadcházející vydání -->
+<h2 class="text-3xl font-bold mb-6 title-font">Nadcházející vydání</h2>
+<div id="home-releases" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"></div>
+
+<h2 class="text-3xl font-bold mb-6 title-font">Poslední recenze</h2>
+<div id="home-reviews" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
         </div>
 
         <!-- NOVINKY -->
@@ -87,23 +92,18 @@
 
 <!-- KALENDÁŘ -->
 <div id="page-5" class="hidden">
-    <h2 class="text-4xl font-bold title-font mb-8">KALENDÁŘ VYDÁNÍ</h2>
-    <div class="flex justify-between items-center mb-6">
-        <button onclick="showCreateReleaseModal()" 
-                class="px-6 py-3 bg-red-600 rounded-xl font-bold flex items-center gap-2">
-            <i class="fas fa-plus"></i> Přidat hru
-        </button>
-    </div>
+    <h2 class="text-4xl font-bold title-font mb-8">KALENDÁŘ VYDÁNÍ HER</h2>
     <div id="calendar-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 </div>
     
     <!-- ADMIN BAR -->
-    <div id="adminBar" class="hidden fixed bottom-6 right-6 bg-zinc-900 border border-red-500 rounded-2xl p-4 flex gap-3 z-50">
-        <button onclick="showCreateModal('news')" class="px-6 py-3 bg-red-600 rounded-xl font-bold">+ Novinka</button>
-        <button onclick="showCreateModal('review')" class="px-6 py-3 bg-red-600 rounded-xl font-bold">+ Recenze</button>
-        <button onclick="showCreateLinkModal()" class="px-6 py-3 bg-red-600 rounded-xl font-bold">+ Odkaz</button>
-        <button onclick="exportData()" class="px-6 py-3 bg-emerald-600 rounded-xl font-bold">📤 Export</button>
-    </div>
+<div id="adminBar" class="hidden fixed bottom-6 right-6 bg-zinc-900 border border-red-500 rounded-2xl p-4 flex gap-3 z-50">
+    <button onclick="showCreateModal('news')" class="px-6 py-3 bg-red-600 rounded-xl font-bold">+ Novinka</button>
+    <button onclick="showCreateModal('review')" class="px-6 py-3 bg-red-600 rounded-xl font-bold">+ Recenze</button>
+    <button onclick="showCreateReleaseModal()" class="px-6 py-3 bg-red-600 rounded-xl font-bold">+ Vydání</button>
+    <button onclick="showCreateLinkModal()" class="px-6 py-3 bg-red-600 rounded-xl font-bold">+ Odkaz</button>
+    <button onclick="exportData()" class="px-6 py-3 bg-emerald-600 rounded-xl font-bold">📤 Export</button>
+</div>
 
     <!-- LOGIN MODAL -->
     <div id="loginModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
@@ -204,6 +204,92 @@
                 alert("❌ Špatné heslo!\n\nHeslo je: yukki12345");
             }
         }
+
+        // ==================== KALENDÁŘ ====================
+
+function renderHomeReleases() {
+    const container = document.getElementById('home-releases');
+    const latest = upcomingReleases.slice(0, 3);
+    
+    container.innerHTML = latest.map(game => {
+        const date = new Date(game.date).toLocaleDateString('cs-CZ', {day: 'numeric', month: 'short'});
+        return `
+            <div class="bg-zinc-900 rounded-3xl p-6 border border-red-500/30 hover:border-red-500 transition">
+                <img src="${game.image}" class="w-full h-40 object-cover rounded-2xl mb-4">
+                <div class="text-red-400 text-sm font-medium">${date}</div>
+                <h4 class="font-bold mt-2">${game.title}</h4>
+                <div class="text-xs text-gray-400">${game.platforms.join(' • ')}</div>
+            </div>
+        `;
+    }).join('');
+}
+
+function renderCalendar() {
+    const container = document.getElementById('calendar-container');
+    const sorted = [...upcomingReleases].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    container.innerHTML = sorted.map((game, i) => {
+        const dateStr = new Date(game.date).toLocaleDateString('cs-CZ', {
+            weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+        });
+        return `
+            <div class="bg-zinc-900 rounded-3xl overflow-hidden border border-red-500/30 hover:border-red-500">
+                <img src="${game.image}" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <div class="text-red-400 font-medium">${dateStr}</div>
+                    <h3 class="text-2xl font-bold mt-3">${game.title}</h3>
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        ${game.platforms.map(p => `<span class="text-xs bg-zinc-800 px-3 py-1 rounded-full">${p}</span>`).join('')}
+                    </div>
+                    ${game.description ? `<p class="mt-4 text-gray-400">${game.description}</p>` : ''}
+                    ${isAdmin ? `
+                    <div class="flex gap-3 mt-6">
+                        <button onclick="editRelease(${i}); event.stopImmediatePropagation()" class="flex-1 py-3 bg-blue-600 rounded-xl">UPRAVIT</button>
+                        <button onclick="deleteRelease(${i}); event.stopImmediatePropagation()" class="flex-1 py-3 bg-red-600 rounded-xl">SMAZAT</button>
+                    </div>` : ''}
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function showCreateReleaseModal(editIndex = null) {
+    if (!isAdmin) return alert("Nejsi přihlášen jako admin!");
+
+    const title = prompt("Název hry:", editIndex !== null ? upcomingReleases[editIndex].title : "");
+    if (!title) return;
+
+    const date = prompt("Datum vydání (YYYY-MM-DD):", editIndex !== null ? upcomingReleases[editIndex].date : "2026-06-15");
+    const platformsStr = prompt("Platformy (oddělené čárkou):", editIndex !== null ? upcomingReleases[editIndex].platforms.join(", ") : "PC, PS5, Xbox");
+    const image = prompt("URL obrázku:", editIndex !== null ? upcomingReleases[editIndex].image : "https://picsum.photos/id/237/1200/700");
+    const desc = prompt("Krátký popis:", editIndex !== null ? upcomingReleases[editIndex].description || "" : "");
+
+    const release = {
+        id: Date.now(),
+        title: title,
+        date: date,
+        platforms: platformsStr.split(',').map(p => p.trim()),
+        image: image,
+        description: desc
+    };
+
+    if (editIndex !== null) upcomingReleases[editIndex] = release;
+    else upcomingReleases.push(release);
+
+    renderCalendar();
+    renderHomeReleases();
+    alert("✅ Hra přidána do kalendáře!");
+}
+
+function editRelease(i) { showCreateReleaseModal(i); }
+
+function deleteRelease(i) {
+    if (confirm("Opravdu smazat?")) {
+        upcomingReleases.splice(i, 1);
+        renderCalendar();
+        renderHomeReleases();
+    }
+}
 
         function loadData() {
             news = [
@@ -416,6 +502,7 @@
             if (n === 2) renderReviews();
             if (n === 3) renderLeaderboard();
             if (n === 4) renderCommunity();
+            if (n === 5) renderCalendar();
         }
         function toggleLogin() { document.getElementById('loginModal').classList.toggle('hidden'); }
 
@@ -630,12 +717,12 @@ function deleteRelease(i) {
 
         window.onload = () => {
             loadData();
+            renderHomeReleases();
             renderHome();
             renderNews();
             renderReviews();
             renderLeaderboard();
             renderCommunity();
-            renderCalendar();
             switchTab(0);
         };
     </script>
