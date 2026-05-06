@@ -156,38 +156,73 @@
     </div>
 
     <script>
-        let isAdmin = false;
-        let editingType = null;
-        let currentEditId = null;
+    let isAdmin = false;
+    let editingType = null;
+    let currentEditId = null;
 
-        // VÝCHOZÍ DATA
-        const defaultNews = [
-            { id: 1, game: "GTA VI", title: "Proč si PC hráči musejí počkat na Grand Theft Auto VI?", image: "https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg?", date: "2026-05-06", content: "Hry od Rockstar Games vycházejí nejprve na konzole..." }
-        ];
-        const defaultReviews = [
-            { id: 101, game: "MOUSE", title: "MOUSE: P.I. For Hire", score: 82, image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2416450/298ff2fc3f6a700d022b8d3ec58047f2b426be03/header.jpg", content: "Stylová retro FPS...", date: "2026-05-06" }
-        ];
-        const defaultReleases = [
-            { id: 201, title: "Grand Theft Auto VI", date: "2026-11-19", platforms: ["PS5", "Xbox"], image: "https://indian-tv.cz/uploads/00/f2f73c64d9ff4ae594f591cd103e0299/1762505917.jpg?", flag: "https://upload.wikimedia.org/wikipedia/commons/c/cb/Flag_of_the_Czech_Republic.svg" }
-        ];
-
-        let news = JSON.parse(localStorage.getItem('yukki_news')) || defaultNews;
-        let reviews = JSON.parse(localStorage.getItem('yukki_reviews')) || defaultReviews;
-        let releases = JSON.parse(localStorage.getItem('yukki_releases')) || defaultReleases;
-
-        window.onload = renderAll;
-
-        function renderAll() {
-            renderHome(); renderNews(); renderReviews(); renderLeaderboard(); renderCalendar(); renderCommunity();
+    // VÝCHOZÍ DATA
+    const defaultNews = [
+        { 
+            id: 1, 
+            game: "GTA VI", 
+            title: "Proč si PC hráči musejí počkat na Grand Theft Auto VI?", 
+            image: "https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg?", 
+            date: "2026-05-06", 
+            content: "Hry od Rockstar Games vycházejí nejprve na konzole..." 
+        },
+        // ← tady přidáš další novinky
+        { 
+            id: 2, 
+            game: "Black Myth: Wukong", 
+            title: "Black Myth: Wukong dostal obrovský update", 
+            image: "https://example.com/obrazek.jpg", 
+            date: "2026-05-05", 
+            content: "Nový patch přidává..." 
         }
+    ];
 
-        function switchTab(index) {
-            document.querySelectorAll('main > div').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`page-${index}`).classList.remove('hidden');
-            document.querySelectorAll('nav button').forEach(b => b.classList.remove('tab-active', 'text-white'));
-            document.getElementById(`tab-${index}`).classList.add('tab-active', 'text-white');
-            window.scrollTo(0,0);
+    const defaultReviews = [
+        { 
+            id: 101, 
+            game: "MOUSE", 
+            title: "MOUSE: P.I. For Hire", 
+            score: 82, 
+            image: "https://shared.fastly.steamstatic.com/.../header.jpg", 
+            content: "Stylová retro FPS...", 
+            date: "2026-05-06" 
+        },
+        // ← nová recenze
+        { 
+            id: 102, 
+            game: "Doom: The Dark Ages", 
+            title: "Doom: The Dark Ages – Brutální návrat", 
+            score: 91, 
+            image: "https://example.com/doom.jpg", 
+            content: "id Software opět překonali sami sebe...", 
+            date: "2026-05-04" 
         }
+    ];
+
+    const defaultReleases = [
+        { 
+            id: 201, 
+            title: "Grand Theft Auto VI", 
+            date: "2026-11-19", 
+            platforms: ["PS5", "Xbox"], 
+            image: "https://indian-tv.cz/.../1762505917.jpg?", 
+            flag: "https://upload.wikimedia.org/wikipedia/commons/c/cb/Flag_of_the_Czech_Republic.svg" 
+        },
+        // ← nové vydání
+        { 
+            id: 202, 
+            title: "The Elder Scrolls VI", 
+            date: "2027-03-15", 
+            platforms: ["PC", "PS5", "Xbox Series X"], 
+            image: "https://example.com/tes6.jpg", 
+            flag: "https://upload.wikimedia.org/wikipedia/commons/c/cb/Flag_of_the_Czech_Republic.svg" 
+        }
+    ];
+</script>
 
         // --- RENDERING ---
 
