@@ -158,27 +158,44 @@
         let editingType = null;
 
         function loadSampleData() {
-            news = [
-                {id:1, title:"Black Myth: Wukong 2 oficiálně oznámen", image:"https://picsum.photos/id/1015/1200/700", date:"2026-05-06", content:"Game Science potvrdilo pokračování velkého hitu..."},
-                {id:2, title:"GTA VI – druhý trailer dorazí v červnu", image:"https://picsum.photos/id/1016/1200/700", date:"2026-05-04", content:"Rockstar Games potvrdilo..."}
-                {id:2, title:"Assassin's Creed Black Flag Resynced – datum vydání oznámeno!", image:"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3751950/9b046115b1663a4be2b252712328e4f6c162da68/header.jpg?t=1777900688", date:"2026-05-04", content:"Po letech spekulací a leaků je to konečně oficiální. Ubisoft potvrdil remake milovaného pirátského dílu Assassin's Creed: Black Flag Resynced a rovnou oznámil datum vydání – 9. července 2026.
-Hra se staví od základu na novém enginu (vylepšený Anvil), dostane kompletně předělanou grafiku, lepší animace, vylepšené souboje na moři i na souši a odstranění některých frustrujících mechanik z originálu (ano, říká se, že ty otravné tailing mise už tam nebudou). Příběh zůstává stejný – vracíme se jako Edward Kenway do zlatého věku pirátství v Karibiku.
-Fanoušci jsou z toho úplně v extázi (včetně mě). Black Flag je pro spoustu lidí dodnes nejlepší díl série a teď to vypadá, že dostane zaslouženou moderní podobu.
-Co očekávat:
+    news = [
+        {
+            id: 1,
+            title: "Black Myth: Wukong 2 oficiálně oznámen",
+            image: "https://picsum.photos/id/1015/1200/700",
+            date: "2026-05-06",
+            content: `Game Science potvrdilo pokračování velkého hitu. První gameplay trailer dorazí už tento měsíc.`
+        },
+        {
+            id: 2,
+            title: "Assassin's Creed Black Flag Resynced – datum vydání oznámeno!",
+            image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3751950/header.jpg?t=1777900688",
+            date: "2026-05-06",
+            content: `Po letech spekulací a leaků je to konečně oficiální. Ubisoft oznámil remake milovaného pirátského dílu na 9. července 2026.
 
-Výrazně lepší grafika a osvětlení
-Vylepšené námořní bitvy
-Zachování open-world pirátské svobody
-Nový obsah (zatím neupřesněno)
+Hra se staví na novém enginu, dostane kompletně předělanou grafiku, lepší animace, vylepšené námořní bitvy a odstranění některých frustrujících mechanik z originálu.
 
-
-července 2026 už si rezervuju dovolenou. Jestli to dopadne dobře, může to být jeden z nejlepších remaků posledních let."}
-            ];
-            reviews = [
-                {id:101, title:"STALKER 2", image:"https://picsum.photos/id/180/800/450", score:94, date:"2026-05-05", content:"Nejlepší post-apo zážitek za poslední roky."},
-                {id:102, title:"Hades II", image:"https://picsum.photos/id/251/800/450", score:96, date:"2026-04-28", content:"Supergiant opět zabodoval."}
-            ];
+Fanoušci jsou z toho v extázi. Black Flag je pro mnoho lidí dodnes nejlepší díl série a teď to vypadá, že dostane zaslouženou moderní podobu.`
         }
+    ];
+
+    reviews = [
+        {
+            id: 103,
+            title: "Assassin's Creed Shadows",
+            image: "https://picsum.photos/id/201/1200/700",
+            score: 68,
+            date: "2026-05-06",
+            content: `Po dlouhém čekání na Assassin's Creed v Japonsku jsem byl opravdu hyped. 
+
+Feudální Japonsko vypadá nádherně, stealth pasáže s Naoe jsou občas skvělé a souboje mají váhu. Bohužel tím to končí.
+
+Příběh je slabý a generický, postavy nezajímavé, svět po 30+ hodinách strašně repetitivní. RPG prvky působí nuceně a questy jsou často otravné.
+
+Čekal jsem mnohem víc. Pro mě osobně solidní 6,5–7/10.`
+        }
+    ];
+}
 
         function sortNewsByDate() {
             news.sort((a,b) => new Date(b.date) - new Date(a.date));
