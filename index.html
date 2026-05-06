@@ -48,24 +48,66 @@
             <div id="home-reviews" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
         </div>
 
-        <!-- NOVINKY + RECENZE + ŽEBŘÍČKY (stejné jako dříve) -->
-        <div id="page-1" class="hidden">...</div>
-        <div id="page-2" class="hidden">...</div>
-        <div id="page-3" class="hidden">...</div>
+        <!-- NOVINKY -->
+        <div id="page-1" class="hidden">
+            <h2 class="text-4xl font-bold title-font mb-8">NOVINKY</h2>
+            <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+        </div>
+
+        <!-- RECENZE -->
+        <div id="page-2" class="hidden">
+            <h2 class="text-4xl font-bold title-font mb-8">RECENZE</h2>
+            <div id="reviews-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        </div>
+
+        <!-- ŽEBŘÍČKY -->
+        <div id="page-3" class="hidden">
+            <h2 class="text-4xl font-bold title-font mb-8">YUKKI ŽEBŘÍČEK</h2>
+            <div id="leaderboard" class="space-y-4"></div>
+        </div>
     </main>
 
-    <!-- ADMIN BAR + modals (stejné) -->
+    <!-- ADMIN BAR -->
+    <div id="adminBar" class="hidden fixed bottom-6 right-6 bg-zinc-900 border border-purple-500 rounded-2xl p-4 flex gap-3 z-50">
+        <button onclick="showCreateModal('news')" class="px-6 py-3 bg-purple-600 rounded-xl">+ Novinka</button>
+        <button onclick="showCreateModal('review')" class="px-6 py-3 bg-purple-600 rounded-xl">+ Recenze</button>
+        <button onclick="exportData()" class="px-6 py-3 bg-emerald-600 rounded-xl">📤 Export</button>
+    </div>
 
-    <!-- DETAIL MODAL - NOVÝ ČISTÝ DESIGN -->
+    <!-- LOGIN MODAL -->
+    <div id="loginModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
+        <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-md border border-purple-500">
+            <h2 class="text-3xl font-bold mb-6 text-center title-font">YUKKI ADMIN</h2>
+            <input id="loginUser" value="yukki" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
+            <input id="loginPass" type="password" value="yukki123" class="w-full mb-6 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
+            <button onclick="adminLogin()" class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-bold">Přihlásit se</button>
+        </div>
+    </div>
+
+    <!-- CREATE/EDIT MODAL -->
+    <div id="createModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
+        <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-2xl border border-purple-500">
+            <h2 class="text-3xl font-bold mb-6" id="modalTitle">Nová novinka</h2>
+            <input id="postTitle" placeholder="Název" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
+            <input id="postImage" placeholder="URL fotky" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
+            <input id="postScore" type="number" placeholder="Hodnocení % (jen recenze)" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
+            <input id="postDate" type="date" class="w-full mb-6 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
+            <textarea id="postContent" rows="10" placeholder="Obsah..." class="w-full bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4"></textarea>
+            
+            <div class="flex gap-4 mt-6">
+                <button onclick="savePost()" class="flex-1 py-4 bg-purple-600 rounded-2xl font-bold">Uložit</button>
+                <button onclick="hideCreateModal()" class="flex-1 py-4 bg-zinc-800 rounded-2xl font-bold">Zrušit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DETAIL MODAL -->
     <div id="detailModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
         <div class="bg-zinc-900 rounded-3xl w-full max-w-4xl border border-purple-500 overflow-hidden">
-            <!-- Obrázek 16:9 -->
             <div id="modal-image" class="w-full aspect-video bg-black"></div>
-            
             <div class="p-8">
                 <h2 id="modal-title" class="text-4xl font-bold title-font"></h2>
                 
-                <!-- Datum a score odděleně -->
                 <div class="flex items-center gap-6 mt-3">
                     <p id="modal-date" class="text-purple-400 text-lg"></p>
                     <div id="modal-score" class="text-5xl font-bold text-purple-400"></div>
@@ -81,11 +123,142 @@
     </div>
 
     <script>
-        // ... (celý script z předchozí verze zůstává)
+        let isAdmin = false;
+        let news = [];
+        let reviews = [];
+        let editingType = null;
+        let editingIndex = null;
+
+        function loadData() {
+            news = [
+                {
+                    "id": 1778031631685,
+                    "title": "Proč si PC hráči musejí počkat na Grand Theft Auto VI? Marketingovou exkluzivitu má PlayStation",
+                    "image": "https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg?",
+                    "date": "2026-05-06",
+                    "content": "Hry od Rockstar Games vycházejí nejprve na konzole a až později na počítače. Stejné to bude i u GTA 6. Proč tomu tak je? Palčivé otázce se věnoval generální ředitel Take-Two Interactive. Potvrdil také marketingovou exkluzivitu PlayStationu.\n\nTahle odpověď PC hráče nepotěší. Rockstar se snaží nejprve obsloužit hlavní uživatelskou základnu, a to co nejlépe. Tím se myslí právě hráči na PlayStationu a Xboxu.\n\n„Rockstar vždy začíná na konzolích, protože právě tam vás hráči hodnotí podle toho, jak dobře zvládnete launch,“ vysvětlil Strauss Zelnick pro Bloomberg. Jinými slovy, pokud by start nevyšel podle představ, mohlo by to negativně ovlivnit i pozdější prodeje na dalších platformách.\n\nZároveň zdůraznil, že zpoždění PC verze nijak nesouvisí s marketingovou spoluprací se Sony u Grand Theft Auto VI. Jde o dlouhodobou strategii, kterou Rockstar používá už roky. Zajímavé je, že samotná data jdou proti této logice. Zelnick totiž zároveň připustil, že u velkých titulů dnes může PC tvořit klidně 45 až 50 % celkových prodejů. Pro srovnání – ještě v roce 2007 to bylo jen kolem 5 % u NBA 2K.\n\nPřesto se strategie nemění, protože konzole jsou pro Rockstar stále klíčovým startovním bodem a až následně přichází rozšíření na další platformy. Doufejme, že alespoň na PC verzi nebudeme čekat dlouho. Spekuluje se o vydání v první polovině roku 2027.\n\nVedle toho bylo potvrzeno i něco, o čem se spekulovalo už delší dobu. GTA 6 má marketingové partnerství se Sony. Hra tak bude v reklamních materiálech primárně spojována s konzolí PlayStation 5. To ale neznamená exkluzivní obsah. Jde čistě o to, že hra bude prezentována na PS5 a všude bude vidět logo PlayStationu. Je dost možné, že vznikne také bundle s konzolí a hrou."
+                }
+            ];
+
+            reviews = [
+                {
+                    "id": 1778031727108,
+                    "title": "Crimson Desert",
+                    "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3321460/669119c3747653f41a46c59f213168448d094e04/ss_669119c3747653f41a46c59f213168448d094e04.1920x1080.jpg?t=1777016399",
+                    "score": 68,
+                    "date": "2026-03-22",
+                    "content": "Crimson Desert je jeden z největších a nejambicióznějších open-world titulů posledních let od tvůrců Black Desert Online. Pearl Abyss tady hodili do jednoho pytle obrovský svět, akční combat, crafting, mounty, bossy a spoustu systémů. Výsledek je… velmi rozporuplný.\nCo se povedlo:\n\nVizuálně je hra často dechberoucí. Obrovské krajiny, detailní města, působivé počasí a občasné momenty, kdy si řekneš „wow“. Engine zvládá obrovské dálky a masivní bitvy.\nCombat je rychlý, brutální a nabízí slušnou variabilitu – weapon switching, combo systémy, environmentální interakce a speciální schopnosti.\nSvět Pywel je rozlehlý a plný aktivit – od velkých boss fightů přes dungeony až po volné prozkoumávání.\n\nCo mi vadilo (a proč jsem z toho nebyl nadšený):\n\nPříběh je slabý a chaotický. Dialogy působí často jako z jiného století, postavy jsou ploché a motivace hlavního hrdiny tě těžko chytí.\nQuest design je velmi tradiční a checklistový – „jdi tam, zabij to, dones to“. Po 15–20 hodinách začne být to opakování velmi unavující.\nSpousta drobných frustrací: nepohodlné ovládání, špatně vysvětlené mechaniky, inventář, healing systém a občasné technické problémy.\nHra trpí syndromem „jack of all trades, master of none“. Dělá spoustu věcí, ale máloco opravdu skvěle.\n\nVerdikt:\nCrimson Desert je hra, která na první pohled vypadá jako potenciální hit, ale po delším hraní se ukáže, že je spíš „solidní průměr s hezkým kabátem“. Pokud miluješ obrovské open-world hry a dokážeš překousnout slabší příběh a občasnou frustraci, může ti nabídnout desítky hodin zábavy. Pokud ale hledáš něco poutavého, dobře napsaného a vyladěného, budeš pravděpodobně zklamaný.\nDoporučení:\nPočkej na výraznou slevu nebo dokud vývojáři nevydají pár velkých patchů. Pro fanoušky žánru 7/10, pro běžné hráče spíš 6/10."
+                },
+                {
+                    "id": 1778031574329,
+                    "title": "MOUSE: P.I. For Hire",
+                    "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2416450/298ff2fc3f6a700d022b8d3ec58047f2b426be03/header.jpg?t=1777393988",
+                    "score": 82,
+                    "date": "2026-05-06",
+                    "content": "MOUSE: P.I. For Hire je přesně ten druh hry, který ti zůstane v hlavě ještě dlouho poté, co ji dokončíš – hlavně díky tomu, jak vypadá a jak zní.\n\nHraješ za Jacka Peppera, myšího soukromého detektiva v černobílém světě inspirovaném 30. lety. Rubber-hose animace (ten klasický kreslený styl jako staré Mickey Mouse) je tady absolutně dechberoucí. Každý frame vypadá jako ručně kreslený, svět je plný detailů, postavy mají přehnané grimasy a pohyby, a celkově to působí jako interaktivní černobílý kreslený film. Jazzová hudba z velkého orchestru dodává atmosféru noiru a občas ti z ní bude chtít tančit i prst na spoušti.\n\nGameplay je solidní retro FPS (boomer shooter). Střílíš, skáčeš, hledáš tajemství, sbíráš power-upy a používáš cartoonové zbraně, které jsou často hodně vtipné. Souboje jsou rychlé, uspokojivé a občas i náročné. Příběh je klasický noir – zmizelá osoba, korupce, femme fatales, zrádci a velké odhalení na konci. Není to nejhlubší příběh na světě, ale je dobře napsaný, plný hlášek a paroduje klasické detektivky.\n\nCo se mi líbilo:\nAbsolutně unikátní vizuální styl – jedna z nejhezčích her posledních let\nSkvělá atmosféra (jazz + noir + myši)\nZábavné zbraně a pohyb\nKrátká, ale intenzivní kampaň (kolem 8–12 hodin)\n\nCo mi vadilo:\nPříběh a akce se občas trochu perou (chceš řešit detektivku, ale pořád jen střílíš)\nNěkteré pasáže se opakují\nObčasné technické drobnosti (ale nic zásadního)\n\nVerdikt:\nPokud máš rád retro shootery a chceš něco, co vypadá úplně jinak než všechno ostatní, tak MOUSE: P.I. For Hire je jasná pecka. Není to revoluce, ale je to jedna z nejpříjemnějších a nejstylovějších her, které letos vyšly.\nDoporučuji – hlavně pokud hledáš něco svěžího a zábavného."
+                }
+            ];
+
+            sortAll();
+        }
+
+        function sortAll() {
+            news.sort((a, b) => new Date(b.date) - new Date(a.date));
+            reviews.sort((a, b) => new Date(b.date) - new Date(a.date));
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('yukki_news', JSON.stringify(news));
+            localStorage.setItem('yukki_reviews', JSON.stringify(reviews));
+        }
+
+        function exportData() {
+            sortAll();
+            const data = {news, reviews};
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = "yukki_data.json";
+            a.click();
+            alert("Data stažena!");
+        }
+
+        function renderHome() {
+            if (news.length > 0) {
+                const n = news[0];
+                document.getElementById('hero-news').innerHTML = `
+                    <img src="${n.image}" class="absolute inset-0 w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/70"></div>
+                    <div class="absolute bottom-12 left-12 right-12">
+                        <h2 class="text-5xl font-bold title-font">${n.title}</h2>
+                        <p class="text-xl text-gray-300 mt-4">${n.content.substring(0, 180)}...</p>
+                    </div>
+                `;
+            }
+
+            document.getElementById('home-reviews').innerHTML = reviews.slice(0, 3).map((r, i) => `
+                <div onclick="openDetail('review', ${i})" class="bg-zinc-900 rounded-3xl p-6 cursor-pointer">
+                    <img src="${r.image}" class="w-full h-40 object-cover rounded-2xl mb-4">
+                    <h4 class="font-bold">${r.title}</h4>
+                    <div class="text-4xl font-bold text-purple-400">${r.score}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderNews() {
+            document.getElementById('news-container').innerHTML = news.map((n, i) => `
+                <div class="bg-zinc-900 rounded-3xl overflow-hidden">
+                    <img src="${n.image}" class="w-full h-56 object-cover cursor-pointer" onclick="openDetail('news', ${i})">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold">${n.title}</h3>
+                        <p class="text-purple-400 text-sm">${n.date}</p>
+                        <p class="mt-4">${n.content}</p>
+                        ${isAdmin ? `
+                        <div class="flex gap-3 mt-6">
+                            <button onclick="event.stopImmediatePropagation(); editItem('news', ${i});" class="flex-1 py-3 bg-blue-600 rounded-xl">UPRAVIT</button>
+                            <button onclick="event.stopImmediatePropagation(); deleteItem('news', ${i});" class="flex-1 py-3 bg-red-600 rounded-xl">SMAZAT</button>
+                        </div>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderReviews() {
+            document.getElementById('reviews-container').innerHTML = reviews.map((r, i) => `
+                <div class="bg-zinc-900 rounded-3xl overflow-hidden">
+                    <img src="${r.image}" class="w-full h-56 object-cover cursor-pointer" onclick="openDetail('review', ${i})">
+                    <div class="p-6">
+                        <div class="flex justify-between">
+                            <h3 class="text-2xl font-bold">${r.title}</h3>
+                            <div class="text-5xl font-bold text-purple-400">${r.score}</div>
+                        </div>
+                        <p class="text-purple-400 text-sm">${r.date}</p>
+                        <p class="mt-4">${r.content}</p>
+                        ${isAdmin ? `
+                        <div class="flex gap-3 mt-6">
+                            <button onclick="event.stopImmediatePropagation(); editItem('review', ${i});" class="flex-1 py-3 bg-blue-600 rounded-xl">UPRAVIT</button>
+                            <button onclick="event.stopImmediatePropagation(); deleteItem('review', ${i});" class="flex-1 py-3 bg-red-600 rounded-xl">SMAZAT</button>
+                        </div>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderLeaderboard() {
+            const sorted = [...reviews].sort((a,b) => b.score - a.score);
+            document.getElementById('leaderboard').innerHTML = sorted.map(r => `
+                <div class="bg-zinc-900 rounded-3xl p-6 flex justify-between items-center">
+                    <div class="flex items-center gap-4">
+                        <img src="${r.image}" class="w-16 h-16 object-cover rounded-xl">
+                        <h3 class="text-xl font-bold">${r.title}</h3>
+                    </div>
+                    <div class="text-5xl font-bold text-purple-400">${r.score}</div>
+                </div>
+            `).join('');
+        }
 
         function openDetail(type, i) {
             const item = type === 'news' ? news[i] : reviews[i];
-            
             document.getElementById('modal-image').innerHTML = `<img src="${item.image}" class="w-full h-full object-cover">`;
             document.getElementById('modal-title').textContent = item.title;
             document.getElementById('modal-date').textContent = item.date;
@@ -93,9 +266,9 @@
             const scoreEl = document.getElementById('modal-score');
             if (type === 'review' && item.score) {
                 scoreEl.textContent = item.score + "%";
-                scoreEl.classList.remove('hidden');
+                scoreEl.style.display = 'block';
             } else {
-                scoreEl.classList.add('hidden');
+                scoreEl.style.display = 'none';
             }
             
             document.getElementById('modal-content').innerHTML = item.content.replace(/\n/g, '<br><br>');
@@ -106,7 +279,106 @@
             document.getElementById('detailModal').classList.add('hidden');
         }
 
-        // Zbytek funkcí (loadData, render atd.) zůstává stejný jako minule
+        function switchTab(n) {
+            document.querySelectorAll('[id^="page-"]').forEach(p => p.classList.add('hidden'));
+            document.getElementById(`page-${n}`).classList.remove('hidden');
+            if (n === 2) renderReviews();
+            if (n === 3) renderLeaderboard();
+        }
+
+        function toggleLogin() {
+            document.getElementById('loginModal').classList.toggle('hidden');
+        }
+
+        function adminLogin() {
+            if (document.getElementById('loginUser').value === "yukki" && document.getElementById('loginPass').value === "yukki123") {
+                isAdmin = true;
+                document.getElementById('loginText').innerHTML = '👑 YUKKI';
+                document.getElementById('adminBar').classList.remove('hidden');
+                toggleLogin();
+            } else {
+                alert("Špatné heslo! (yukki123)");
+            }
+        }
+
+        function showCreateModal(type) {
+            if (!isAdmin) return alert("Nejsi přihlášen jako admin!");
+            editingIndex = null;
+            editingType = type;
+            document.getElementById('modalTitle').textContent = type === 'news' ? "Nová novinka" : "Nová recenze";
+            document.getElementById('postTitle').value = '';
+            document.getElementById('postImage').value = '';
+            document.getElementById('postScore').value = type === 'review' ? '80' : '';
+            document.getElementById('postDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('postContent').value = '';
+            document.getElementById('createModal').classList.remove('hidden');
+        }
+
+        function hideCreateModal() {
+            document.getElementById('createModal').classList.add('hidden');
+        }
+
+        function savePost() {
+            const title = document.getElementById('postTitle').value.trim();
+            const image = document.getElementById('postImage').value || "https://picsum.photos/id/237/1200/700";
+            const score = parseInt(document.getElementById('postScore').value) || 0;
+            const date = document.getElementById('postDate').value;
+            const content = document.getElementById('postContent').value.trim();
+
+            if (!title || !content) return alert("Název a obsah jsou povinné!");
+
+            if (editingType === 'news') {
+                if (editingIndex !== null) news[editingIndex] = {id: news[editingIndex].id, title, image, date, content};
+                else news.unshift({id: Date.now(), title, image, date, content});
+            } else {
+                if (editingIndex !== null) reviews[editingIndex] = {id: reviews[editingIndex].id, title, image, score, date, content};
+                else reviews.unshift({id: Date.now(), title, image, score, date, content});
+            }
+
+            sortAll();
+            saveToLocalStorage();
+            hideCreateModal();
+            renderHome();
+            renderNews();
+            renderReviews();
+            renderLeaderboard();
+            alert("Přidáno!");
+        }
+
+        function editItem(type, i) {
+            editingType = type;
+            editingIndex = i;
+            const item = type === 'news' ? news[i] : reviews[i];
+            document.getElementById('modalTitle').textContent = type === 'news' ? "Upravit novinku" : "Upravit recenzi";
+            document.getElementById('postTitle').value = item.title;
+            document.getElementById('postImage').value = item.image;
+            document.getElementById('postScore').value = item.score || '';
+            document.getElementById('postDate').value = item.date;
+            document.getElementById('postContent').value = item.content;
+            document.getElementById('createModal').classList.remove('hidden');
+        }
+
+        function deleteItem(type, i) {
+            if (confirm("Opravdu smazat?")) {
+                if (type === 'news') news.splice(i, 1);
+                else reviews.splice(i, 1);
+                sortAll();
+                saveToLocalStorage();
+                renderHome();
+                renderNews();
+                renderReviews();
+                renderLeaderboard();
+            }
+        }
+
+        window.onload = () => {
+            loadData();
+            renderHome();
+            renderNews();
+            renderReviews();
+            renderLeaderboard();
+            switchTab(0);
+        };
     </script>
 </body>
 </html>
