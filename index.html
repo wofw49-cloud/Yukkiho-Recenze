@@ -99,7 +99,7 @@
         </div>
     </div>
 
-    <!-- DETAIL MODAL - ŠIROKÝ -->
+    <!-- DETAIL MODAL -->
     <div id="detailModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-4">
         <div class="bg-zinc-900 rounded-3xl w-full max-w-6xl border border-purple-500 overflow-hidden relative">
             <button onclick="closeModal()" class="absolute top-6 right-6 z-10 w-14 h-14 bg-black/80 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-4xl font-light">✕</button>
@@ -153,6 +153,11 @@
             ];
         }
 
+        function sortAll() {
+            news.sort((a, b) => new Date(b.date) - new Date(a.date));
+            reviews.sort((a, b) => new Date(b.date) - new Date(a.date));
+        }
+
         function renderNews() {
             document.getElementById('news-container').innerHTML = news.map((n, i) => `
                 <div class="bg-zinc-900 rounded-3xl overflow-hidden">
@@ -161,7 +166,8 @@
                         <h3 class="text-2xl font-bold">${n.title}</h3>
                         <p class="text-purple-400 text-sm">${n.date}</p>
                         <p class="mt-4 line-clamp-4">${n.content}</p>
-                        ${isAdmin ? `<div class="flex gap-3 mt-6">
+                        ${isAdmin ? `
+                        <div class="flex gap-3 mt-6">
                             <button onclick="event.stopImmediatePropagation(); editItem('news', ${i});" class="flex-1 py-3 bg-blue-600 rounded-xl font-bold">UPRAVIT</button>
                             <button onclick="event.stopImmediatePropagation(); deleteItem('news', ${i});" class="flex-1 py-3 bg-red-600 rounded-xl font-bold">SMAZAT</button>
                         </div>` : ''}
@@ -181,11 +187,32 @@
                         </div>
                         <p class="text-purple-400 text-sm">${r.date}</p>
                         <p class="mt-4 line-clamp-4">${r.content}</p>
-                        ${isAdmin ? `<div class="flex gap-3 mt-6">
+                        ${isAdmin ? `
+                        <div class="flex gap-3 mt-6">
                             <button onclick="event.stopImmediatePropagation(); editItem('review', ${i});" class="flex-1 py-3 bg-blue-600 rounded-xl font-bold">UPRAVIT</button>
                             <button onclick="event.stopImmediatePropagation(); deleteItem('review', ${i});" class="flex-1 py-3 bg-red-600 rounded-xl font-bold">SMAZAT</button>
                         </div>` : ''}
                     </div>
+                </div>
+            `).join('');
+        }
+
+        function renderHome() {
+            if (news.length > 0) {
+                const n = news[0];
+                document.getElementById('hero-news').innerHTML = `
+                    <img src="${n.image}" class="absolute inset-0 w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/70"></div>
+                    <div class="absolute bottom-12 left-12 right-12">
+                        <h2 class="text-5xl font-bold title-font">${n.title}</h2>
+                    </div>
+                `;
+            }
+            document.getElementById('home-reviews').innerHTML = reviews.slice(0, 3).map((r, i) => `
+                <div onclick="openDetail('review', ${i})" class="bg-zinc-900 rounded-3xl p-6 cursor-pointer">
+                    <img src="${r.image}" class="w-full h-40 object-cover rounded-2xl mb-4">
+                    <h4 class="font-bold">${r.title}</h4>
+                    <div class="text-4xl font-bold text-purple-400">${r.score}</div>
                 </div>
             `).join('');
         }
@@ -199,7 +226,9 @@
             if (type === 'review' && item.score) {
                 scoreEl.textContent = item.score + "%";
                 scoreEl.style.display = 'block';
-            } else scoreEl.style.display = 'none';
+            } else {
+                scoreEl.style.display = 'none';
+            }
             document.getElementById('modal-content').innerHTML = item.content.replace(/\n/g, '<br><br>');
             document.getElementById('detailModal').classList.remove('hidden');
         }
@@ -215,7 +244,9 @@
             if (n === 2) renderReviews();
         }
 
-        function toggleLogin() { document.getElementById('loginModal').classList.toggle('hidden'); }
+        function toggleLogin() {
+            document.getElementById('loginModal').classList.toggle('hidden');
+        }
 
         function adminLogin() {
             if (document.getElementById('loginUser').value === "yukki" && document.getElementById('loginPass').value === "yukki123") {
@@ -225,7 +256,9 @@
                 toggleLogin();
                 renderNews();
                 renderReviews();
-            } else alert("Špatné heslo! (yukki123)");
+            } else {
+                alert("Špatné heslo! (yukki123)");
+            }
         }
 
         function showCreateModal(type) {
@@ -241,7 +274,9 @@
             document.getElementById('createModal').classList.remove('hidden');
         }
 
-        function hideCreateModal() { document.getElementById('createModal').classList.add('hidden'); }
+        function hideCreateModal() {
+            document.getElementById('createModal').classList.add('hidden');
+        }
 
         function savePost() {
             const title = document.getElementById('postTitle').value.trim();
@@ -249,6 +284,61 @@
             const score = parseInt(document.getElementById('postScore').value) || 0;
             const date = document.getElementById('postDate').value;
             const content = document.getElementById('postContent').value.trim();
+
             if (!title || !content) return alert("Název a obsah jsou povinné!");
 
-            if
+            if (editingType === 'news') {
+                if (editingIndex !== null) news[editingIndex] = {id: news[editingIndex].id, title, image, date, content};
+                else news.unshift({id: Date.now(), title, image, date, content});
+            } else {
+                if (editingIndex !== null) reviews[editingIndex] = {id: reviews[editingIndex].id, title, image, score, date, content};
+                else reviews.unshift({id: Date.now(), title, image, score, date, content});
+            }
+
+            hideCreateModal();
+            renderNews();
+            renderReviews();
+            alert("Uloženo!");
+        }
+
+        function editItem(type, i) {
+            editingType = type;
+            editingIndex = i;
+            const item = type === 'news' ? news[i] : reviews[i];
+            document.getElementById('modalTitle').textContent = type === 'news' ? "Upravit novinku" : "Upravit recenzi";
+            document.getElementById('postTitle').value = item.title;
+            document.getElementById('postImage').value = item.image;
+            document.getElementById('postScore').value = item.score || '';
+            document.getElementById('postDate').value = item.date;
+            document.getElementById('postContent').value = item.content;
+            document.getElementById('createModal').classList.remove('hidden');
+        }
+
+        function deleteItem(type, i) {
+            if (confirm("Opravdu smazat?")) {
+                if (type === 'news') news.splice(i, 1);
+                else reviews.splice(i, 1);
+                renderNews();
+                renderReviews();
+            }
+        }
+
+        function exportData() {
+            const data = {news, reviews};
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = "yukki_data.json";
+            a.click();
+            alert("Data stažena!");
+        }
+
+        window.onload = () => {
+            loadData();
+            renderNews();
+            renderReviews();
+            switchTab(0);
+        };
+    </script>
+</body>
+</html>
