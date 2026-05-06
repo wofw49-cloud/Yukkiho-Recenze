@@ -17,228 +17,56 @@
 <body class="bg-zinc-950 text-white min-h-screen">
 
     <nav class="bg-black border-b border-purple-600 fixed w-full z-50">
-        <div class="max-w-7xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center text-2xl">🌀</div>
-                <span class="text-3xl font-bold tracking-widest neon title-font">YUKKI</span>
+        <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center text-3xl">🌀</div>
+                <span class="text-4xl font-bold tracking-widest neon title-font">YUKKI</span>
             </div>
 
-            <div class="hidden md:flex gap-6 text-base font-medium">
-                <button onclick="switchTab(0)" class="tab-active pb-1 px-3" id="tab-0">DOMŮ</button>
-                <button onclick="switchTab(1)" class="pb-1 px-3 hover:text-purple-400" id="tab-1">NOVINKY</button>
-                <button onclick="switchTab(2)" class="pb-1 px-3 hover:text-purple-400" id="tab-2">RECENZE</button>
-                <button onclick="switchTab(3)" class="pb-1 px-3 hover:text-purple-400" id="tab-3">ŽEBŘÍČKY</button>
+            <div class="flex gap-8 text-lg font-medium">
+                <button onclick="switchTab(0)" class="tab-active pb-1 px-4" id="tab-0">DOMŮ</button>
+                <button onclick="switchTab(1)" class="pb-1 px-4 hover:text-purple-400" id="tab-1">NOVINKY</button>
+                <button onclick="switchTab(2)" class="pb-1 px-4 hover:text-purple-400" id="tab-2">RECENZE</button>
+                <button onclick="switchTab(3)" class="pb-1 px-4 hover:text-purple-400" id="tab-3">ŽEBŘÍČKY</button>
             </div>
 
-            <button onclick="toggleLogin()" class="px-5 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-bold flex items-center gap-2 text-sm">
+            <button onclick="toggleLogin()" class="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-bold flex items-center gap-2">
                 <i class="fas fa-user"></i>
                 <span id="loginText">PŘIHLÁSIT SE</span>
             </button>
         </div>
     </nav>
 
-    <main class="pt-20 md:pt-24 max-w-7xl mx-auto px-4 md:px-6 pb-20">
+    <main class="pt-24 max-w-7xl mx-auto px-6 pb-20">
 
         <!-- DOMŮ -->
         <div id="page-0">
-            <h1 class="text-5xl md:text-6xl font-bold text-center mt-8 mb-3 neon title-font">Vítej zpátky, Yukki</h1>
-            
-            <div id="hero-news" onclick="openDetail('news', 0)" class="cursor-pointer relative h-[50vh] md:h-[65vh] rounded-3xl overflow-hidden mb-12 border border-purple-500/30"></div>
+            <h1 class="text-6xl font-bold text-center mt-10 mb-2 neon title-font">Vítej zpátky, Yukki</h1>
+            <div id="hero-news" onclick="openDetail('news', 0)" class="cursor-pointer relative h-[65vh] rounded-3xl overflow-hidden mb-12 border border-purple-500/30"></div>
 
-            <h2 class="text-2xl md:text-3xl font-bold mb-6 title-font">Poslední recenze</h2>
-            <div id="home-reviews" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            <h2 class="text-3xl font-bold mb-6 title-font">Poslední recenze</h2>
+            <div id="home-reviews" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
         </div>
 
         <!-- NOVINKY -->
         <div id="page-1" class="hidden">
             <h2 class="text-4xl font-bold title-font mb-8">NOVINKY</h2>
-            <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
         </div>
 
         <!-- RECENZE -->
         <div id="page-2" class="hidden">
             <h2 class="text-4xl font-bold title-font mb-8">RECENZE</h2>
-            <div id="reviews-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            <div id="reviews-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
         </div>
 
         <!-- ŽEBŘÍČKY -->
         <div id="page-3" class="hidden">
-            <h2 class="text-4xl font-bold title-font mb-8">ŽEBŘÍČKY</h2>
+            <h2 class="text-4xl font-bold title-font mb-8">YUKKI ŽEBŘÍČEK</h2>
             <div id="leaderboard" class="space-y-4"></div>
         </div>
     </main>
 
     <!-- ADMIN BAR -->
-    <div id="adminBar" class="hidden fixed bottom-6 right-6 bg-zinc-900 border border-purple-500 rounded-2xl p-4 flex flex-col sm:flex-row gap-3 z-50">
-        <button onclick="showCreateModal('news')" class="px-6 py-3 bg-purple-600 rounded-xl text-sm">+ Novinka</button>
-        <button onclick="showCreateModal('review')" class="px-6 py-3 bg-purple-600 rounded-xl text-sm">+ Recenze</button>
-        <button onclick="exportData()" class="px-6 py-3 bg-emerald-600 rounded-xl text-sm">📤 Export</button>
-    </div>
-
-    <!-- LOGIN + MODALS (zjednodušené) -->
-    <div id="loginModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
-        <div class="bg-zinc-900 p-8 rounded-3xl w-full max-w-md border border-purple-500">
-            <h2 class="text-3xl font-bold mb-6 text-center title-font">YUKKI ADMIN</h2>
-            <input id="loginUser" value="yukki" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
-            <input id="loginPass" type="password" value="yukki123" class="w-full mb-6 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
-            <button onclick="adminLogin()" class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-bold">Přihlásit se</button>
-        </div>
-    </div>
-
-    <script>
-        let isAdmin = false;
-        let news = [];
-        let reviews = [];
-
-        function loadData() {
-            news = JSON.parse(localStorage.getItem('yukki_news') || '[]');
-            reviews = JSON.parse(localStorage.getItem('yukki_reviews') || '[]');
-        }
-
-        function saveToLocalStorage() {
-            localStorage.setItem('yukki_news', JSON.stringify(news));
-            localStorage.setItem('yukki_reviews', JSON.stringify(reviews));
-        }
-
-        function exportData() {
-            const data = {news, reviews};
-            const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = "yukki_data.json";
-            a.click();
-            alert("Data stažena!");
-        }
-
-        function renderHome() {
-            if (news.length > 0) {
-                const n = news[0];
-                document.getElementById('hero-news').innerHTML = `
-                    <img src="${n.image}" class="absolute inset-0 w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/70"></div>
-                    <div class="absolute bottom-8 left-6 right-6">
-                        <h2 class="text-4xl md:text-5xl font-bold title-font">${n.title}</h2>
-                        <p class="text-lg text-gray-300 mt-3">${n.content.substring(0, 160)}...</p>
-                    </div>
-                `;
-            }
-
-            document.getElementById('home-reviews').innerHTML = reviews.slice(0, 3).map((r, i) => `
-                <div onclick="openDetail('review', ${i})" class="bg-zinc-900 rounded-3xl p-5 cursor-pointer">
-                    <img src="${r.image}" class="w-full h-40 object-cover rounded-2xl mb-4">
-                    <h4 class="font-bold text-lg">${r.title}</h4>
-                    <div class="text-4xl font-bold text-purple-400 mt-1">${r.score}</div>
-                </div>
-            `).join('');
-        }
-
-        function renderNews() {
-            document.getElementById('news-container').innerHTML = news.map((n, i) => `
-                <div onclick="openDetail('news', ${i})" class="bg-zinc-900 rounded-3xl overflow-hidden cursor-pointer">
-                    <img src="${n.image}" class="w-full h-52 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold">${n.title}</h3>
-                        <p class="text-purple-400 text-sm mt-1">${n.date}</p>
-                        <p class="mt-3">${n.content}</p>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function renderReviews() {
-            document.getElementById('reviews-container').innerHTML = reviews.map((r, i) => `
-                <div onclick="openDetail('review', ${i})" class="bg-zinc-900 rounded-3xl overflow-hidden cursor-pointer">
-                    <img src="${r.image}" class="w-full h-52 object-cover">
-                    <div class="p-6">
-                        <div class="flex justify-between">
-                            <h3 class="text-xl font-bold">${r.title}</h3>
-                            <div class="text-4xl font-bold text-purple-400">${r.score}</div>
-                        </div>
-                        <p class="text-purple-400 text-sm mt-1">${r.date}</p>
-                        <p class="mt-4">${r.content}</p>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function openDetail(type, i) {
-            const item = type === 'news' ? news[i] : reviews[i];
-            document.getElementById('modal-image').innerHTML = `<img src="${item.image}" class="w-full">`;
-            document.getElementById('modal-title').textContent = item.title;
-            document.getElementById('modal-date').textContent = item.date + (type === 'review' ? ` • ${item.score}%` : '');
-            document.getElementById('modal-content').textContent = item.content;
-            document.getElementById('detailModal').classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('detailModal').classList.add('hidden');
-        }
-
-        function switchTab(n) {
-            document.querySelectorAll('[id^="page-"]').forEach(p => p.classList.add('hidden'));
-            document.getElementById(`page-${n}`).classList.remove('hidden');
-        }
-
-        function toggleLogin() {
-            document.getElementById('loginModal').classList.toggle('hidden');
-        }
-
-        function adminLogin() {
-            if (document.getElementById('loginUser').value === "yukki" && document.getElementById('loginPass').value === "yukki123") {
-                isAdmin = true;
-                document.getElementById('loginText').innerHTML = '👑 YUKKI';
-                document.getElementById('adminBar').classList.remove('hidden');
-                toggleLogin();
-            } else {
-                alert("Špatné heslo! (yukki123)");
-            }
-        }
-
-        function showCreateModal(type) {
-            if (!isAdmin) return alert("Nejsi přihlášen jako admin!");
-            document.getElementById('modalTitle').textContent = type === 'news' ? "Nová novinka" : "Nová recenze";
-            document.getElementById('postTitle').value = '';
-            document.getElementById('postImage').value = '';
-            document.getElementById('postScore').value = type === 'review' ? '80' : '';
-            document.getElementById('postDate').value = new Date().toISOString().split('T')[0];
-            document.getElementById('postContent').value = '';
-            document.getElementById('createModal').classList.remove('hidden');
-        }
-
-        function hideCreateModal() {
-            document.getElementById('createModal').classList.add('hidden');
-        }
-
-        function savePost() {
-            const title = document.getElementById('postTitle').value;
-            const image = document.getElementById('postImage').value || "https://picsum.photos/id/237/1200/700";
-            const score = parseInt(document.getElementById('postScore').value) || 0;
-            const date = document.getElementById('postDate').value;
-            const content = document.getElementById('postContent').value;
-
-            if (!title || !content) return alert("Název a obsah jsou povinné!");
-
-            if (editingType === 'news') {
-                news.unshift({id: Date.now(), title, image, date, content});
-            } else {
-                reviews.unshift({id: Date.now(), title, image, score, date, content});
-            }
-
-            hideCreateModal();
-            renderHome();
-            renderNews();
-            renderReviews();
-            alert("Přidáno!");
-        }
-
-        window.onload = () => {
-            loadData();
-            renderHome();
-            renderNews();
-            renderReviews();
-            switchTab(0);
-        };
-    </script>
-</body>
-</html>
+    <div id="adminBar" class="hidden fixed bottom-6 right-6 bg-zinc-900 border border-purple-500 rounded-2xl p-4 flex gap-3 z-50">
+        <button onclick="showCreateModal('
