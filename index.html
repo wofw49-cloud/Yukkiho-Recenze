@@ -31,7 +31,7 @@
                 <button onclick="switchTab(4)" class="pb-1 px-4 hover:text-purple-400" id="tab-4">KOMUNITA</button>
             </div>
 
-            <button onclick="toggleLogin()" class="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-bold flex items-center gap-2">
+            <button onclick="toggleLogin()" id="loginBtn" class="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-bold flex items-center gap-2">
                 <i class="fas fa-user"></i>
                 <span id="loginText">PŘIHLÁSIT SE</span>
             </button>
@@ -40,19 +40,16 @@
 
     <main class="pt-24 max-w-7xl mx-auto px-6 pb-20">
 
-        <!-- DOMŮ -->
         <div id="page-0">
             <h1 class="text-6xl font-bold text-center mt-10 mb-2 neon title-font">Vítej zpátky, Yukki</h1>
             <div id="hero-news" onclick="openDetail('news', 0)" class="cursor-pointer relative h-[65vh] rounded-3xl overflow-hidden mb-12 border border-purple-500/30"></div>
         </div>
 
-        <!-- NOVINKY -->
         <div id="page-1" class="hidden">
             <h2 class="text-4xl font-bold title-font mb-8">NOVINKY</h2>
             <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
         </div>
 
-        <!-- RECENZE -->
         <div id="page-2" class="hidden">
             <h2 class="text-4xl font-bold title-font mb-8">RECENZE</h2>
             <div id="reviews-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
@@ -66,7 +63,7 @@
     <div id="adminBar" class="hidden fixed bottom-6 right-6 bg-zinc-900 border border-purple-500 rounded-2xl p-4 flex gap-3 z-50">
         <button onclick="showCreateModal('news')" class="px-6 py-3 bg-purple-600 rounded-xl">+ Novinka</button>
         <button onclick="showCreateModal('review')" class="px-6 py-3 bg-purple-600 rounded-xl">+ Recenze</button>
-        <button onclick="exportData()" class="px-6 py-3 bg-emerald-600 rounded-xl">📤 Exportovat data</button>
+        <button onclick="exportData()" class="px-6 py-3 bg-emerald-600 rounded-xl">📤 Export</button>
     </div>
 
     <!-- LOGIN MODAL -->
@@ -126,7 +123,7 @@
                     title: "Assassin's Creed Black Flag Resynced – datum vydání je venku!",
                     image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3751950/header.jpg?t=1777900688",
                     date: "2026-05-06",
-                    content: `Po letech spekulací je to konečně oficiální. Ubisoft oznámil remake na 9. července 2026.`
+                    content: `Po letech spekulací je to konečně oficiální...`
                 }];
             }
         }
@@ -166,12 +163,12 @@
                     <img src="${n.image}" class="w-full h-56 object-cover cursor-pointer" onclick="openDetail('news', ${i})">
                     <div class="p-6">
                         <h3 class="text-2xl font-bold cursor-pointer" onclick="openDetail('news', ${i})">${n.title}</h3>
-                        <p class="text-purple-400 text-sm">${n.date}</p>
+                        <p class="text-purple-400 text-sm mt-2">${n.date}</p>
                         <p class="mt-4">${n.content}</p>
                         ${isAdmin ? `
                         <div class="flex gap-3 mt-6">
-                            <button onclick="event.stopImmediatePropagation(); editItem('news', ${i});" class="flex-1 py-3 bg-blue-600 rounded-2xl">UPRAVIT</button>
-                            <button onclick="event.stopImmediatePropagation(); deleteItem('news', ${i});" class="flex-1 py-3 bg-red-600 rounded-2xl">SMAZAT</button>
+                            <button onclick="event.stopImmediatePropagation(); editItem('news', ${i});" class="flex-1 py-3 bg-blue-600 rounded-2xl text-sm">UPRAVIT</button>
+                            <button onclick="event.stopImmediatePropagation(); deleteItem('news', ${i});" class="flex-1 py-3 bg-red-600 rounded-2xl text-sm">SMAZAT</button>
                         </div>` : ''}
                     </div>
                 </div>
@@ -191,8 +188,8 @@
                         <p class="mt-4">${r.content}</p>
                         ${isAdmin ? `
                         <div class="flex gap-3 mt-6">
-                            <button onclick="event.stopImmediatePropagation(); editItem('review', ${i});" class="flex-1 py-3 bg-blue-600 rounded-2xl">UPRAVIT</button>
-                            <button onclick="event.stopImmediatePropagation(); deleteItem('review', ${i});" class="flex-1 py-3 bg-red-600 rounded-2xl">SMAZAT</button>
+                            <button onclick="event.stopImmediatePropagation(); editItem('review', ${i});" class="flex-1 py-3 bg-blue-600 rounded-2xl text-sm">UPRAVIT</button>
+                            <button onclick="event.stopImmediatePropagation(); deleteItem('review', ${i});" class="flex-1 py-3 bg-red-600 rounded-2xl text-sm">SMAZAT</button>
                         </div>` : ''}
                     </div>
                 </div>
@@ -228,6 +225,7 @@
                 document.getElementById('loginText').innerHTML = '👑 YUKKI';
                 document.getElementById('adminBar').classList.remove('hidden');
                 toggleLogin();
+                alert("✅ Přihlášen jako admin!");
             } else {
                 alert("Špatné heslo! (yukki123)");
             }
@@ -298,6 +296,7 @@
             loadData();
             renderHome();
             renderNews();
+            renderReviews();
             switchTab(0);
         };
     </script>
