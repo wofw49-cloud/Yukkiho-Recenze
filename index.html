@@ -38,21 +38,26 @@
     </nav>
 
     <main class="pt-24 max-w-7xl mx-auto px-6 pb-20">
+
+        <!-- DOMŮ -->
         <div id="page-0">
             <h1 class="text-6xl font-bold text-center mt-10 mb-2 neon title-font">Vítej zpátky, Yukki</h1>
             <div id="hero-news" onclick="openDetail('news', 0)" class="cursor-pointer relative h-[65vh] rounded-3xl overflow-hidden mb-12 border border-purple-500/30"></div>
         </div>
 
+        <!-- NOVINKY -->
         <div id="page-1" class="hidden">
             <h2 class="text-4xl font-bold title-font mb-8">NOVINKY</h2>
             <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
         </div>
 
+        <!-- RECENZE -->
         <div id="page-2" class="hidden">
             <h2 class="text-4xl font-bold title-font mb-8">RECENZE</h2>
             <div id="reviews-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
         </div>
 
+        <!-- ŽEBŘÍČKY -->
         <div id="page-3" class="hidden">
             <h2 class="text-4xl font-bold title-font mb-8">ŽEBŘÍČKY</h2>
             <div id="leaderboard" class="space-y-4"></div>
@@ -63,7 +68,7 @@
     <div id="adminBar" class="hidden fixed bottom-6 right-6 bg-zinc-900 border border-purple-500 rounded-2xl p-4 flex gap-3 z-50">
         <button onclick="showCreateModal('news')" class="px-6 py-3 bg-purple-600 rounded-xl">+ Novinka</button>
         <button onclick="showCreateModal('review')" class="px-6 py-3 bg-purple-600 rounded-xl">+ Recenze</button>
-        <button onclick="exportData()" class="px-6 py-3 bg-emerald-600 rounded-xl">📤 Export dat</button>
+        <button onclick="exportData()" class="px-6 py-3 bg-emerald-600 rounded-xl">📤 Export</button>
     </div>
 
     <!-- LOGIN + MODALS -->
@@ -73,6 +78,23 @@
             <input id="loginUser" value="yukki" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
             <input id="loginPass" type="password" value="yukki123" class="w-full mb-6 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
             <button onclick="adminLogin()" class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-bold">Přihlásit se</button>
+        </div>
+    </div>
+
+    <!-- CREATE MODAL -->
+    <div id="createModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
+        <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-2xl border border-purple-500">
+            <h2 class="text-3xl font-bold mb-6" id="modalTitle">Nová novinka</h2>
+            <input id="postTitle" placeholder="Název" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
+            <input id="postImage" placeholder="URL fotky" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
+            <input id="postScore" type="number" placeholder="Hodnocení % (jen recenze)" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
+            <input id="postDate" type="date" class="w-full mb-6 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
+            <textarea id="postContent" rows="8" placeholder="Obsah..." class="w-full bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4"></textarea>
+            
+            <div class="flex gap-4 mt-6">
+                <button onclick="savePost()" class="flex-1 py-4 bg-purple-600 rounded-2xl font-bold">Uložit</button>
+                <button onclick="hideCreateModal()" class="flex-1 py-4 bg-zinc-800 rounded-2xl font-bold">Zrušit</button>
+            </div>
         </div>
     </div>
 
@@ -172,6 +194,7 @@
         function switchTab(n) {
             document.querySelectorAll('[id^="page-"]').forEach(p => p.classList.add('hidden'));
             document.getElementById(`page-${n}`).classList.remove('hidden');
+            if (n === 2) renderReviews();
         }
 
         function toggleLogin() {
