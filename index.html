@@ -36,14 +36,14 @@
                 <div class="w-12 h-12 bg-gradient-to-br from-red-600 to-rose-600 rounded-2xl flex items-center justify-center text-3xl">🌀</div>
                 <span class="text-4xl font-bold tracking-widest neon title-font">YUKKI</span>
             </div>
-   <div class="flex gap-8 text-lg font-medium">
-    <button onclick="switchTab(0)" class="tab-active pb-1 px-4" id="tab-0">DOMŮ</button>
-    <button onclick="switchTab(1)" class="pb-1 px-4 hover:text-red-400" id="tab-1">NOVINKY</button>
-    <button onclick="switchTab(2)" class="pb-1 px-4 hover:text-red-400" id="tab-2">RECENZE</button>
-    <button onclick="switchTab(3)" class="pb-1 px-4 hover:text-red-400" id="tab-3">ŽEBŘÍČEK</button>
-    <button onclick="switchTab(4)" class="pb-1 px-4 hover:text-red-400" id="tab-4">KOMUNITA</button>
-    <button onclick="switchTab(5)" class="pb-1 px-4 hover:text-red-400" id="tab-5">KALENDÁŘ</button>
-</div>
+            <div class="flex gap-8 text-lg font-medium">
+                <button onclick="switchTab(0)" class="tab-active pb-1 px-4" id="tab-0">DOMŮ</button>
+                <button onclick="switchTab(1)" class="pb-1 px-4 hover:text-red-400" id="tab-1">NOVINKY</button>
+                <button onclick="switchTab(2)" class="pb-1 px-4 hover:text-red-400" id="tab-2">RECENZE</button>
+                <button onclick="switchTab(3)" class="pb-1 px-4 hover:text-red-400" id="tab-3">ŽEBŘÍČEK</button>
+                <button onclick="switchTab(4)" class="pb-1 px-4 hover:text-red-400" id="tab-4">KOMUNITA</button>
+                <button onclick="switchTab(5)" class="pb-1 px-4 hover:text-red-400" id="tab-5">KALENDÁŘ</button>
+            </div>
             <button onclick="toggleLogin()" class="px-6 py-3 bg-gradient-to-r from-red-600 to-rose-600 rounded-2xl font-bold flex items-center gap-2">
                 <i class="fas fa-user"></i>
                 <span id="loginText">PŘIHLÁSIT SE</span>
@@ -54,15 +54,14 @@
     <main class="pt-24 max-w-7xl mx-auto px-6 pb-20">
         <!-- DOMŮ -->
         <div id="page-0">
-            <h1 class="text-6xl font-bold text-center mt-10 mb-2 neon title-font">Vítej poutníku</h1>
-<div id="hero-news" onclick="openDetail('news', 0)" class="cursor-pointer relative h-[65vh] rounded-3xl overflow-hidden mb-12 border border-red-500/30"></div>
+            <h1 class="text-6xl font-bold text-center mt-10 mb-2 neon title-font">Vítej zpátky, Yukki</h1>
+            <div id="hero-news" onclick="openDetail('news', 0)" class="cursor-pointer relative h-[65vh] rounded-3xl overflow-hidden mb-12 border border-red-500/30"></div>
+            
+            <h2 class="text-3xl font-bold mb-6 title-font">Nadcházející vydání</h2>
+            <div id="home-releases" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"></div>
 
-<!-- NOVÉ: Nadcházející vydání -->
-<h2 class="text-3xl font-bold mb-6 title-font">Nadcházející vydání</h2>
-<div id="home-releases" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"></div>
-
-<h2 class="text-3xl font-bold mb-6 title-font">Poslední recenze</h2>
-<div id="home-reviews" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+            <h2 class="text-3xl font-bold mb-6 title-font">Poslední recenze</h2>
+            <div id="home-reviews" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
         </div>
 
         <!-- NOVINKY -->
@@ -88,42 +87,30 @@
             <h2 class="text-4xl font-bold title-font mb-8">KOMUNITA</h2>
             <div id="community-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
         </div>
+
+        <!-- KALENDÁŘ -->
+        <div id="page-5" class="hidden">
+            <h2 class="text-4xl font-bold title-font mb-8">KALENDÁŘ VYDÁNÍ HER</h2>
+            <div id="calendar-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
     </main>
 
-<!-- KALENDÁŘ -->
-<div id="page-5" class="hidden">
-    <h2 class="text-4xl font-bold title-font mb-8">KALENDÁŘ VYDÁNÍ HER</h2>
-    <div id="calendar-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-</div>
-    
     <!-- ADMIN BAR -->
-<div id="adminBar" class="hidden fixed bottom-6 right-6 bg-zinc-900 border border-red-500 rounded-2xl p-4 flex gap-3 z-50">
-    <button onclick="showCreateModal('news')" class="px-6 py-3 bg-red-600 rounded-xl font-bold">+ Novinka</button>
-    <button onclick="showCreateModal('review')" class="px-6 py-3 bg-red-600 rounded-xl font-bold">+ Recenze</button>
-    <button onclick="showCreateReleaseModal()" class="px-6 py-3 bg-red-600 rounded-xl font-bold">+ Vydání</button>
-    <button onclick="showCreateLinkModal()" class="px-6 py-3 bg-red-600 rounded-xl font-bold">+ Odkaz</button>
-    <button onclick="exportData()" class="px-6 py-3 bg-emerald-600 rounded-xl font-bold">📤 Export</button>
-</div>
+    <div id="adminBar" class="hidden fixed bottom-6 right-6 bg-zinc-900 border border-red-500 rounded-2xl p-4 flex gap-3 z-50">
+        <button onclick="showCreateModal('news')" class="px-6 py-3 bg-red-600 rounded-xl font-bold">+ Novinka</button>
+        <button onclick="showCreateModal('review')" class="px-6 py-3 bg-red-600 rounded-xl font-bold">+ Recenze</button>
+        <button onclick="showCreateReleaseModal()" class="px-6 py-3 bg-red-600 rounded-xl font-bold">+ Vydání</button>
+        <button onclick="showCreateLinkModal()" class="px-6 py-3 bg-red-600 rounded-xl font-bold">+ Odkaz</button>
+        <button onclick="exportData()" class="px-6 py-3 bg-emerald-600 rounded-xl font-bold">📤 Export</button>
+    </div>
 
     <!-- LOGIN MODAL -->
     <div id="loginModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
-        <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-md border border-red-500 shadow-2xl">
-            <h2 class="text-3xl font-bold mb-8 text-center title-font neon">YUKKI ADMIN</h2>
-            
-            <input id="loginUser" value="yukki" 
-                   class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4" 
-                   placeholder="Uživatelské jméno">
-            
-            <input id="loginPass" type="password" 
-                   class="w-full mb-6 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4" 
-                   placeholder="Heslo">
-            
-            <button onclick="adminLogin()" 
-                    class="w-full py-4 bg-gradient-to-r from-red-600 to-rose-600 rounded-2xl font-bold text-lg hover:brightness-110">
-                Přihlásit se jako admin
-            </button>
-            
-            <p class="text-center text-xs text-zinc-500 mt-6">Pouze pro majitele</p>
+        <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-md border border-red-500">
+            <h2 class="text-3xl font-bold mb-6 text-center title-font">YUKKI ADMIN</h2>
+            <input id="loginUser" value="yukki" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
+            <input id="loginPass" type="password" value="yukki123" class="w-full mb-6 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
+            <button onclick="adminLogin()" class="w-full py-4 bg-gradient-to-r from-red-600 to-rose-600 rounded-2xl font-bold">Přihlásit se</button>
         </div>
     </div>
 
@@ -140,6 +127,22 @@
             <div class="flex gap-4 mt-6">
                 <button onclick="savePost()" class="flex-1 py-4 bg-red-600 rounded-2xl font-bold">Uložit</button>
                 <button onclick="hideCreateModal()" class="flex-1 py-4 bg-zinc-800 rounded-2xl font-bold">Zrušit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- KALENDÁŘ MODAL -->
+    <div id="releaseModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
+        <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-2xl border border-red-500">
+            <h2 class="text-3xl font-bold mb-6" id="releaseModalTitle">Nové vydání hry</h2>
+            <input id="releaseTitle" placeholder="Název hry" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
+            <input id="releaseDate" type="date" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
+            <input id="releasePlatforms" placeholder="Platformy (oddělené čárkou)" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
+            <input id="releaseImage" placeholder="URL obrázku" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
+            <textarea id="releaseDescription" rows="4" placeholder="Krátký popis..." class="w-full mb-6 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4"></textarea>
+            <div class="flex gap-4">
+                <button onclick="saveRelease()" class="flex-1 py-4 bg-red-600 rounded-2xl font-bold">Uložit</button>
+                <button onclick="hideReleaseModal()" class="flex-1 py-4 bg-zinc-800 rounded-2xl font-bold">Zrušit</button>
             </div>
         </div>
     </div>
@@ -180,155 +183,29 @@
         let editingType = null;
         let editingIndex = null;
         let editingLinkIndex = null;
-
-        // ==================== ADMIN LOGIN ====================
-        const ADMIN_USERNAME = "yukki";
-        const ADMIN_PASSWORD = "yukki12345";   // ← ZMĚŇ SI NA SVOJE HESLO
-
-        function adminLogin() {
-            const user = document.getElementById("loginUser").value.trim();
-            const pass = document.getElementById("loginPass").value;
-
-            if (user === ADMIN_USERNAME && pass === ADMIN_PASSWORD) {
-                isAdmin = true;
-                document.getElementById("loginText").innerHTML = '👑 ADMIN';
-                document.getElementById("adminBar").classList.remove("hidden");
-                document.getElementById("loginModal").classList.add("hidden");
-
-                renderNews();
-                renderReviews();
-                renderCommunity();
-
-                alert("✅ Přihlášen jako ADMIN!");
-            } else {
-                alert("❌ Špatné heslo!\n\nHeslo je: yukki12345");
-            }
-        }
-
-        // ==================== KALENDÁŘ ====================
-
-function renderHomeReleases() {
-    const container = document.getElementById('home-releases');
-    const latest = upcomingReleases.slice(0, 3);
-    
-    container.innerHTML = latest.map(game => {
-        const date = new Date(game.date).toLocaleDateString('cs-CZ', {day: 'numeric', month: 'short'});
-        return `
-            <div class="bg-zinc-900 rounded-3xl p-6 border border-red-500/30 hover:border-red-500 transition">
-                <img src="${game.image}" class="w-full h-40 object-cover rounded-2xl mb-4">
-                <div class="text-red-400 text-sm font-medium">${date}</div>
-                <h4 class="font-bold mt-2">${game.title}</h4>
-                <div class="text-xs text-gray-400">${game.platforms.join(' • ')}</div>
-            </div>
-        `;
-    }).join('');
-}
-
-function renderCalendar() {
-    const container = document.getElementById('calendar-container');
-    const sorted = [...upcomingReleases].sort((a, b) => new Date(a.date) - new Date(b.date));
-
-    container.innerHTML = sorted.map((game, i) => {
-        const dateStr = new Date(game.date).toLocaleDateString('cs-CZ', {
-            weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-        });
-        return `
-            <div class="bg-zinc-900 rounded-3xl overflow-hidden border border-red-500/30 hover:border-red-500">
-                <img src="${game.image}" class="w-full h-48 object-cover">
-                <div class="p-6">
-                    <div class="text-red-400 font-medium">${dateStr}</div>
-                    <h3 class="text-2xl font-bold mt-3">${game.title}</h3>
-                    <div class="flex flex-wrap gap-2 mt-4">
-                        ${game.platforms.map(p => `<span class="text-xs bg-zinc-800 px-3 py-1 rounded-full">${p}</span>`).join('')}
-                    </div>
-                    ${game.description ? `<p class="mt-4 text-gray-400">${game.description}</p>` : ''}
-                    ${isAdmin ? `
-                    <div class="flex gap-3 mt-6">
-                        <button onclick="editRelease(${i}); event.stopImmediatePropagation()" class="flex-1 py-3 bg-blue-600 rounded-xl">UPRAVIT</button>
-                        <button onclick="deleteRelease(${i}); event.stopImmediatePropagation()" class="flex-1 py-3 bg-red-600 rounded-xl">SMAZAT</button>
-                    </div>` : ''}
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-
-function showCreateReleaseModal(editIndex = null) {
-    if (!isAdmin) return alert("Nejsi přihlášen jako admin!");
-
-    const title = prompt("Název hry:", editIndex !== null ? upcomingReleases[editIndex].title : "");
-    if (!title) return;
-
-    const date = prompt("Datum vydání (YYYY-MM-DD):", editIndex !== null ? upcomingReleases[editIndex].date : "2026-06-15");
-    const platformsStr = prompt("Platformy (oddělené čárkou):", editIndex !== null ? upcomingReleases[editIndex].platforms.join(", ") : "PC, PS5, Xbox");
-    const image = prompt("URL obrázku:", editIndex !== null ? upcomingReleases[editIndex].image : "https://picsum.photos/id/237/1200/700");
-    const desc = prompt("Krátký popis:", editIndex !== null ? upcomingReleases[editIndex].description || "" : "");
-
-    const release = {
-        id: Date.now(),
-        title: title,
-        date: date,
-        platforms: platformsStr.split(',').map(p => p.trim()),
-        image: image,
-        description: desc
-    };
-
-    if (editIndex !== null) upcomingReleases[editIndex] = release;
-    else upcomingReleases.push(release);
-
-    renderCalendar();
-    renderHomeReleases();
-    alert("✅ Hra přidána do kalendáře!");
-}
-
-function editRelease(i) { showCreateReleaseModal(i); }
-
-function deleteRelease(i) {
-    if (confirm("Opravdu smazat?")) {
-        upcomingReleases.splice(i, 1);
-        renderCalendar();
-        renderHomeReleases();
-    }
-}
+        let editingReleaseIndex = null;
 
         function loadData() {
-            news = [
-                {
-                id: 1778031631686,
-                title: "Assassin’s Creed Black Flag: Resynced – návrat pirátské legendy má datum vydání",
-                image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3751950/3a0de67fdb133b4b21c53cc23a813b766f0c612c/ss_3a0de67fdb133b4b21c53cc23a813b766f0c612c.1920x1080.jpg?t=1777900688",
-                date: "2026-05-06",
-                content: "Ubisoft oficiálně představil Assassin’s Creed Black Flag: Resynced a tentokrát už je jasno – vydání je naplánované na 9. července 2026 pro PC, PlayStation 5 a Xbox Series X|S. Nejde jen o jednoduchý remaster. Resynced je kompletně přepracovaná verze původního Assassin’s Creed IV: Black Flag, která běží na moderním enginu a přináší výrazně vylepšenou grafiku, detailnější prostředí a plynulejší celkový zážitek. Hra si ale zachovává to nejdůležitější – identitu původního dílu. Čekej návrat námořních bitev, průzkumu Karibiku a příběhu Edwarda Kenwaye, který patří mezi nejvýraznější postavy celé série Assassin’s Creed. Došlo i na úpravy hratelnosti. Souboje mají být akčnější a více zaměřené na timing a skill, zatímco RPG prvky známé z novějších dílů tady nenajdeš. Vývojáři se snaží vrátit ke kořenům série, ale zároveň ji modernizovat. Novinkou má být i rozšířený obsah – více aktivit ve světě, přepracované vedlejší mise a živější herní prostředí, které by mělo působit méně prázdně než v originále. Resynced tak míří přesně na fanoušky, kteří chtějí návrat ke klasickému Assassin’s Creed, ale v moderním zpracování. Pokud se Ubisoftu podaří udržet atmosféru originálu a zároveň doladit technickou stránku, může jít o jeden z nejlepších návratů celé série."
-            },
-                {
+            news = [{
                 id: 1778031631685,
                 title: "Proč si PC hráči musejí počkat na Grand Theft Auto VI?",
                 image: "https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg?",
+                images: [],
+                video: "",
                 date: "2026-05-06",
-                content: "Hry od Rockstar Games vycházejí nejprve na konzole a až později na počítače. Stejné to bude i u GTA 6. Proč tomu tak je? Palčivé otázce se věnoval generální ředitel Take-Two Interactive. Potvrdil také marketingovou exkluzivitu PlayStationu.\nTahle odpověď PC hráče nepotěší. Rockstar se snaží nejprve obsloužit hlavní uživatelskou základnu, a to co nejlépe. Tím se myslí právě hráči na PlayStationu a Xboxu.\n„Rockstar vždy začíná na konzolích, protože právě tam vás hráči hodnotí podle toho, jak dobře zvládnete launch,“ vysvětlil Strauss Zelnick pro Bloomberg. Jinými slovy, pokud by start nevyšel podle představ, mohlo by to negativně ovlivnit i pozdější prodeje na dalších platformách.\nZároveň zdůraznil, že zpoždění PC verze nijak nesouvisí s marketingovou spoluprací se Sony u Grand Theft Auto VI. Jde o dlouhodobou strategii, kterou Rockstar používá už roky. Zajímavé je, že samotná data jdou proti této logice. Zelnick totiž zároveň připustil, že u velkých titulů dnes může PC tvořit klidně 45 až 50 % celkových prodejů. Pro srovnání – ještě v roce 2007 to bylo jen kolem 5 % u NBA 2K.\nPřesto se strategie nemění, protože konzole jsou pro Rockstar stále klíčovým startovním bodem a až následně přichází rozšíření na další platformy. Doufejme, že alespoň na PC verzi nebudeme čekat dlouho. Spekuluje se o vydání v první polovině roku 2027. \nVedle toho bylo potvrzeno i něco, o čem se spekulovalo už delší dobu. GTA 6 má marketingové partnerství se Sony. Hra tak bude v reklamních materiálech primárně spojována s konzolí PlayStation 5. To ale neznamená exkluzivní obsah. Jde čistě o to, že hra bude prezentována na PS5 a všude bude vidět logo PlayStationu. Je dost možné, že vznikne také bundle s konzolí a hrou."
-            }
-            ];
+                content: "Hry od Rockstar Games vycházejí nejprve na konzole a až později na PC..."
+            }];
 
             reviews = [
-                {
-                    id: 1778031727109,
-                    title: "Black Myth: Wukong",
-                    image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2358720/ss_63477e8ce2c0582b81c6ed576377d78e692b5642.1920x1080.jpg?t=1760601605",
-                    images: [],
-                    video: "",
-                    score: 85,
-                    date: "2024-08-22",
-                    content: "Black Myth: Wukong od studia Game Science je akční RPG inspirované čínskou mytologií, které se otevřeně hlásí k soulslike žánru. Už od prvních minut je jasné, že hra sází na náročnější souboje, silnou atmosféru a výraznou vizuální stránku. Soubojový systém je postavený na precizním načasování a trpělivosti. Úskoky, parry i správné čtení nepřátel jsou klíčové pro přežití. Velkým zpestřením jsou proměny hlavního hrdiny, které mění styl boje a dávají soubojům větší variabilitu. Po vizuální stránce jde o jeden z nejpůsobivějších titulů poslední doby. Díky Unreal Engine 5 hra nabízí detailní prostředí, kvalitní nasvícení a silnou atmosféru. Lokace jsou rozmanité, i když struktura hry je spíše lineární. Příběh je podaný nepřímo, skrze dialogy a prostředí. To sice buduje tajemnou atmosféru, ale nemusí sednout každému, kdo preferuje jasně vedený narativ. Na PC hra běží velmi dobře, zejména na výkonnějších sestavách. Občas se objeví drobné technické problémy jako stuttering, ale celkově jde o solidně optimalizovaný titul. Ovládání je nejpohodlnější na gamepadu. Celkově Black Myth: Wukong nabízí silný herní zážitek postavený na atmosféře, náročných soubojích a unikátní stylizaci. Nedostatky se najdou, ale nijak zásadně nekazí výsledný dojem.\n\nVerdikt: Black Myth: Wukong je vizuálně i herně výrazný titul, který boduje především atmosférou a soubojovým systémem. Přestože není ve všech ohledech vyvážený, dokáže nabídnout intenzivní a zapamatovatelný zážitek. Slabší, méně přístupné vyprávění a drobné technické nedostatky ho sráží jen částečně. Celkově jde o silný titul, který ocení hlavně hráči hledající výzvu a výrazný styl."
-                },
                 {
                     id: 1778031727108,
                     title: "Crimson Desert",
                     image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3321460/669119c3747653f41a46c59f213168448d094e04/ss_669119c3747653f41a46c59f213168448d094e04.1920x1080.jpg",
                     images: [],
                     video: "",
-                    score: 78,
-                    date: "2026-03-25",
-                    content: "Crimson Desert od Pearl Abyss je ambiciózní open-world akční RPG, které se snaží spojit rozsáhlý svět, dynamický soubojový systém a velké množství herních mechanik. Výsledkem je titul, který dokáže zaujmout, ale zároveň působí nevyrovnaně. Soubojový systém je jednou z nejsilnějších stránek hry. Je dynamický, má hloubku a nabízí dostatek možností, jak k soubojům přistupovat. Jakmile si na něj hráč zvykne, dokáže být velmi uspokojivý. Problémem je ale slabší vysvětlení mechanik na začátku, což může působit zmatečně. Svět hry je rozsáhlý a vizuálně působivý. Nabízí velké množství aktivit a možností průzkumu, což podporuje pocit svobody. Zároveň se ale projevuje určitá roztříštěnost – hra se snaží nabídnout příliš mnoho systémů najednou, které ne vždy fungují ideálně dohromady. Příběh působí spíše jako slabší část celku. Nejde o vyloženě špatné vyprávění, ale chybí mu silnější tempo a větší zapamatovatelnost. Hráče tak více než hlavní děj často zaujme samotná hratelnost. Technická stránka je na solidní úrovni, zejména na výkonnějších sestavách. Přesto se při vydání objevily drobnější problémy, které kazí jinak dobrý dojem z prezentace. Celkově Crimson Desert nabízí zajímavý a místy velmi zábavný zážitek, ale nedokáže všechny své ambice plně naplnit. Hra je silná v jednotlivých momentech, slabší jako celek.\nVerdikt: Ambiciózní open-world titul s kvalitním soubojovým systémem a velkým světem, který ale doplácí na nevyváženost a přehnané množství mechanik."
+                    score: 68,
+                    date: "2026-03-22",
+                    content: "Crimson Desert je jeden z největších a nejambicióznějších open-world titulů...\n\nVerdikt: Solidní průměr."
                 },
                 {
                     id: 1778031574329,
@@ -346,14 +223,24 @@ function deleteRelease(i) {
                 { title: "YouTube", url: "https://www.youtube.com/@YukkiCZE", icon: "fa-youtube" },
                 { title: "Instagram", url: "https://www.instagram.com/_yukki77_/", icon: "fa-instagram" }
             ];
+
+            upcomingReleases = [
+                {
+                    id: 1,
+                    title: "GTA VI",
+                    date: "2026-09-15",
+                    platforms: ["PC", "PS5"],
+                    image: "https://picsum.photos/id/1015/1200/700",
+                    description: "Nejočekávanější hra desetiletí"
+                }
+            ];
         }
 
-        // Zbytek tvého původního kódu zůstává stejný (jen jsem ho nechal pro přehlednost)
         function sortByDate(arr) {
             return [...arr].sort((a, b) => new Date(b.date) - new Date(a.date));
         }
 
-        function renderNews() { /* ... tvůj původní kód ... */ 
+        function renderNews() {
             const sorted = sortByDate(news);
             document.getElementById('news-container').innerHTML = sorted.map((n) => {
                 const idx = news.findIndex(item => item.id === n.id);
@@ -372,8 +259,6 @@ function deleteRelease(i) {
                 `;
             }).join('');
         }
-
-        // ... (ostatní funkce renderReviews, renderLeaderboard, renderCommunity, renderHome, openDetail atd. zůstávají stejné)
 
         function renderReviews() {
             const sorted = sortByDate(reviews);
@@ -458,6 +343,49 @@ function deleteRelease(i) {
             }).join('');
         }
 
+        function renderHomeReleases() {
+            const container = document.getElementById('home-releases');
+            const latest = upcomingReleases.slice(0, 3);
+            container.innerHTML = latest.map(game => {
+                const date = new Date(game.date).toLocaleDateString('cs-CZ', {day: 'numeric', month: 'short'});
+                return `
+                    <div class="bg-zinc-900 rounded-3xl p-6 border border-red-500/30 hover:border-red-500 transition">
+                        <img src="${game.image}" class="w-full h-40 object-cover rounded-2xl mb-4">
+                        <div class="text-red-400 text-sm font-medium">${date}</div>
+                        <h4 class="font-bold mt-2">${game.title}</h4>
+                        <div class="text-xs text-gray-400">${game.platforms.join(' • ')}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderCalendar() {
+            const container = document.getElementById('calendar-container');
+            const sorted = [...upcomingReleases].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            container.innerHTML = sorted.map((game, i) => {
+                const dateStr = new Date(game.date).toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                return `
+                    <div class="bg-zinc-900 rounded-3xl overflow-hidden border border-red-500/30 hover:border-red-500">
+                        <img src="${game.image}" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <div class="text-red-400 font-medium">${dateStr}</div>
+                            <h3 class="text-2xl font-bold mt-3">${game.title}</h3>
+                            <div class="flex flex-wrap gap-2 mt-4">
+                                ${game.platforms.map(p => `<span class="text-xs bg-zinc-800 px-3 py-1 rounded-full">${p}</span>`).join('')}
+                            </div>
+                            ${game.description ? `<p class="mt-4 text-gray-400">${game.description}</p>` : ''}
+                            ${isAdmin ? `
+                            <div class="flex gap-3 mt-6">
+                                <button onclick="editRelease(${i}); event.stopImmediatePropagation()" class="flex-1 py-3 bg-blue-600 rounded-xl">UPRAVIT</button>
+                                <button onclick="deleteRelease(${i}); event.stopImmediatePropagation()" class="flex-1 py-3 bg-red-600 rounded-xl">SMAZAT</button>
+                            </div>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
         function openDetail(type, i) {
             const item = type === 'news' ? news[i] : reviews[i];
             let mediaHTML = '';
@@ -494,7 +422,10 @@ function deleteRelease(i) {
             document.getElementById('detailModal').classList.remove('hidden');
         }
 
-        function closeModal() { document.getElementById('detailModal').classList.add('hidden'); }
+        function closeModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+
         function switchTab(n) {
             document.querySelectorAll('[id^="page-"]').forEach(p => p.classList.add('hidden'));
             document.getElementById(`page-${n}`).classList.remove('hidden');
@@ -504,10 +435,88 @@ function deleteRelease(i) {
             if (n === 4) renderCommunity();
             if (n === 5) renderCalendar();
         }
+
         function toggleLogin() { document.getElementById('loginModal').classList.toggle('hidden'); }
 
-        // Zbytek funkcí (savePost, editItem, atd.) zůstává stejný
-        function showCreateModal(type) { /* tvůj původní kód */ 
+        function adminLogin() {
+            if (document.getElementById('loginUser').value === "yukki" && document.getElementById('loginPass').value === "yukki123") {
+                isAdmin = true;
+                document.getElementById('loginText').innerHTML = '👑 ADMIN';
+                document.getElementById('adminBar').classList.remove('hidden');
+                toggleLogin();
+                renderNews(); renderReviews(); renderCommunity(); renderHomeReleases();
+            } else alert("Špatné heslo! (yukki123)");
+        }
+
+        // === KALENDÁŘ FUNKCE ===
+        function showCreateReleaseModal(editIndex = null) {
+            if (!isAdmin) return alert("Nejsi přihlášen jako admin!");
+            editingReleaseIndex = editIndex;
+            
+            if (editIndex !== null) {
+                const game = upcomingReleases[editIndex];
+                document.getElementById('releaseModalTitle').textContent = "Upravit vydání";
+                document.getElementById('releaseTitle').value = game.title;
+                document.getElementById('releaseDate').value = game.date;
+                document.getElementById('releasePlatforms').value = game.platforms.join(', ');
+                document.getElementById('releaseImage').value = game.image;
+                document.getElementById('releaseDescription').value = game.description || '';
+            } else {
+                document.getElementById('releaseModalTitle').textContent = "Nové vydání hry";
+                document.getElementById('releaseTitle').value = '';
+                document.getElementById('releaseDate').value = '';
+                document.getElementById('releasePlatforms').value = 'PC, PS5';
+                document.getElementById('releaseImage').value = 'https://picsum.photos/id/237/1200/700';
+                document.getElementById('releaseDescription').value = '';
+            }
+            document.getElementById('releaseModal').classList.remove('hidden');
+        }
+
+        function hideReleaseModal() {
+            document.getElementById('releaseModal').classList.add('hidden');
+        }
+
+        function saveRelease() {
+            const title = document.getElementById('releaseTitle').value.trim();
+            const date = document.getElementById('releaseDate').value;
+            const platformsStr = document.getElementById('releasePlatforms').value.trim();
+            const image = document.getElementById('releaseImage').value.trim();
+            const description = document.getElementById('releaseDescription').value.trim();
+
+            if (!title || !date || !platformsStr) return alert("Název, datum a platformy jsou povinné!");
+
+            const release = {
+                id: Date.now(),
+                title,
+                date,
+                platforms: platformsStr.split(',').map(p => p.trim()),
+                image: image || "https://picsum.photos/id/237/1200/700",
+                description
+            };
+
+            if (editingReleaseIndex !== null) {
+                upcomingReleases[editingReleaseIndex] = release;
+            } else {
+                upcomingReleases.push(release);
+            }
+
+            hideReleaseModal();
+            renderCalendar();
+            renderHomeReleases();
+            alert("✅ Vydání uloženo!");
+        }
+
+        function editRelease(i) { showCreateReleaseModal(i); }
+
+        function deleteRelease(i) {
+            if (confirm("Opravdu smazat?")) {
+                upcomingReleases.splice(i, 1);
+                renderCalendar();
+                renderHomeReleases();
+            }
+        }
+
+        function showCreateModal(type) {
             if (!isAdmin) return alert("Nejsi přihlášen jako admin!");
             editingIndex = null;
             editingType = type;
@@ -522,13 +531,15 @@ function deleteRelease(i) {
         }
 
         function hideCreateModal() { document.getElementById('createModal').classList.add('hidden'); }
-        function savePost() { /* tvůj původní kód */ 
+
+        function savePost() {
             const title = document.getElementById('postTitle').value.trim();
             const imagesStr = document.getElementById('postImages').value.trim();
             const video = document.getElementById('postVideo').value.trim();
             const score = parseInt(document.getElementById('postScore').value) || 0;
             const date = document.getElementById('postDate').value;
             const content = document.getElementById('postContent').value.trim();
+
             const images = imagesStr ? imagesStr.split(',').map(u => u.trim()).filter(Boolean) : [];
 
             if (!title || !content) return alert("Název a obsah jsou povinné!");
@@ -552,7 +563,7 @@ function deleteRelease(i) {
             alert("Uloženo!");
         }
 
-        function editItem(type, i) { /* tvůj kód */ 
+        function editItem(type, i) {
             editingType = type;
             editingIndex = i;
             const item = type === 'news' ? news[i] : reviews[i];
@@ -621,104 +632,18 @@ function deleteRelease(i) {
         }
 
         function exportData() {
-            const data = {news, reviews, communityLinks};
+            const data = {news, reviews, communityLinks, upcomingReleases};
             const blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
             a.download = "yukki_data.json";
             a.click();
         }
-        function renderCalendar() {
-    const container = document.getElementById('calendar-container');
-    const sorted = [...upcomingReleases].sort((a, b) => new Date(a.date) - new Date(b.date));
-
-    container.innerHTML = sorted.map((game, i) => {
-        const date = new Date(game.date);
-        const dateStr = date.toLocaleDateString('cs-CZ', { 
-            day: 'numeric', 
-            month: 'long', 
-            year: 'numeric' 
-        });
-
-        const platforms = game.platforms.map(p => 
-            `<span class="inline-block bg-zinc-800 text-xs px-3 py-1 rounded-full">${p}</span>`
-        ).join(' ');
-
-        return `
-            <div class="bg-zinc-900 rounded-3xl overflow-hidden border border-red-500/30 hover:border-red-500 transition-all">
-                <img src="${game.image}" class="w-full h-48 object-cover">
-                <div class="p-6">
-                    <div class="text-red-400 text-sm font-medium">${dateStr}</div>
-                    <h3 class="text-2xl font-bold mt-2">${game.title}</h3>
-                    <div class="flex flex-wrap gap-2 mt-4">
-                        ${platforms}
-                    </div>
-                    ${game.description ? `<p class="text-gray-400 text-sm mt-4 line-clamp-3">${game.description}</p>` : ''}
-                    
-                    ${isAdmin ? `
-                    <div class="flex gap-3 mt-6">
-                        <button onclick="editRelease(${i}); event.stopImmediatePropagation()" 
-                                class="flex-1 py-3 bg-blue-600 rounded-xl text-sm">UPRAVIT</button>
-                        <button onclick="deleteRelease(${i}); event.stopImmediatePropagation()" 
-                                class="flex-1 py-3 bg-red-600 rounded-xl text-sm">SMAZAT</button>
-                    </div>` : ''}
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-
-function showCreateReleaseModal(editIndex = null) {
-    if (!isAdmin) return alert("Nejsi admin!");
-
-    const title = editIndex !== null ? "Upravit vydání" : "Nové vydání hry";
-    // Můžeš použít existující createModal a upravit ho, nebo vytvořit nový – pro jednoduchost použijeme stávající
-
-    // Prozatím použijeme alert + prompt (rychlé řešení), později vylepšíme
-    const titleGame = prompt("Název hry:");
-    if (!titleGame) return;
-
-    const date = prompt("Datum vydání (YYYY-MM-DD):", "2026-06-15");
-    const platformsStr = prompt("Platformy (oddělené čárkou):", "PC, PS5, Xbox Series");
-    const image = prompt("URL obrázku:", "https://picsum.photos/id/237/1200/700");
-    const description = prompt("Krátký popis (nepovinné):", "");
-
-    const platforms = platformsStr.split(',').map(p => p.trim());
-
-    const newRelease = { 
-        id: Date.now(), 
-        title: titleGame, 
-        date, 
-        platforms, 
-        image, 
-        description 
-    };
-
-    if (editIndex !== null) {
-        upcomingReleases[editIndex] = newRelease;
-    } else {
-        upcomingReleases.push(newRelease);
-    }
-
-    renderCalendar();
-    alert("Hra přidána do kalendáře!");
-}
-
-function editRelease(i) {
-    showCreateReleaseModal(i);
-}
-
-function deleteRelease(i) {
-    if (confirm("Smazat hru z kalendáře?")) {
-        upcomingReleases.splice(i, 1);
-        renderCalendar();
-    }
-}
 
         window.onload = () => {
             loadData();
-            renderHomeReleases();
             renderHome();
+            renderHomeReleases();
             renderNews();
             renderReviews();
             renderLeaderboard();
