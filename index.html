@@ -12,6 +12,7 @@
         .title-font { font-family: 'Orbitron', sans-serif; }
         .neon { text-shadow: 0 0 20px #c026d3, 0 0 40px #a855f7; }
         .tab-active { border-bottom: 4px solid #c026d3; color: white; }
+        .card-hover:hover { transform: translateY(-8px); }
     </style>
 </head>
 <body class="bg-zinc-950 text-white min-h-screen">
@@ -26,6 +27,9 @@
             <div class="flex gap-8 text-lg font-medium">
                 <button onclick="switchTab(0)" class="tab-active pb-1 px-4" id="tab-0">DOMŮ</button>
                 <button onclick="switchTab(1)" class="pb-1 px-4 hover:text-purple-400" id="tab-1">NOVINKY</button>
+                <button onclick="switchTab(2)" class="pb-1 px-4 hover:text-purple-400" id="tab-2">RECENZE</button>
+                <button onclick="switchTab(3)" class="pb-1 px-4 hover:text-purple-400" id="tab-3">ŽEBŘÍČKY</button>
+                <button onclick="switchTab(4)" class="pb-1 px-4 hover:text-purple-400" id="tab-4">KOMUNITA</button>
             </div>
 
             <button onclick="toggleLogin()" class="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-bold flex items-center gap-2">
@@ -36,28 +40,42 @@
     </nav>
 
     <main class="pt-24 max-w-7xl mx-auto px-6 pb-20">
+
+        <!-- DOMŮ -->
         <div id="page-0">
             <h1 class="text-6xl font-bold text-center mt-10 mb-2 neon title-font">Vítej zpátky, Yukki</h1>
             <div id="hero-news" onclick="openDetail(0)" class="cursor-pointer relative h-[65vh] rounded-3xl overflow-hidden mb-12 border border-purple-500/30"></div>
         </div>
 
+        <!-- NOVINKY -->
         <div id="page-1" class="hidden">
             <h2 class="text-4xl font-bold title-font mb-8">NOVINKY</h2>
             <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
         </div>
+
+        <!-- RECENZE -->
+        <div id="page-2" class="hidden">
+            <h2 class="text-4xl font-bold title-font mb-8">RECENZE</h2>
+            <p class="text-gray-400">Připravuji sekci recenzí...</p>
+        </div>
+
+        <!-- ŽEBŘÍČKY -->
+        <div id="page-3" class="hidden">
+            <h2 class="text-4xl font-bold title-font mb-8">ŽEBŘÍČKY</h2>
+            <p class="text-gray-400">Nejlepší hry podle Yukkiho hodnocení...</p>
+        </div>
+
+        <!-- KOMUNITA -->
+        <div id="page-4" class="hidden">
+            <h2 class="text-4xl font-bold title-font mb-8">KOMUNITA</h2>
+            <p class="text-gray-400">Brzy přidám fórum a komentáře...</p>
+        </div>
     </main>
 
-    <!-- DETAIL MODAL -->
-    <div id="detailModal" class="hidden fixed inset-0 bg-black/95 z-[100] flex items-center justify-center p-6">
-        <div class="bg-zinc-900 border border-purple-500 rounded-3xl w-full max-w-3xl max-h-[90vh] overflow-auto">
-            <div class="p-8">
-                <button onclick="closeModal()" class="float-right text-4xl text-gray-400 hover:text-white">✕</button>
-                <div id="modal-image" class="rounded-2xl overflow-hidden mb-6 w-full"></div>
-                <h2 id="modal-title" class="text-4xl font-bold title-font mb-4"></h2>
-                <p id="modal-date" class="text-purple-400 mb-6"></p>
-                <div id="modal-content" class="text-lg leading-relaxed whitespace-pre-wrap"></div>
-            </div>
-        </div>
+    <!-- ADMIN BAR -->
+    <div id="adminBar" class="hidden fixed bottom-6 right-6 bg-zinc-900 border border-purple-500 rounded-2xl p-4 flex gap-3 z-50">
+        <button onclick="showCreateModal('news')" class="px-6 py-3 bg-purple-600 rounded-xl">+ Novinka</button>
+        <button onclick="showCreateModal('review')" class="px-6 py-3 bg-purple-600 rounded-xl">+ Recenze</button>
     </div>
 
     <!-- LOGIN MODAL -->
@@ -67,6 +85,19 @@
             <input id="loginUser" value="yukki" class="w-full mb-4 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
             <input id="loginPass" type="password" value="yukki123" class="w-full mb-6 bg-zinc-800 border border-purple-500 rounded-2xl px-6 py-4">
             <button onclick="adminLogin()" class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl font-bold">Přihlásit se</button>
+        </div>
+    </div>
+
+    <!-- DETAIL MODAL -->
+    <div id="detailModal" class="hidden fixed inset-0 bg-black/95 z-[100] flex items-center justify-center p-6">
+        <div class="bg-zinc-900 border border-purple-500 rounded-3xl w-full max-w-3xl max-h-[90vh] overflow-auto">
+            <div class="p-8">
+                <button onclick="closeModal()" class="float-right text-4xl text-gray-400 hover:text-white">✕</button>
+                <div id="modal-image" class="rounded-2xl overflow-hidden mb-6"></div>
+                <h2 id="modal-title" class="text-4xl font-bold title-font mb-4"></h2>
+                <p id="modal-date" class="text-purple-400 mb-6"></p>
+                <div id="modal-content" class="text-lg leading-relaxed whitespace-pre-wrap"></div>
+            </div>
         </div>
     </div>
 
@@ -97,18 +128,17 @@ Fanoušci jsou z toho v extázi. Black Flag je pro spoustu lidí dodnes nejlepš
         }
 
         function renderNews() {
-            const container = document.getElementById('news-container');
-            container.innerHTML = news.map((n, i) => `
+            document.getElementById('news-container').innerHTML = news.map((n, i) => `
                 <div class="bg-zinc-900 rounded-3xl overflow-hidden">
-                    <img src="${n.image}" class="w-full h-56 object-cover" onclick="openDetail(${i})">
+                    <img src="${n.image}" class="w-full h-56 object-cover cursor-pointer" onclick="openDetail(${i})">
                     <div class="p-6">
-                        <h3 onclick="openDetail(${i})" class="text-2xl font-bold cursor-pointer">${n.title}</h3>
+                        <h3 class="text-2xl font-bold cursor-pointer" onclick="openDetail(${i})">${n.title}</h3>
                         <p class="text-purple-400 text-sm mt-2">${n.date}</p>
-                        <p class="mt-4">${n.content}</p>
+                        <p class="mt-4 line-clamp-4">${n.content}</p>
                         ${isAdmin ? `
                         <div class="flex gap-3 mt-6">
-                            <button onclick="editNews(${i}); event.stopImmediatePropagation();" class="flex-1 py-3 bg-blue-600 rounded-2xl text-sm">UPRAVIT</button>
-                            <button onclick="deleteNews(${i}); event.stopImmediatePropagation();" class="flex-1 py-3 bg-red-600 rounded-2xl text-sm">SMAZAT</button>
+                            <button onclick="event.stopImmediatePropagation(); editNews(${i});" class="flex-1 py-3 bg-blue-600 rounded-2xl text-sm">UPRAVIT</button>
+                            <button onclick="event.stopImmediatePropagation(); deleteNews(${i});" class="flex-1 py-3 bg-red-600 rounded-2xl text-sm">SMAZAT</button>
                         </div>` : ''}
                     </div>
                 </div>
@@ -141,16 +171,17 @@ Fanoušci jsou z toho v extázi. Black Flag je pro spoustu lidí dodnes nejlepš
             if (document.getElementById('loginUser').value === "yukki" && document.getElementById('loginPass').value === "yukki123") {
                 isAdmin = true;
                 document.getElementById('loginText').innerHTML = '👑 YUKKI';
+                document.getElementById('adminBar').classList.remove('hidden');
                 toggleLogin();
                 renderNews();
-                alert("✅ Přihlášen jako admin! Nyní vidíš tlačítka Upravit / Smazat.");
+                alert("✅ Přihlášen jako admin! Nyní můžeš upravovat a mazat.");
             } else {
                 alert("Špatné heslo! (yukki123)");
             }
         }
 
         function editNews(i) {
-            alert("Upravit novinku " + news[i].title + "\n\n(Tato funkce bude doplněna v další verzi)");
+            alert("Upravit novinku: " + news[i].title + "\n\n(Tato funkce bude doplněna v příští verzi)");
         }
 
         function deleteNews(i) {
