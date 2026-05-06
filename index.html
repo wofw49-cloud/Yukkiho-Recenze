@@ -13,10 +13,10 @@
         .neon { text-shadow: 0 0 20px #ef4444, 0 0 40px #b91c1c; }
         .tab-active { border-bottom: 4px solid #ef4444; color: white; }
 
-        .leaderboard-card {
+        .leaderboard-card, .release-card {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .leaderboard-card:hover {
+        .leaderboard-card:hover, .release-card:hover {
             transform: translateY(-10px) scale(1.03);
             box-shadow: 0 30px 60px -15px rgb(185 28 28 / 0.5);
         }
@@ -26,6 +26,11 @@
             overflow-y: auto;
             scrollbar-width: thin;
             scrollbar-color: #ef4444 #27272a;
+        }
+
+        .platform-btn.active {
+            background-color: #ef4444 !important;
+            color: white;
         }
     </style>
 </head>
@@ -90,7 +95,15 @@
 
         <!-- KALENDÁŘ -->
         <div id="page-5" class="hidden">
-            <h2 class="text-4xl font-bold title-font mb-8">KALENDÁŘ VYDÁNÍ HER</h2>
+            <h2 class="text-5xl font-bold title-font mb-10 tracking-widest neon text-center">KALENDÁŘ VYDÁNÍ HER</h2>
+            
+            <div class="flex flex-wrap gap-3 justify-center mb-10" id="platform-filters">
+                <button onclick="filterByPlatform('all')" class="platform-btn active px-6 py-3 bg-red-600 rounded-2xl font-bold">VŠE</button>
+                <button onclick="filterByPlatform('PC')" class="platform-btn px-6 py-3 bg-zinc-800 hover:bg-zinc-700 rounded-2xl">PC</button>
+                <button onclick="filterByPlatform('PS5')" class="platform-btn px-6 py-3 bg-zinc-800 hover:bg-zinc-700 rounded-2xl">PS5</button>
+                <button onclick="filterByPlatform('Xbox')" class="platform-btn px-6 py-3 bg-zinc-800 hover:bg-zinc-700 rounded-2xl">Xbox</button>
+            </div>
+
             <div id="calendar-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
     </main>
@@ -139,6 +152,10 @@
             <input id="releaseDate" type="date" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
             <input id="releasePlatforms" placeholder="Platformy (oddělené čárkou)" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
             <input id="releaseImage" placeholder="URL obrázku" class="w-full mb-4 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4">
+            <div class="flex items-center gap-3 mb-4">
+                <input id="releaseCzech" type="checkbox" class="w-5 h-5 accent-red-600">
+                <label for="releaseCzech" class="text-white">Podporována čeština</label>
+            </div>
             <textarea id="releaseDescription" rows="4" placeholder="Krátký popis..." class="w-full mb-6 bg-zinc-800 border border-red-500 rounded-2xl px-6 py-4"></textarea>
             <div class="flex gap-4">
                 <button onclick="saveRelease()" class="flex-1 py-4 bg-red-600 rounded-2xl font-bold">Uložit</button>
@@ -160,7 +177,7 @@
         </div>
     </div>
 
-    <!-- KOMUNITNÍ ODKAZ MODAL -->
+    <!-- LINK MODAL -->
     <div id="linkModal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
         <div class="bg-zinc-900 p-10 rounded-3xl w-full max-w-lg border border-red-500">
             <h2 class="text-3xl font-bold mb-6" id="linkModalTitle">Nový odkaz</h2>
@@ -180,6 +197,7 @@
         let reviews = [];
         let communityLinks = [];
         let upcomingReleases = [];
+        let currentFilter = 'all';
         let editingType = null;
         let editingIndex = null;
         let editingLinkIndex = null;
@@ -220,8 +238,8 @@
             ];
 
             communityLinks = [
-                { title: "YouTube", url: "https://www.youtube.com/@YukkiCZE", icon: "youtube" },
-                { title: "Instagram", url: "https://www.instagram.com/_yukki77_/", icon: "instagram" }
+                { title: "YouTube", url: "https://www.youtube.com/@YukkiCZE", icon: "fa-youtube" },
+                { title: "Instagram", url: "https://www.instagram.com/_yukki77_/", icon: "fa-instagram" }
             ];
 
             upcomingReleases = [
@@ -230,8 +248,9 @@
                     title: "Grand Theft Auto VI",
                     date: "2026-11-19",
                     platforms: ["PS5", "Xbox Series X|S"],
-                    image: "https://indian-tv.cz/uploads/00/388736b706db42bdaa00aa837f8dac05/1746543737.jpg?",
-                    description: "Kriminální sága dvojice Lucie a Jasona v moderním státě Leonida (Vice City). Nejpokročilejší open-world zážitek s důrazem na satiru dnešní kultury a sociálních sítí."
+                    image: "https://picsum.photos/id/1015/1200/700",
+                    description: "Kriminální sága dvojice Lucie a Jasona v moderním státě Leonida (Vice City). Nejpodrobnější open-world zážitek s důrazem na satiru dnešní kultury a sociálních sítí.",
+                    czech: true
                 }
             ];
         }
@@ -346,44 +365,76 @@
         function renderHomeReleases() {
             const container = document.getElementById('home-releases');
             const latest = upcomingReleases.slice(0, 3);
-            container.innerHTML = latest.map(game => {
-                const date = new Date(game.date).toLocaleDateString('cs-CZ', {day: 'numeric', month: 'short'});
+            container.innerHTML = latest.map((game, i) => `
+                <div onclick="openReleaseDetail(${i})" class="release-card bg-zinc-900 rounded-3xl p-6 border border-red-500/30 hover:border-red-500 cursor-pointer">
+                    <img src="${game.image}" class="w-full h-40 object-cover rounded-2xl mb-4">
+                    <div class="text-red-400 text-sm font-medium">${new Date(game.date).toLocaleDateString('cs-CZ', {day:'numeric', month:'short'})}</div>
+                    <h4 class="font-bold mt-2">${game.title}</h4>
+                    <div class="text-xs text-gray-400">${game.platforms.join(' • ')}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderCalendar() {
+            const container = document.getElementById('calendar-container');
+            let filtered = upcomingReleases;
+
+            if (currentFilter !== 'all') {
+                filtered = upcomingReleases.filter(game => game.platforms.some(p => p.includes(currentFilter)));
+            }
+
+            const sorted = [...filtered].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            container.innerHTML = sorted.map((game, i) => {
+                const globalIndex = upcomingReleases.indexOf(game);
                 return `
-                    <div class="bg-zinc-900 rounded-3xl p-6 border border-red-500/30 hover:border-red-500 transition">
-                        <img src="${game.image}" class="w-full h-40 object-cover rounded-2xl mb-4">
-                        <div class="text-red-400 text-sm font-medium">${date}</div>
-                        <h4 class="font-bold mt-2">${game.title}</h4>
-                        <div class="text-xs text-gray-400">${game.platforms.join(' • ')}</div>
+                    <div onclick="openReleaseDetail(${globalIndex})" class="release-card bg-zinc-900 rounded-3xl overflow-hidden border border-red-500/30 hover:border-red-500 cursor-pointer">
+                        <img src="${game.image}" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <div class="flex justify-between items-start">
+                                <div class="text-red-400 font-medium">${new Date(game.date).toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
+                                ${game.czech ? '<span class="text-3xl">🇨🇿</span>' : ''}
+                            </div>
+                            <h3 class="text-2xl font-bold mt-3">${game.title}</h3>
+                            <div class="flex flex-wrap gap-2 mt-4">
+                                ${game.platforms.map(p => `<span class="text-xs bg-zinc-800 px-3 py-1 rounded-full">${p}</span>`).join('')}
+                            </div>
+                            ${game.description ? `<p class="mt-4 text-gray-400 line-clamp-3">${game.description}</p>` : ''}
+                        </div>
                     </div>
                 `;
             }).join('');
         }
 
-        function renderCalendar() {
-            const container = document.getElementById('calendar-container');
-            const sorted = [...upcomingReleases].sort((a, b) => new Date(a.date) - new Date(b.date));
+        function filterByPlatform(platform) {
+            currentFilter = platform;
+            document.querySelectorAll('.platform-btn').forEach(btn => {
+                btn.classList.toggle('active', 
+                    (platform === 'all' && btn.textContent === 'VŠE') || 
+                    btn.textContent === platform
+                );
+            });
+            renderCalendar();
+        }
 
-            container.innerHTML = sorted.map((game, i) => {
-                const dateStr = new Date(game.date).toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-                return `
-                    <div class="bg-zinc-900 rounded-3xl overflow-hidden border border-red-500/30 hover:border-red-500">
-                        <img src="${game.image}" class="w-full h-48 object-cover">
-                        <div class="p-6">
-                            <div class="text-red-400 font-medium">${dateStr}</div>
-                            <h3 class="text-2xl font-bold mt-3">${game.title}</h3>
-                            <div class="flex flex-wrap gap-2 mt-4">
-                                ${game.platforms.map(p => `<span class="text-xs bg-zinc-800 px-3 py-1 rounded-full">${p}</span>`).join('')}
-                            </div>
-                            ${game.description ? `<p class="mt-4 text-gray-400">${game.description}</p>` : ''}
-                            ${isAdmin ? `
-                            <div class="flex gap-3 mt-6">
-                                <button onclick="editRelease(${i}); event.stopImmediatePropagation()" class="flex-1 py-3 bg-blue-600 rounded-xl">UPRAVIT</button>
-                                <button onclick="deleteRelease(${i}); event.stopImmediatePropagation()" class="flex-1 py-3 bg-red-600 rounded-xl">SMAZAT</button>
-                            </div>` : ''}
-                        </div>
-                    </div>
-                `;
-            }).join('');
+        function openReleaseDetail(i) {
+            const game = upcomingReleases[i];
+            const dateStr = new Date(game.date).toLocaleDateString('cs-CZ', { 
+                weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' 
+            });
+
+            document.getElementById('modal-media').innerHTML = `<img src="${game.image}" class="w-full">`;
+            document.getElementById('modal-title').textContent = game.title;
+            document.getElementById('modal-score').style.display = 'none';
+
+            document.getElementById('modal-content').innerHTML = `
+                <p class="text-red-400 text-2xl mb-6">${dateStr}</p>
+                <p class="text-lg mb-6"><strong>Platformy:</strong> ${game.platforms.join(', ')}</p>
+                ${game.czech ? '<p class="inline-flex items-center gap-3 mb-6 text-green-400"><span class="text-4xl">🇨🇿</span> <span class="font-bold text-xl">Podporována čeština</span></p>' : ''}
+                ${game.description ? `<p class="text-gray-200 leading-relaxed">${game.description}</p>` : ''}
+            `;
+
+            document.getElementById('detailModal').classList.remove('hidden');
         }
 
         function openDetail(type, i) {
@@ -448,7 +499,6 @@
             } else alert("Špatné heslo! (yukki123)");
         }
 
-        // === KALENDÁŘ FUNKCE ===
         function showCreateReleaseModal(editIndex = null) {
             if (!isAdmin) return alert("Nejsi přihlášen jako admin!");
             editingReleaseIndex = editIndex;
@@ -461,13 +511,15 @@
                 document.getElementById('releasePlatforms').value = game.platforms.join(', ');
                 document.getElementById('releaseImage').value = game.image;
                 document.getElementById('releaseDescription').value = game.description || '';
+                document.getElementById('releaseCzech').checked = !!game.czech;
             } else {
                 document.getElementById('releaseModalTitle').textContent = "Nové vydání hry";
                 document.getElementById('releaseTitle').value = '';
                 document.getElementById('releaseDate').value = '';
-                document.getElementById('releasePlatforms').value = 'PC, PS5';
-                document.getElementById('releaseImage').value = 'https://picsum.photos/id/237/1200/700';
+                document.getElementById('releasePlatforms').value = 'PS5, Xbox Series X|S';
+                document.getElementById('releaseImage').value = 'https://picsum.photos/id/1015/1200/700';
                 document.getElementById('releaseDescription').value = '';
+                document.getElementById('releaseCzech').checked = false;
             }
             document.getElementById('releaseModal').classList.remove('hidden');
         }
@@ -482,6 +534,7 @@
             const platformsStr = document.getElementById('releasePlatforms').value.trim();
             const image = document.getElementById('releaseImage').value.trim();
             const description = document.getElementById('releaseDescription').value.trim();
+            const czech = document.getElementById('releaseCzech').checked;
 
             if (!title || !date || !platformsStr) return alert("Název, datum a platformy jsou povinné!");
 
@@ -491,7 +544,8 @@
                 date,
                 platforms: platformsStr.split(',').map(p => p.trim()),
                 image: image || "https://picsum.photos/id/237/1200/700",
-                description
+                description,
+                czech
             };
 
             if (editingReleaseIndex !== null) {
