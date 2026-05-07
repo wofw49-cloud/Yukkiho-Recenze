@@ -49,6 +49,11 @@
         .con-item { color: #ef4444; }
         .gallery-thumb { cursor: pointer; transition: 0.3s; filter: grayscale(1); border: 2px solid transparent; flex-shrink: 0; }
         .gallery-thumb:hover, .gallery-thumb.active { filter: grayscale(0); border-color: var(--red); }
+        
+        /* Toast notifikace pro kopírování */
+        .toast {
+            animation: toastPop 0.3s ease forwards;
+        }
     </style>
 </head>
 <body>
@@ -340,6 +345,84 @@ Návykový progres: Supergiant Games znovu dokazují, že jsou mistři vyprávě
             container.innerHTML = src.includes('youtube.com') ? `<iframe class="w-full aspect-video rounded-3xl mb-6 md:mb-10 shadow-2xl" src="${src}" frameborder="0" allowfullscreen></iframe>` : `<img src="${src}" class="w-full rounded-3xl mb-6 md:mb-10 shadow-2xl">`;
         };
 
+        // === NOVÉ FUNKCE PRO SDÍLENÍ PŘÍSPĚVKŮ ===
+        // (Nic z původního kódu nebylo smazáno ani změněno – jen přidáno)
+
+        window.copyLink = (id) => {
+            const item = findItem(id);
+            const title = item.title || item.game || 'Příspěvek na YUKKI';
+            const baseUrl = window.location.href.split('#')[0];
+            const url = `${baseUrl}#item-${id}`;
+            const shareText = `${title} • YUKKI • State Driven v24\n${url}`;
+            
+            navigator.clipboard.writeText(shareText).then(() => {
+                showToast('✅ Odkaz zkopírován do schránky!');
+            }).catch(() => {
+                // fallback pro starší prohlížeče
+                const textarea = document.createElement('textarea');
+                textarea.value = shareText;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast('✅ Odkaz zkopírován do schránky!');
+            });
+        };
+
+        window.shareToX = (id, title) => {
+            const item = findItem(id);
+            const baseUrl = window.location.href.split('#')[0];
+            const url = `${baseUrl}#item-${id}`;
+            const text = encodeURIComponent(`${title} • YUKKI State Driven v24`);
+            window.open(`https://x.com/intent/tweet?text=${text}&url=${encodeURIComponent(url)}`, '_blank', 'width=580,height=420');
+        };
+
+        window.shareToFB = (id) => {
+            const baseUrl = window.location.href.split('#')[0];
+            const url = `${baseUrl}#item-${id}`;
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank', 'width=580,height=420');
+        };
+
+        window.nativeShare = async (id) => {
+            const item = findItem(id);
+            const title = item.title || item.game || 'YUKKI';
+            const baseUrl = window.location.href.split('#')[0];
+            const url = `${baseUrl}#item-${id}`;
+            const text = (item.content || '').replace(/<[^>]*>/g, '').substring(0, 140) + '...';
+            
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title, text, url });
+                } catch (err) {
+                    if (err.name !== 'AbortError') copyLink(id);
+                }
+            } else {
+                copyLink(id);
+            }
+        };
+
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.style.cssText = `
+                position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+                background: linear-gradient(90deg, #10b981, #34d399); color: #fff; 
+                padding: 14px 28px; border-radius: 9999px; font-weight: 900; 
+                font-size: 15px; box-shadow: 0 20px 25px -5px rgb(16 185 129), 0 0 0 4px rgba(16,185,129,0.3);
+                z-index: 99999; white-space: nowrap; display: flex; align-items: center; gap: 8px;
+            `;
+            toast.innerHTML = `${msg} <i class="fa-solid fa-check-circle"></i>`;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 1, 1)';
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(-50%) translateY(20px)';
+                setTimeout(() => toast.remove(), 400);
+            }, 2800);
+        };
+        // === KONEC NOVÝCH FUNKCÍ PRO SDÍLENÍ ===
+
         window.openModal = (id) => {
             const i = findItem(id);
             const scoreHtml = i.score ? `<span class="text-red-600 ml-4">${i.score}%</span>` : '';
@@ -347,7 +430,32 @@ Návykový progres: Supergiant Games znovu dokazují, že jsou mistři vyprávě
             let prosConsHtml = (i.pros || i.cons) ? `<div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-8 md:my-12 p-6 md:p-8 bg-zinc-950 rounded-[20px] md:rounded-[30px] border border-zinc-900"><div><h4 class="condensed text-xl md:text-2xl font-black text-white mb-4">KLADY</h4><ul class="space-y-2">${(i.pros || []).map(p => `<li class="pro-item font-bold italic text-base md:text-lg">+ ${p}</li>`).join('')}</ul></div><div><h4 class="condensed text-xl md:text-2xl font-black text-white mb-4">ZÁPORY</h4><ul class="space-y-2">${(i.cons || []).map(c => `<li class="con-item font-bold italic text-base md:text-lg">- ${c}</li>`).join('')}</ul></div></div>` : '';
             const related = [...state.news, ...state.reviews].filter(x => x.id !== i.id).sort(() => 0.5 - Math.random()).slice(0, 3);
             const relatedHtml = `<div class="mt-10 md:mt-20 pt-10 border-t border-zinc-900"><h4 class="condensed text-2xl md:text-3xl font-black text-white mb-6 md:mb-8 italic uppercase">Mohlo by tě zajímat</h4><div class="grid grid-cols-1 sm:grid-cols-3 gap-6">${related.map(r => `<div class="cursor-pointer group" onclick="openModal(${r.id})"><div class="relative overflow-hidden rounded-2xl mb-3 h-32"><img src="${r.img}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500"><div class="absolute top-2 left-2 bg-red-600 text-white font-black condensed px-2 py-0.5 text-[8px] italic rounded uppercase z-10">${r.score ? 'RECENZE' : 'NOVINKA'}</div></div><h5 class="text-sm font-black condensed uppercase text-zinc-400 group-hover:text-white transition leading-tight">${r.title || r.game}</h5></div>`).join('')}</div></div>`;
-            document.getElementById('modal-content').innerHTML = `<div id="main-media-container">${i.video ? `<iframe class="w-full aspect-video rounded-3xl mb-6 md:mb-10 shadow-2xl" src="https://www.youtube.com/embed/${i.video}?autoplay=1" frameborder="0" allowfullscreen></iframe>` : `<img src="${i.img}" class="w-full rounded-3xl mb-6 md:mb-10 shadow-2xl">`}</div>${galleryHtml}<div class="flex gap-2 mb-6">${getTags(i)}</div><h2 class="hero-title condensed text-4xl md:text-7xl font-black italic mb-6 md:mb-8 uppercase text-white">${i.title || i.game}${scoreHtml}</h2><div class="text-zinc-400 text-lg md:text-2xl leading-relaxed space-y-6 md:space-y-8 font-medium"><p>${(i.content || '...').replace(/\n/g, '<br>')}</p></div>${prosConsHtml}${relatedHtml}`;
+            
+            // NOVÉ: příprava názvu pro sdílení (bezpečné pro onclick)
+            const shareTitle = (i.title || i.game || 'YUKKI příspěvek').replace(/'/g, "\\'");
+            
+            document.getElementById('modal-content').innerHTML = `<div id="main-media-container">${i.video ? `<iframe class="w-full aspect-video rounded-3xl mb-6 md:mb-10 shadow-2xl" src="https://www.youtube.com/embed/${i.video}?autoplay=1" frameborder="0" allowfullscreen></iframe>` : `<img src="${i.img}" class="w-full rounded-3xl mb-6 md:mb-10 shadow-2xl">`}</div>${galleryHtml}<div class="flex gap-2 mb-6">${getTags(i)}</div><h2 class="hero-title condensed text-4xl md:text-7xl font-black italic mb-6 md:mb-8 uppercase text-white">${i.title || i.game}${scoreHtml}</h2><div class="text-zinc-400 text-lg md:text-2xl leading-relaxed space-y-6 md:space-y-8 font-medium"><p>${(i.content || '...').replace(/\n/g, '<br>')}</p></div>${prosConsHtml}${relatedHtml}
+            
+            <!-- === NOVÁ SDÍLECÍ LIŠTA (přidáno, nic nebylo smazáno) === -->
+            <div class="mt-12 pt-8 border-t border-zinc-900 flex justify-center gap-8 md:gap-10 flex-wrap">
+                <div onclick="copyLink(${i.id})" class="flex flex-col items-center cursor-pointer group hover:scale-110 active:scale-95 transition-all">
+                    <i class="fa-solid fa-link text-4xl mb-1 text-zinc-400 group-hover:text-red-600"></i>
+                    <span class="text-[10px] font-black condensed uppercase tracking-[1px]">Kopírovat odkaz</span>
+                </div>
+                <div onclick="shareToX(${i.id}, '${shareTitle}')" class="flex flex-col items-center cursor-pointer group hover:scale-110 active:scale-95 transition-all">
+                    <i class="fa-brands fa-x-twitter text-4xl mb-1 text-zinc-400 group-hover:text-red-600"></i>
+                    <span class="text-[10px] font-black condensed uppercase tracking-[1px]">X / Twitter</span>
+                </div>
+                <div onclick="shareToFB(${i.id})" class="flex flex-col items-center cursor-pointer group hover:scale-110 active:scale-95 transition-all">
+                    <i class="fa-brands fa-facebook text-4xl mb-1 text-zinc-400 group-hover:text-red-600"></i>
+                    <span class="text-[10px] font-black condensed uppercase tracking-[1px]">Facebook</span>
+                </div>
+                <div onclick="nativeShare(${i.id})" class="flex flex-col items-center cursor-pointer group hover:scale-110 active:scale-95 transition-all">
+                    <i class="fa-solid fa-share-nodes text-4xl mb-1 text-zinc-400 group-hover:text-red-600"></i>
+                    <span class="text-[10px] font-black condensed uppercase tracking-[1px]">Sdílet</span>
+                </div>
+            </div>`;
+            
             document.getElementById('modal-overlay').style.display = 'block';
             document.body.style.overflow = 'hidden';
             document.querySelector('.modal').scrollTo({ top: 0 });
