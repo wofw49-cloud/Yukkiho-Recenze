@@ -9,7 +9,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root { --red: #ff0000; --bg: #050505; --border: #1a1a1a; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; margin: 0; overflow-x: hidden; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #050505 0%, #1f0a0a 100%); 
+            color: #fff; 
+            margin: 0; 
+            overflow-x: hidden; 
+        }
         .condensed { font-family: 'Barlow Condensed', sans-serif; text-transform: uppercase; }
         
         nav { background: #000; border-bottom: 1px solid var(--border); position: fixed; width: 100%; top: 0; z-index: 1000; height: 70px; }
@@ -54,9 +60,29 @@
         .toast {
             animation: toastPop 0.3s ease forwards;
         }
+
+        /* PARTICLES */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* === NOVÉ ANIMACE PRO JEDNOTLIVÉ TABY === */
+        .tab-content {
+            transition: opacity 0.6s cubic-bezier(0.25, 0.1, 0.25, 1), 
+                        transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
     </style>
 </head>
 <body>
+
+    <!-- PARTICLE CANVAS -->
+    <canvas id="particles"></canvas>
 
     <nav>
         <div class="max-w-[1600px] mx-auto flex items-center px-4 md:px-8 h-full text-white">
@@ -283,7 +309,7 @@ Návykový progres: Supergiant Games znovu dokazují, že jsou mistři vyprávě
 <div class="mt-6 p-6 bg-zinc-900/50 rounded-2xl border border-zinc-800">
     <span class="text-white font-black text-2xl uppercase block mb-1"><b>VERDIKT:</b></span>
     <span class="text-white font-black text-lg leading-tight">
-        Art style a hudba: Vizuální stránka je čistá extáze. Každá lokace, od mlžných lesů až po hlubiny podsvětí, vypadá jako oživlá malba. Hudební doprovod Darrena Korba pak opět trefuje hřebíček na hlavičku a dodává soubojům ten správný říz a atmosféru.
+        Art style a hudba: Vizuální stránka je čistá extáze. Každá lokace, od mlžných lesů až po hlubiny podsvětí, vypadá jako oživlá malba. Hudební doprovod Darrena Korba pak opět trefuje hrebíček na hlavičku a dodává soubojům ten správný říz a atmosféru.
     </span>
 </div>`
 },
@@ -346,8 +372,6 @@ Návykový progres: Supergiant Games znovu dokazují, že jsou mistři vyprávě
         };
 
         // === NOVÉ FUNKCE PRO SDÍLENÍ PŘÍSPĚVKŮ ===
-        // (Nic z původního kódu nebylo smazáno ani změněno – jen přidáno)
-
         window.copyLink = (id) => {
             const item = findItem(id);
             const title = item.title || item.game || 'Příspěvek na YUKKI';
@@ -358,7 +382,6 @@ Návykový progres: Supergiant Games znovu dokazují, že jsou mistři vyprávě
             navigator.clipboard.writeText(shareText).then(() => {
                 showToast('✅ Odkaz zkopírován do schránky!');
             }).catch(() => {
-                // fallback pro starší prohlížeče
                 const textarea = document.createElement('textarea');
                 textarea.value = shareText;
                 document.body.appendChild(textarea);
@@ -421,7 +444,6 @@ Návykový progres: Supergiant Games znovu dokazují, že jsou mistři vyprávě
                 setTimeout(() => toast.remove(), 400);
             }, 2800);
         };
-        // === KONEC NOVÝCH FUNKCÍ PRO SDÍLENÍ ===
 
         window.openModal = (id) => {
             const i = findItem(id);
@@ -431,12 +453,10 @@ Návykový progres: Supergiant Games znovu dokazují, že jsou mistři vyprávě
             const related = [...state.news, ...state.reviews].filter(x => x.id !== i.id).sort(() => 0.5 - Math.random()).slice(0, 3);
             const relatedHtml = `<div class="mt-10 md:mt-20 pt-10 border-t border-zinc-900"><h4 class="condensed text-2xl md:text-3xl font-black text-white mb-6 md:mb-8 italic uppercase">Mohlo by tě zajímat</h4><div class="grid grid-cols-1 sm:grid-cols-3 gap-6">${related.map(r => `<div class="cursor-pointer group" onclick="openModal(${r.id})"><div class="relative overflow-hidden rounded-2xl mb-3 h-32"><img src="${r.img}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500"><div class="absolute top-2 left-2 bg-red-600 text-white font-black condensed px-2 py-0.5 text-[8px] italic rounded uppercase z-10">${r.score ? 'RECENZE' : 'NOVINKA'}</div></div><h5 class="text-sm font-black condensed uppercase text-zinc-400 group-hover:text-white transition leading-tight">${r.title || r.game}</h5></div>`).join('')}</div></div>`;
             
-            // NOVÉ: příprava názvu pro sdílení (bezpečné pro onclick)
             const shareTitle = (i.title || i.game || 'YUKKI příspěvek').replace(/'/g, "\\'");
             
             document.getElementById('modal-content').innerHTML = `<div id="main-media-container">${i.video ? `<iframe class="w-full aspect-video rounded-3xl mb-6 md:mb-10 shadow-2xl" src="https://www.youtube.com/embed/${i.video}?autoplay=1" frameborder="0" allowfullscreen></iframe>` : `<img src="${i.img}" class="w-full rounded-3xl mb-6 md:mb-10 shadow-2xl">`}</div>${galleryHtml}<div class="flex gap-2 mb-6">${getTags(i)}</div><h2 class="hero-title condensed text-4xl md:text-7xl font-black italic mb-6 md:mb-8 uppercase text-white">${i.title || i.game}${scoreHtml}</h2><div class="text-zinc-400 text-lg md:text-2xl leading-relaxed space-y-6 md:space-y-8 font-medium"><p>${(i.content || '...').replace(/\n/g, '<br>')}</p></div>${prosConsHtml}${relatedHtml}
             
-            <!-- === NOVÁ SDÍLECÍ LIŠTA (přidáno, nic nebylo smazáno) === -->
             <div class="mt-12 pt-8 border-t border-zinc-900 flex justify-center gap-8 md:gap-10 flex-wrap">
                 <div onclick="copyLink(${i.id})" class="flex flex-col items-center cursor-pointer group hover:scale-110 active:scale-95 transition-all">
                     <i class="fa-solid fa-link text-4xl mb-1 text-zinc-400 group-hover:text-red-600"></i>
@@ -471,6 +491,71 @@ Návykový progres: Supergiant Games znovu dokazují, že jsou mistři vyprávě
             document.getElementById('month-list').classList.remove('show');
         };
 
+        // === PARTICLE SYSTEM ===
+        let particleCanvas, particleCtx, particlesArray = [];
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * particleCanvas.width;
+                this.y = Math.random() * particleCanvas.height;
+                this.size = Math.random() * 2.8 + 0.6;
+                this.speedX = Math.random() * 0.7 - 0.35;
+                this.speedY = Math.random() * 0.7 - 0.35;
+                this.opacity = Math.random() * 0.5 + 0.5;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > particleCanvas.width) this.speedX *= -0.85;
+                if (this.y < 0 || this.y > particleCanvas.height) this.speedY *= -0.85;
+
+                this.speedX += (Math.random() - 0.5) * 0.015;
+                this.speedY += (Math.random() - 0.5) * 0.015;
+            }
+            draw() {
+                particleCtx.save();
+                particleCtx.globalAlpha = this.opacity;
+                particleCtx.shadowBlur = 12;
+                particleCtx.shadowColor = '#ff3333';
+                particleCtx.fillStyle = '#ff4444';
+                particleCtx.beginPath();
+                particleCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                particleCtx.fill();
+                particleCtx.restore();
+            }
+        }
+
+        function initParticles() {
+            particleCanvas = document.getElementById('particles');
+            if (!particleCanvas) return;
+            particleCtx = particleCanvas.getContext('2d');
+
+            const resize = () => {
+                particleCanvas.width = window.innerWidth;
+                particleCanvas.height = window.innerHeight;
+            };
+            window.addEventListener('resize', resize);
+            resize();
+
+            particlesArray = [];
+            const count = Math.min(130, Math.floor((window.innerWidth * window.innerHeight) / 11000));
+            for (let i = 0; i < count; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            if (!particleCtx) return;
+            particleCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
         function init() {
             state.news.sort((a, b) => new Date(b.rDate) - new Date(a.rDate));
             state.reviews.sort((a, b) => new Date(b.rDate) - new Date(a.rDate));
@@ -496,10 +581,48 @@ Návykový progres: Supergiant Games znovu dokazují, že jsou mistři vyprávě
             const months = [...new Set(state.calendar.map(x => new Date(x.rDate).toLocaleString('cs-CZ', { month: 'long' })))];
             document.getElementById('month-list').innerHTML = months.map(m => `<div class="p-4 hover:bg-zinc-800 cursor-pointer text-xs font-black uppercase border-b border-zinc-900 transition text-white" onclick="renderCalendar('${m}')">${m} 2026</div>`).join('') + `<div class="p-4 hover:bg-red-600 cursor-pointer text-xs font-black uppercase transition text-white" onclick="renderCalendar('vše')">Zobrazit vše</div>`;
             renderCalendar('vše');
+
+            // === PARTICLES INITIALIZATION ===
+            initParticles();
+            animateParticles();
         }
 
         document.getElementById('month-toggle-btn').onclick = (e) => { e.stopPropagation(); document.getElementById('month-list').classList.toggle('show'); };
-        document.querySelectorAll('.nav-link').forEach(link => { link.addEventListener('click', () => { document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden')); document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-nav')); document.getElementById('tab-' + link.dataset.tab).classList.remove('hidden'); link.classList.add('active-nav'); window.scrollTo(0,0); }); });
+        
+        /* === ANIMACE PRO JEDNOTLIVÉ TABY (přidáno přesně podle tvého požadavku) === */
+        document.querySelectorAll('.nav-link').forEach(link => { 
+            link.addEventListener('click', () => { 
+                // Fade out aktuální tab
+                const currentActive = document.querySelector('.tab-content:not(.hidden)');
+                if (currentActive) {
+                    currentActive.style.opacity = '0';
+                    currentActive.style.transform = 'translateY(30px)';
+                    setTimeout(() => {
+                        currentActive.classList.add('hidden');
+                        currentActive.style.opacity = '';
+                        currentActive.style.transform = '';
+                    }, 600);
+                }
+
+                // Aktivace nového tabu + animace
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-nav')); 
+                link.classList.add('active-nav'); 
+
+                const newTab = document.getElementById('tab-' + link.dataset.tab);
+                newTab.classList.remove('hidden');
+                newTab.style.opacity = '0';
+                newTab.style.transform = 'translateY(30px)';
+
+                // Trigger animace (slide + fade in)
+                setTimeout(() => {
+                    newTab.style.opacity = '1';
+                    newTab.style.transform = 'translateY(0)';
+                }, 10);
+
+                window.scrollTo(0,0); 
+            }); 
+        });
+        
         window.onclick = () => { document.getElementById('month-list').classList.remove('show'); };
         window.onload = init;
     </script>
