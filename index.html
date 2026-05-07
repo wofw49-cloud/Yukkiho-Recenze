@@ -283,7 +283,7 @@
             document.body.style.overflow = 'auto';
         }
 
-        function handleAdminAuth() { if(prompt("Kód:") === 'yukki123') document.body.classList.add('logged-in'); }
+        function handleAdminAuth() { if(prompt("Kód:") === '') document.body.classList.add('logged-in'); }
         window.onload = renderAll;
     </script>
 </body>
