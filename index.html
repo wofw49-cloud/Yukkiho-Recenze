@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YUKKI • State Driven v14</title>
+    <title>YUKKI • State Driven v16</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Barlow+Condensed:ital,wght@0,700;0,900;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -16,7 +16,7 @@
         .nav-link { font-weight: 800; font-size: 12px; text-transform: uppercase; padding: 0 20px; cursor: pointer; opacity: 0.5; transition: 0.3s; line-height: 70px; display: inline-block; letter-spacing: 1px; }
         .nav-link:hover, .active-nav { opacity: 1; color: var(--red); }
 
-        .hero-title { line-height: 1.1 !important; letter-spacing: 0.08em !important; word-spacing: 0.15em; }
+        .hero-title { line-height: 0.9 !important; letter-spacing: -0.02em !important; word-spacing: 0.05em; }
         .gold-text { background: linear-gradient(90deg, #bf953f 0%, #fcf6ba 50%, #b38728 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
         .tag { font-size: 9px; font-weight: 900; padding: 2px 6px; border-radius: 3px; text-transform: uppercase; }
@@ -37,9 +37,9 @@
 <body>
 
     <nav>
-        <div class="max-w-[1600px] mx-auto flex items-center px-8 h-full">
+        <div class="max-w-[1600px] mx-auto flex items-center px-8 h-full text-white">
             <div class="text-3xl font-black italic tracking-tighter cursor-pointer mr-12" onclick="location.reload()">YUKKI<span class="text-red-600">.</span></div>
-            <div class="flex space-x-2">
+            <div class="flex">
                 <div class="nav-link active-nav" data-tab="domu">Úvod</div>
                 <div class="nav-link" data-tab="novinky">Novinky</div>
                 <div class="nav-link" data-tab="recenze">Recenze</div>
@@ -50,60 +50,14 @@
     </nav>
 
     <div class="max-w-[1600px] mx-auto px-8 pt-32 pb-20">
-        
-        <div id="tab-domu" class="tab-content">
-            <div id="hero-area" class="mb-20"></div>
-            <div class="grid grid-cols-12 gap-16">
-                <div id="home-feed" class="col-span-8 space-y-10"></div>
-                <div class="col-span-4 space-y-12">
-                    <div class="bg-[#080808] p-8 rounded-3xl border border-zinc-900 shadow-xl">
-                        <h3 class="condensed text-2xl font-black mb-6 italic">Prestige Hall <span class="text-zinc-700">#Top5</span></h3>
-                        <div id="side-hall" class="space-y-3"></div>
-                    </div>
-                    <div>
-                        <h3 class="condensed text-2xl font-black mb-6 italic">Pecky měsíce</h3>
-                        <div id="side-pecky" class="space-y-4"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="tab-novinky" class="tab-content hidden">
-            <h2 class="condensed text-7xl font-black italic mb-16 uppercase">Novinky</h2>
-            <div id="news-full-list" class="space-y-16 max-w-5xl"></div>
-        </div>
-
-        <div id="tab-recenze" class="tab-content hidden">
-            <h2 class="condensed text-7xl font-black italic mb-16 uppercase">Recenze</h2>
-            <div id="reviews-full-grid" class="grid grid-cols-3 gap-8"></div>
-        </div>
-
-        <div id="tab-kalendar" class="tab-content hidden">
-            <div class="flex justify-between items-end mb-16">
-                <h2 class="condensed text-7xl font-black italic uppercase">Kalendář 2026</h2>
-                <div class="relative">
-                    <button id="month-toggle-btn" class="bg-red-600 px-8 py-4 rounded-xl font-black condensed flex items-center gap-3 tracking-widest hover:bg-red-700 transition">
-                        VYBRAT MĚSÍC <i class="fa-solid fa-chevron-down text-xs"></i>
-                    </button>
-                    <div id="month-list" class="dropdown-content"></div>
-                </div>
-            </div>
-            <div id="calendar-grid" class="grid grid-cols-4 gap-6"></div>
-        </div>
-
-        <div id="tab-elite" class="tab-content hidden">
-            <div class="text-center mb-20">
-                <h2 class="condensed text-[120px] font-black italic gold-text leading-none">PRESTIGE HALL</h2>
-                <p class="text-zinc-500 font-bold tracking-[0.6em] uppercase text-xs mt-4">The Absolute Best of Gaming 2026</p>
-            </div>
-            <div id="hall-full-list" class="max-w-5xl mx-auto space-y-6"></div>
-        </div>
+        <div id="tab-domu" class="tab-content"><div id="hero-area" class="mb-20"></div><div class="grid grid-cols-12 gap-16"><div id="home-feed" class="col-span-8 space-y-10"></div><div class="col-span-4 space-y-12"><div class="bg-[#080808] p-8 rounded-3xl border border-zinc-900 shadow-xl"><h3 class="condensed text-2xl font-black mb-6 italic">Prestige Hall <span class="text-zinc-700">#Top5</span></h3><div id="side-hall" class="space-y-3"></div></div><div><h3 class="condensed text-2xl font-black mb-6 italic">Pecky měsíce</h3><div id="side-pecky" class="space-y-4"></div></div></div></div></div>
+        <div id="tab-novinky" class="tab-content hidden"><h2 class="condensed text-7xl font-black italic mb-16 uppercase">Novinky</h2><div id="news-full-list" class="space-y-16 max-w-5xl"></div></div>
+        <div id="tab-recenze" class="tab-content hidden"><h2 class="condensed text-7xl font-black italic mb-16 uppercase">Recenze</h2><div id="reviews-full-list" class="space-y-16 max-w-5xl"></div></div>
+        <div id="tab-kalendar" class="tab-content hidden"><div class="flex justify-between items-end mb-16"><h2 class="condensed text-7xl font-black italic uppercase">Kalendář 2026</h2><div class="relative"><button id="month-toggle-btn" class="bg-red-600 px-8 py-4 rounded-xl font-black condensed flex items-center gap-3 tracking-widest hover:bg-red-700 transition">VYBRAT MĚSÍC <i class="fa-solid fa-chevron-down text-xs"></i></button><div id="month-list" class="dropdown-content"></div></div></div><div id="calendar-grid" class="grid grid-cols-4 gap-6"></div></div>
+        <div id="tab-elite" class="tab-content hidden"><div class="text-center mb-20"><h2 class="condensed text-[120px] font-black italic gold-text leading-none">PRESTIGE HALL</h2><p class="text-zinc-500 font-bold tracking-[0.6em] uppercase text-xs mt-4">The Absolute Best of Gaming 2026</p></div><div id="hall-full-list" class="max-w-5xl mx-auto space-y-6"></div></div>
     </div>
 
-    <div id="modal-overlay" class="modal">
-        <div class="close-modal" onclick="closeModal()">&times;</div>
-        <div class="modal-body" id="modal-content"></div>
-    </div>
+    <div id="modal-overlay" class="modal"><div class="close-modal" onclick="closeModal()">&times;</div><div class="modal-body" id="modal-content"></div></div>
 
     <script>
         const TODAY = new Date("2026-05-07");
@@ -111,66 +65,35 @@
 
         let state = {
             news: [
-                { id: 101, title: "Sony se má u PlayStationu 6 poučit z chyb Xboxu", img: "https://indian-tv.cz/uploads/ls/c1611a4a8fcd4083837042b2ef4994a8/1749806929.jpg?", rDate: "2026-05-07", cz: false, isEA: false, isDLC: false, content: "Spekulace kolem nové generace konzolí nabírají na síle..." },
-                { id: 102, title: "Game Pass v květnu: Forza Horizon 6 a Subnautica 2", img: "https://indian-tv.cz/uploads/ls/36e56838c4764a7492018688930ce83e/1777998805.jpg?", rDate: "2026-05-06", cz: false, isEA: false, isDLC: false, content: "Microsoft odhalil bombastickou nabídku pro tento měsíc." },
-                { 
-    id: 103, 
-    title: "Proč si PC hráči musejí počkat na Grand Theft Auto VI?", 
-    img: "https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg", 
-    rDate: "2026-05-05", 
-    cz: false, 
-    isEA: false, 
-    isDLC: false, 
-    content: `Hry od Rockstar Games vycházejí nejprve na konzole a až později na počítače. Stejné to bude i u GTA 6. Proč tomu tak je? Palčivé otázce se věnoval generální ředitel Take-Two Interactive. Potvrdil také marketingovou exkluzivitu PlayStationu.
+                { id: 101, title: `Sony se má u PlayStationu 6 poučit z chyb Xboxu`, img: `https://indian-tv.cz/uploads/ls/c1611a4a8fcd4083837042b2ef4994a8/1749806929.jpg?`, rDate: `2026-05-07`, cz: false, isEA: false, isDLC: false, content: `Spekulace kolem nové generace konzolí nabírají na síle. Sony chce u PS6 zajistit maximální zpětnou kompatibilitu a výkon.` },
+                { id: 102, title: `Game Pass v květnu: Forza Horizon 6 a Subnautica 2`, img: `https://indian-tv.cz/uploads/ls/36e56838c4764a7492018688930ce83e/1777998805.jpg?`, rDate: `2026-05-06`, cz: false, isEA: false, isDLC: false, content: `Microsoft odhalil bombastickou nabídku pro tento měsíc. Předplatitelé se dočkají největších pecek roku hned v den vydání.` },
+                { id: 103, title: `Proč si PC hráči musejí počkat na Grand Theft Auto VI?`, img: `https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg`, rDate: `2026-05-05`, cz: false, isEA: false, isDLC: false, content: `Hry od Rockstar Games vycházejí nejprve na konzole a až později na počítače. Stejné to bude i u GTA 6. Proč tomu tak je? Rockstar se snaží nejprve obsloužit hlavní uživatelskou základnu na konzolích. <br><br> <b>VERDIKT:</b> PC hráči si prostě musí počkat, až Rockstar „vyladí“ konzolové verze.` },
+                { id: 104, title: `Zaklínač 4: Vývojáři slibují návrat ke kořenům série`, img: `https://cdn.myshoptet.com/usr/www.konzoliste.cz/user/documents/upload/clanky/witcher-4.jpg`, rDate: `2026-05-04`, cz: true, isEA: false, isDLC: false, video: `54dabgZJ5YA`, content: `Po letech spekulací a očekávání začíná být kolem The Witcher 4 konečně jasněji. Studio CD Projekt RED
+ postupně odhaluje nové informace a podle všeho chce navázat hlavně na to, co fanoušci milovali na třetím Zaklínači – silný příběh, propracovaný svět a důraz na atmosféru.
 
-Tahle odpověď PC hráče nepotěší. Rockstar se snaží nejprve obsloužit hlavní uživatelskou základnu, a to co nejlépe. Tím se myslí právě hráči na PlayStationu a Xboxu.
+Hlavní hrdinkou nové ságy bude Ciri, což vývojáři označují za přirozené pokračování univerza po konci Geralta. Studio zároveň potvrzuje, že nechce vytvořit „větší mapu za každou cenu“, ale soustředit se na kvalitu obsahu a smysluplně zaplněný svět. Podle herního ředitele Sebastiana Kalemby má být svět velikostně podobný Zaklínači 3, ale detailnější a živější.
 
-„Rockstar vždy začíná na konzolích, protože právě tam vás hráči hodnotí podle toho, jak dobře zvládnete launch,“ vysvětlil Strauss Zelnick pro Bloomberg. Jinými slovy, pokud by start nevyšel podle představ, mohlo by to negativně ovlivnit i pozdější prodeje na dalších platformách.
+Vývojáři také mluví o návratu ke kořenům série. Po zkušenostech s problematickým startem Cyberpunk 2077 chce studio tentokrát klást větší důraz na stabilitu, propracované questy a uvěřitelnější RPG prvky. Každé NPC má působit, jako by mělo vlastní život a příběh, což má posunout celkovou imerzi zase o úroveň výš.
 
-Zároveň zdůraznil, že zpoždění PC verze nijak nesouvisí s marketingovou spoluprací se Sony u Grand Theft Auto VI. Jde o dlouhodobou strategii, kterou Rockstar používá už roky. Zajímavé je, že samotná data jdou proti této logice. Zelnick totiž zároveň připustil, že u velkých titulů dnes může PC tvořit klidně 45 až 50 % celkových prodejů. Pro srovnání – ještě v roce 2007 to bylo jen kolem 5 % u NBA 2K.
+Fanoušky potěší i návrat Gwintu, který se podle dostupných informací znovu objeví jako součást herního světa. Vývojáři sice zatím neukázali samotný gameplay, ale potvrzují, že ikonická karetní hra bude součástí zážitku i v novém díle.
 
-Přesto se strategie nemění, protože konzole jsou pro Rockstar stále klíčovým startovním bodem a až následně přichází rozšíření na další platformy. Doufejme, že alespoň na PC verzi nebudeme čekat dlouho. Spekuluje se o vydání v první polovině roku 2027.
+Na vývoji aktuálně pracuje téměř 500 vývojářů, což z projektu dělá největší interní hru v historii studia. Přesto si CD Projekt RED nechává s vydáním čas. Aktuální informace naznačují, že hra dorazí nejdříve v roce 2027.
 
-Vedle toho bylo potvrzeno i něco, o čem se spekulovalo už delší dobu. GTA 6 má marketingové partnerství se Sony. Hra tak bude v reklamních materiálech primárně spojována s konzolí PlayStation 5. To ale neznamená exkluzivní obsah. Jde čistě o to, že hra bude prezentována na PS5 a všude bude vidět logo PlayStationu. Je dost možné, že vznikne také bundle s konzolí a hrou.` 
-},
-                { id: 104, title: "Zaklínač 4: Vývojáři slibují návrat ke kořenům", img: "https://cdn.mos.cms.futurecdn.net/ZpE6Q6v7T6X2R6V7X2R6V7.jpg", rDate: "2026-05-04", cz: true, isEA: false, isDLC: false, content: "Nová sága začíná a Unreal Engine 5 vypadá naprosto neuvěřitelně." }
+Očekávání jsou obrovská. Zaklínač 3 dodnes patří mezi nejuznávanější RPG všech dob a studio si dobře uvědomuje, že čtvrtý díl bude pod obrovským tlakem. Podle dosavadních vyjádření to ale vypadá, že se CD Projekt RED nesnaží vytvořit jen větší hru, ale hlavně lepší a propracovanější pokračování slavné série.` }
             ],
             reviews: [
-                { id: 201, game: "Kingdom Come: Deliverance II", score: 95, img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1771300/header.jpg", rDate: "2026-02-11", cz: true, isEA: false, isDLC: false, content: "Jindra se vrací v životní formě..." },
-                { id: 202, game: "ELDEN RING: Shadow of the Erdtree", score: 98, img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2778580/header.jpg", rDate: "2026-05-06", cz: false, isEA: false, isDLC: true, content: "Nejlepší DLC všech dob. Tečka." },
-     { 
-    id: 205, 
-    game: `Hades II`, 
-    score: 91, 
-    img: `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1145350/ss_47e14ed55ac7f1bf9266b2cd5b3e4d9eae0ca54c.1920x1080.jpg?t=1765831644`, 
-    rDate: `2025-10-11`, 
-    cz: false, 
-    isEA: false, 
-    isDLC: false, 
-    video: `MawBCULz4vE`, 
-    content: `Hades II od studia Supergiant Games navazuje na jeden z nejlépe hodnocených roguelike titulů posledních let a téměř ve všech směrech působí větší, propracovanější a sebevědomější než první díl.
-
-Tentokrát se hráč ujímá Melinoë, sestry Zagreuse, která vyráží zastavit Titána času Chrona. Základ hratelnosti zůstává stejný – rychlé souboje, opakované průchody a postupné vylepšování postavy – ale pokračování přidává nové mechaniky, větší variabilitu buildů a více možností při soubojích.
-
-Soubojový systém je výborný. Hra je rychlá, plynulá a každá zbraň působí odlišně. Velkým plusem je práce s magií a schopnostmi, díky kterým mají souboje větší hloubku než v prvním Hades. Boss fighty patří k tomu nejlepšímu, co žánr nabízí.
-
-Audiovizuálně jde opět o špičku. Stylizace, soundtrack i dabing mají obrovskou atmosféru a hra si drží unikátní identitu od začátku do konce.
-
-Nevýhodou pro některé hráče může být vyšší obtížnost a fakt, že hra pořád stojí na repetitivní roguelike smyčce. Pokud tě tenhle typ her nebaví, Hades II tě pravděpodobně nepřesvědčí.
-
-<span class="text-white font-black">VERDIKT: Hades II je výborné pokračování, které nesází na revoluci, ale na vylepšení téměř všech aspektů prvního dílu. Skvělé souboje, silná atmosféra a obrovská znovuhratelnost z něj dělají jeden z nejlepších roguelike titulů současnosti.</span>` 
-},
-                { id: 204, game: "Life is Strange: Reunion", score: 84, img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2624870/4a44a2dce89e2d5194f939bd221a79d869169bdf/ss_4a44a2dce89e2d5194f939bd221a79d869169bdf.1920x1080.jpg?t=1777999087", rDate: "2026-04-02", cz: true, isEA: false, isDLC: false, video: "qf1Um7RKjkc", content: "Life is Strange: Reunion představuje návrat Max a Chloe..." }
+                { id: 201, game: `Kingdom Come: Deliverance II`, score: 95, img: `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1771300/header.jpg`, rDate: `2026-02-11`, cz: true, isEA: false, isDLC: false, content: `Jindra se vrací v životní formě v českém středověku, který vypadá lépe než kdy dřív.` },
+                { id: 202, game: `ELDEN RING: Shadow of the Erdtree`, score: 98, img: `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2778580/header.jpg`, rDate: `2026-05-06`, cz: false, isEA: false, isDLC: true, content: `Nejlepší DLC všech dob. FromSoftware opět dokázalo, že v žánru nemá konkurenci.` },
+                { id: 204, game: `Life is Strange: Reunion`, score: 84, img: `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2624870/4a44a2dce89e2d5194f939bd221a79d869169bdf/ss_4a44a2dce89e2d5194f939bd221a79d869169bdf.1920x1080.jpg?t=1777999087`, rDate: `2026-04-02`, cz: true, isEA: false, isDLC: false, content: `Emotivní návrat Max a Chloe, který potěší každého fanouška série.` },
+                { id: 205, game: `Hades II`, score: 91, img: `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1145350/ss_47e14ed55ac7f1bf9266b2cd5b3e4d9eae0ca54c.1920x1080.jpg?t=1765831644`, rDate: `2025-10-11`, cz: false, isEA: false, isDLC: false, video: `MawBCULz4vE`, content: `Hades II od studia Supergiant Games vylepšuje vše, co jsme milovali na prvním díle. <br><br> <span class="text-white font-black">VERDIKT:</span> Roguelike mistrovské dílo.` }
             ],
             calendar: [
-                { id: 301, game: "Grand Theft Auto VI", rDate: "2026-11-19", img: "https://www.rockstargames.com/VI/_next/image?url=%2FVI%2F_next%2Fstatic%2Fmedia%2FJason_Duval_05.921c79be.jpg&w=1280&q=75", platforms: ['ps5', 'xbox'], cz: false, video: "QdBZY2fkU-0" },
-                { id: 302, game: "Forza Horizon 6", rDate: "2026-05-19", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2483190/383ace7815eaa8f8f5128a58fd8ca7df911d3e14/ss_383ace7815eaa8f8f5128a58fd8ca7df911d3e14.1920x1080.jpg", platforms: ['pc', 'xbox'], cz: true, video: "pWw-UENvdTw" },
-                { id: 303, game: "LEGO® Batman™: Legacy", rDate: "2026-05-22", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2215200/26d8ea3f288ffaa1fe9956620cbd920f10b171f4/ss_26d8ea3f288ffaa1fe9956620cbd920f10b171f4.1920x1080.jpg", platforms: ['pc', 'ps5', 'switch'], cz: true },
-                { id: 304, game: "Subnautica 2", rDate: "2026-05-14", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1962700/787e2315a1eb5aaba73c4f75e6f7d7d8835fa260/ss_787e2315a1eb5aaba73c4f75e6f7d7d8835fa260.1920x1080.jpg", platforms: ['pc', 'xbox'], isEA: true }
+                { id: 301, game: `Grand Theft Auto VI`, rDate: `2026-11-19`, img: `https://www.rockstargames.com/VI/_next/image?url=%2FVI%2F_next%2Fstatic%2Fmedia%2FJason_Duval_05.921c79be.jpg&w=1280&q=75`, platforms: ['ps5', 'xbox'], video: `QdBZY2fkU-0` },
+                { id: 302, game: `Forza Horizon 6`, rDate: `2026-05-19`, img: `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2483190/383ace7815eaa8f8f5128a58fd8ca7df911d3e14/ss_383ace7815eaa8f8f5128a58fd8ca7df911d3e14.1920x1080.jpg`, platforms: ['pc', 'xbox'], cz: true },
+                { id: 304, game: `Subnautica 2`, rDate: `2026-05-14`, img: `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1962700/787e2315a1eb5aaba73c4f75e6f7d7d8835fa260/ss_787e2315a1eb5aaba73c4f75e6f7d7d8835fa260.1920x1080.jpg`, platforms: ['pc', 'xbox'], isEA: true }
             ]
         };
 
-        // --- POMOCNÉ FUNKCE ---
         const getTags = (i) => {
             let h = '';
             if(i.cz) h += `<span class="tag tag-cz">CZ</span> `;
@@ -180,146 +103,71 @@ Nevýhodou pro některé hráče může být vyšší obtížnost a fakt, že hr
             return h;
         };
 
-        const findItem = (id) => {
-            return state.news.find(x => x.id === id) || 
-                   state.reviews.find(x => x.id === id) || 
-                   state.calendar.find(x => x.id === id);
-        };
+        const findItem = (id) => state.news.find(x => x.id === id) || state.reviews.find(x => x.id === id) || state.calendar.find(x => x.id === id);
 
-        // --- MODAL ---
         window.openModal = (id) => {
             const i = findItem(id);
-            const media = i.video ? `<iframe class="w-full aspect-video rounded-3xl mb-10" src="https://www.youtube.com/embed/${i.video}?autoplay=1" frameborder="0" allowfullscreen></iframe>` : `<img src="${i.img}" class="w-full rounded-3xl mb-10 shadow-2xl">`;
-            document.getElementById('modal-content').innerHTML = `
-                ${media}
-                <div class="flex gap-2 mb-6">${getTags(i)}</div>
-                <h2 class="hero-title condensed text-7xl font-black italic mb-8 uppercase">${i.title || i.game}</h2>
-                <div class="text-zinc-400 text-2xl leading-relaxed space-y-8 font-medium">
-                    <p>${(i.content || 'Informace připravujeme...').replace(/\n/g, '<br>')}</p>
-                </div>`;
+            const media = i.video ? `<iframe class="w-full aspect-video rounded-3xl mb-10 shadow-2xl" src="https://www.youtube.com/embed/${i.video}?autoplay=1" frameborder="0" allowfullscreen></iframe>` : `<img src="${i.img}" class="w-full rounded-3xl mb-10 shadow-2xl">`;
+            const scoreHtml = i.score ? `<span class="text-red-600 ml-4">${i.score}%</span>` : '';
+            document.getElementById('modal-content').innerHTML = `${media}<div class="flex gap-2 mb-6">${getTags(i)}</div><h2 class="hero-title condensed text-7xl font-black italic mb-8 uppercase text-white">${i.title || i.game}${scoreHtml}</h2><div class="text-zinc-400 text-2xl leading-relaxed space-y-8 font-medium"><p>${(i.content || 'Informace připravujeme...').replace(/\n/g, '<br>')}</p></div>`;
             document.getElementById('modal-overlay').style.display = 'block';
             document.body.style.overflow = 'hidden';
         };
 
-        window.closeModal = () => {
-            document.getElementById('modal-overlay').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        };
+        window.closeModal = () => { document.getElementById('modal-overlay').style.display = 'none'; document.body.style.overflow = 'auto'; };
 
-        // --- KALENDÁŘ RENDER (S ŘAZENÍM) ---
         window.renderCalendar = (monthFilter) => {
             const grid = document.getElementById('calendar-grid');
             let items = [...state.calendar].sort((a, b) => new Date(a.rDate) - new Date(b.rDate));
-            
-            if(monthFilter !== 'vše') {
-                items = items.filter(x => {
-                    const mName = new Date(x.rDate).toLocaleString('cs-CZ', { month: 'long' });
-                    return mName.toLowerCase() === monthFilter.toLowerCase();
-                });
-            }
-
-            grid.innerHTML = items.map(c => `
-                <div class="bg-zinc-950 border border-zinc-900 rounded-3xl p-6 cursor-pointer hover:border-red-600 transition" onclick="openModal(${c.id})">
-                    <div class="text-red-600 font-black condensed mb-3 uppercase text-xs">
-                        ${new Date(c.rDate).getDate()}. ${new Date(c.rDate).toLocaleString('cs-CZ', { month: 'short' }).toUpperCase()}
-                    </div>
-                    <img src="${c.img}" class="w-full h-36 object-cover rounded-xl mb-4 grayscale hover:grayscale-0 transition duration-500">
-                    <h4 class="font-black italic uppercase text-sm mb-4 h-10 overflow-hidden leading-tight">${c.game}</h4>
-                    <div class="flex flex-wrap gap-2">${getTags(c)}</div>
-                </div>`).join('');
-            
+            if(monthFilter !== 'vše') items = items.filter(x => new Date(x.rDate).toLocaleString('cs-CZ', { month: 'long' }).toLowerCase() === monthFilter.toLowerCase());
+            grid.innerHTML = items.map(c => `<div class="bg-zinc-950 border border-zinc-900 rounded-3xl p-6 cursor-pointer hover:border-red-600 transition shadow-xl" onclick="openModal(${c.id})"><div class="text-red-600 font-black condensed mb-3 uppercase text-xs">${new Date(c.rDate).getDate()}. ${new Date(c.rDate).toLocaleString('cs-CZ', { month: 'short' }).toUpperCase()}</div><img src="${c.img}" class="w-full h-36 object-cover rounded-xl mb-4 grayscale hover:grayscale-0 transition duration-500"><h4 class="font-black italic uppercase text-sm mb-4 h-10 overflow-hidden leading-tight text-white">${c.game}</h4><div class="flex flex-wrap gap-2">${getTags(c)}</div></div>`).join('');
             document.getElementById('month-list').classList.remove('show');
         };
 
-        // --- DROPDOWN ---
-        document.getElementById('month-toggle-btn').onclick = (e) => {
-            e.stopPropagation();
-            document.getElementById('month-list').classList.toggle('show');
-        };
-
-        // --- HLAVNÍ INIT ---
         function init() {
-            // 1. Hero
+            // 1. Hero Area (S NÁPISEM NA OBRÁZKU)
             const hero = state.news[0];
-            document.getElementById('hero-area').innerHTML = `
-                <div class="relative h-[650px] rounded-[50px] overflow-hidden cursor-pointer group shadow-2xl" onclick="openModal(${hero.id})">
-                    <img src="${hero.img}" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition duration-[10s]">
-                    <div class="absolute bottom-20 left-20">
-                        <span class="bg-red-600 px-4 py-1 text-[11px] font-black condensed mb-6 inline-block tracking-widest uppercase">HLAVNÍ ZPRÁVA</span>
-                        <h1 class="hero-title condensed text-8xl font-black italic uppercase mb-8">${hero.title}</h1>
-                    </div>
-                </div>`;
+            const heroTag = state.reviews.some(r => r.id === hero.id) ? 'RECENZE' : 'NOVINKA';
+            document.getElementById('hero-area').innerHTML = `<div class="relative h-[650px] rounded-[50px] overflow-hidden cursor-pointer group shadow-2xl" onclick="openModal(${hero.id})"><img src="${hero.img}" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition duration-[10s]"><div class="absolute top-10 right-10 bg-red-600 text-white font-black condensed px-6 py-2 text-xl italic rounded-xl z-10">${heroTag}</div><div class="absolute bottom-20 left-20 max-w-5xl"><span class="bg-red-600 px-4 py-1 text-[11px] font-black condensed mb-6 inline-block tracking-widest uppercase">HLAVNÍ ZPRÁVA</span><h1 class="hero-title condensed text-9xl font-black italic uppercase text-white">${hero.title}</h1></div></div>`;
 
-            // 2. Home Feed
-            document.getElementById('home-feed').innerHTML = [...state.news.slice(1), ...state.reviews.slice(0, 1)].map(i => `
-                <div class="flex gap-10 py-10 border-b border-zinc-900 group cursor-pointer" onclick="openModal(${i.id})">
-                    <img src="${i.img}" class="w-80 h-44 object-cover rounded-3xl shadow-xl grayscale hover:grayscale-0 transition duration-500">
+            // 2. Home Feed (S TEXTEM A NÁPISEM NA OBRÁZKU)
+            document.getElementById('home-feed').innerHTML = [...state.news.slice(1), ...state.reviews.slice(0, 2)].map(i => {
+                const itemTag = i.score ? 'RECENZE' : 'NOVINKA';
+                return `<div class="flex gap-10 py-10 border-b border-zinc-900 group cursor-pointer" onclick="openModal(${i.id})">
+                    <div class="relative w-80 h-44 shrink-0 overflow-hidden rounded-3xl shadow-xl">
+                        <img src="${i.img}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500">
+                        <div class="absolute top-4 left-4 bg-red-600 text-white font-black condensed px-3 py-1 text-[10px] italic rounded-lg">${itemTag}</div>
+                    </div>
                     <div class="flex-1">
-                        <span class="text-red-600 font-black text-[10px] uppercase mb-3 block tracking-widest">${i.score ? 'Recenze' : 'Novinka'}</span>
-                        <h3 class="condensed text-4xl font-black italic group-hover:text-red-600 transition mb-4 uppercase leading-none tracking-tighter">${i.title || i.game}</h3>
+                        <h3 class="condensed text-4xl font-black italic group-hover:text-red-600 transition mb-3 uppercase leading-none tracking-tighter text-white">${i.title || i.game}</h3>
+                        <p class="text-zinc-500 text-lg line-clamp-2 mb-4">${i.content.replace(/<[^>]*>/g, '')}</p>
                         ${i.score ? `<div class="text-3xl font-black text-red-600 italic">${i.score}%</div>` : ''}
                     </div>
-                </div>`).join('');
+                </div>`;
+            }).join('');
 
             // 3. Novinky Tab
-            document.getElementById('news-full-list').innerHTML = state.news.map(n => `
-                <div class="flex gap-12 group cursor-pointer" onclick="openModal(${n.id})">
-                    <div class="w-[450px] h-[280px] overflow-hidden rounded-[40px] shadow-2xl"><img src="${n.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700"></div>
-                    <div class="flex-1 py-4">
-                        <h3 class="condensed text-5xl font-black italic group-hover:text-red-600 transition mb-6 uppercase tracking-tighter leading-none">${n.title}</h3>
-                        <p class="text-zinc-500 text-xl font-medium line-clamp-3">${n.content}</p>
-                    </div>
-                </div>`).join('');
+            document.getElementById('news-full-list').innerHTML = state.news.map(n => `<div class="flex gap-12 group cursor-pointer" onclick="openModal(${n.id})"><div class="w-[450px] h-[280px] overflow-hidden rounded-[40px] shadow-2xl relative"><img src="${n.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700"></div><div class="flex-1 py-4"><h3 class="condensed text-5xl font-black italic group-hover:text-red-600 transition mb-6 uppercase tracking-tighter leading-none text-white">${n.title}</h3><p class="text-zinc-500 text-xl font-medium line-clamp-3">${n.content.replace(/<[^>]*>/g, '')}</p></div></div>`).join('');
 
             // 4. Recenze Tab
-            document.getElementById('reviews-full-grid').innerHTML = state.reviews.map(r => `
-                <div class="bg-zinc-950 border border-zinc-900 rounded-[40px] p-8 cursor-pointer hover:border-zinc-700 transition" onclick="openModal(${r.id})">
-                    <img src="${r.img}" class="w-full h-56 object-cover rounded-3xl mb-8 shadow-2xl">
-                    <div class="flex justify-between items-center mb-6"><h4 class="font-black italic uppercase text-2xl tracking-tighter w-2/3 leading-none">${r.game}</h4><span class="text-4xl font-black italic text-red-600">${r.score}%</span></div>
-                    <div class="flex flex-wrap gap-2">${getTags(r)}</div>
-                </div>`).join('');
+            document.getElementById('reviews-full-list').innerHTML = state.reviews.map(r => `<div class="flex gap-12 group cursor-pointer" onclick="openModal(${r.id})"><div class="w-[450px] h-[280px] overflow-hidden rounded-[40px] shadow-2xl relative"><img src="${r.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700"><div class="absolute top-6 right-6 bg-red-600 text-white font-black italic condensed px-4 py-2 text-3xl shadow-2xl rounded-xl">${r.score}%</div></div><div class="flex-1 py-4"><h3 class="condensed text-6xl font-black italic group-hover:text-red-600 transition mb-6 uppercase tracking-tighter leading-none text-white">${r.game}</h3><div class="mb-6 flex gap-2">${getTags(r)}</div><p class="text-zinc-500 text-xl font-medium line-clamp-3">${r.content.replace(/<[^>]*>/g, '')}</p></div></div>`).join('');
 
-            // 5. Prestige Hall
+            // 5. Hall & Sidebars
             const sortedReviews = [...state.reviews].sort((a,b) => b.score - a.score);
-            document.getElementById('hall-full-list').innerHTML = sortedReviews.map((e, idx) => `
-                <div class="bg-[#080808] border border-zinc-900 flex items-center p-10 rounded-[40px] hover:border-zinc-700 transition group shadow-2xl">
-                    <div class="condensed text-7xl font-black italic w-32 text-center ${idx===0?'gold-text':'text-zinc-800'}">#${idx+1}</div>
-                    <img src="${e.img}" class="w-64 h-36 object-cover rounded-2xl mx-12 shadow-2xl grayscale group-hover:grayscale-0 transition duration-500">
-                    <div class="flex-1"><h3 class="condensed text-5xl font-black italic uppercase tracking-tighter ${idx===0?'gold-text':''}">${e.game}</h3><div class="mt-4 flex gap-2">${getTags(e)}</div></div>
-                    <div class="text-7xl font-black italic text-red-600">${e.score}%</div>
-                </div>`).join('');
+            document.getElementById('hall-full-list').innerHTML = sortedReviews.map((e, idx) => `<div class="bg-[#080808] border border-zinc-900 flex items-center p-10 rounded-[40px] hover:border-zinc-700 transition group shadow-2xl"><div class="condensed text-7xl font-black italic w-32 text-center ${idx===0?'gold-text':'text-zinc-800'}">#${idx+1}</div><img src="${e.img}" class="w-64 h-36 object-cover rounded-2xl mx-12 shadow-2xl grayscale group-hover:grayscale-0 transition duration-500"><div class="flex-1"><h3 class="condensed text-5xl font-black italic uppercase tracking-tighter text-white ${idx===0?'gold-text':''}">${e.game}</h3><div class="mt-4 flex gap-2">${getTags(e)}</div></div><div class="text-7xl font-black italic text-red-600">${e.score}%</div></div>`).join('');
+            document.getElementById('side-hall').innerHTML = sortedReviews.slice(0,5).map((e, idx) => `<div class="flex items-center gap-4 bg-black/40 p-4 rounded-xl border border-zinc-900"><span class="condensed text-2xl font-black italic ${idx===0?'gold-text':'text-zinc-700'}">#${idx+1}</span><span class="text-[10px] font-bold uppercase flex-1 truncate text-zinc-400">${e.game}</span><span class="font-black text-red-600">${e.score}%</span></div>`).join('');
+            
+            // Pecky měsíce (Opraveno: bere všechny budoucí hry)
+            const upcoming = [...state.calendar].sort((a,b) => new Date(a.rDate) - new Date(b.rDate));
+            document.getElementById('side-pecky').innerHTML = upcoming.map(c => `<div class="flex items-center gap-5 bg-zinc-950 p-4 rounded-2xl border border-zinc-900 cursor-pointer hover:border-red-600 transition shadow-lg" onclick="openModal(${c.id})"><div class="bg-red-600 w-14 h-14 shrink-0 flex flex-col items-center justify-center rounded-xl font-black condensed leading-none text-white"><span class="text-[9px] opacity-70">${new Date(c.rDate).toLocaleString('cs-CZ', { month: 'short' }).toUpperCase()}</span><span class="text-xl">${new Date(c.rDate).getDate()}</span></div><div class="flex-1 truncate"><span class="text-[11px] font-black uppercase block truncate mb-1 text-white">${c.game}</span><div class="flex gap-1 flex-wrap">${getTags(c)}</div></div></div>`).join('');
 
-            document.getElementById('side-hall').innerHTML = sortedReviews.slice(0,5).map((e, idx) => `
-                <div class="flex items-center gap-4 bg-black/40 p-4 rounded-xl border border-zinc-900"><span class="condensed text-2xl font-black italic ${idx===0?'gold-text':'text-zinc-700'}">#${idx+1}</span><span class="text-[10px] font-bold uppercase flex-1 truncate text-zinc-400">${e.game}</span><span class="font-black text-red-600">${e.score}%</span></div>`).join('');
-
-            // 6. Pecky (Sidebar)
-            const upcoming = [...state.calendar].sort((a,b) => new Date(a.rDate) - new Date(b.rDate)).filter(x => new Date(x.rDate) >= TODAY).slice(0,5);
-            document.getElementById('side-pecky').innerHTML = upcoming.map(c => `
-                <div class="flex items-center gap-5 bg-zinc-950 p-4 rounded-2xl border border-zinc-900 cursor-pointer hover:border-red-600 transition shadow-lg" onclick="openModal(${c.id})">
-                    <div class="bg-red-600 w-14 h-14 flex flex-col items-center justify-center rounded-xl font-black condensed leading-none"><span class="text-[9px] opacity-70">${new Date(c.rDate).toLocaleString('cs-CZ', { month: 'short' }).toUpperCase()}</span><span class="text-xl">${new Date(c.rDate).getDate()}</span></div>
-                    <div class="flex-1 truncate"><span class="text-[11px] font-black uppercase block truncate mb-1">${c.game}</span><div class="flex gap-1 flex-wrap">${getTags(c)}</div></div>
-                </div>`).join('');
-
-            // 7. Dropdown měsíců
             const months = [...new Set(state.calendar.map(x => new Date(x.rDate).toLocaleString('cs-CZ', { month: 'long' })))];
-            document.getElementById('month-list').innerHTML = months.map(m => `
-                <div class="p-4 hover:bg-zinc-800 cursor-pointer text-xs font-black uppercase border-b border-zinc-900 transition" onclick="renderCalendar('${m}')">${m} 2026</div>
-            `).join('') + `<div class="p-4 hover:bg-red-600 cursor-pointer text-xs font-black uppercase transition" onclick="renderCalendar('vše')">Zobrazit vše</div>`;
-
+            document.getElementById('month-list').innerHTML = months.map(m => `<div class="p-4 hover:bg-zinc-800 cursor-pointer text-xs font-black uppercase border-b border-zinc-900 transition text-white" onclick="renderCalendar('${m}')">${m} 2026</div>`).join('') + `<div class="p-4 hover:bg-red-600 cursor-pointer text-xs font-black uppercase transition text-white" onclick="renderCalendar('vše')">Zobrazit vše</div>`;
             renderCalendar('vše');
         }
 
-        // Tab Switching
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-nav'));
-                document.getElementById('tab-' + link.dataset.tab).classList.remove('hidden');
-                link.classList.add('active-nav');
-                window.scrollTo(0,0);
-            });
-        });
-
+        document.getElementById('month-toggle-btn').onclick = (e) => { e.stopPropagation(); document.getElementById('month-list').classList.toggle('show'); };
+        document.querySelectorAll('.nav-link').forEach(link => { link.addEventListener('click', () => { document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden')); document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-nav')); document.getElementById('tab-' + link.dataset.tab).classList.remove('hidden'); link.classList.add('active-nav'); window.scrollTo(0,0); }); });
         window.onclick = () => { document.getElementById('month-list').classList.remove('show'); };
         window.onload = init;
     </script>
