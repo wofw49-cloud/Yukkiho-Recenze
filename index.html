@@ -19,12 +19,28 @@
         .condensed { font-family: 'Barlow Condensed', sans-serif; text-transform: uppercase; }
         
         nav { background: #000; border-bottom: 1px solid var(--border); position: fixed; width: 100%; top: 0; z-index: 1000; height: 70px; }
-        /* Mobilní menu - horizontální scroll */
         .nav-container { overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
         .nav-container::-webkit-scrollbar { display: none; }
         
-        .nav-link { font-weight: 800; font-size: 12px; text-transform: uppercase; padding: 0 15px; cursor: pointer; opacity: 0.5; transition: 0.3s; line-height: 70px; display: inline-block; letter-spacing: 1px; }
+        .nav-link { font-weight: 800; font-size: 12px; text-transform: uppercase; padding: 0 15px; cursor: pointer; opacity: 0.5; transition: 0.3s; line-height: 70px; display: inline-block; letter-spacing: 1px; position: relative; }
         .nav-link:hover, .active-nav { opacity: 1; color: var(--red); }
+        
+        .nav-link.active-nav::after {
+            content: '';
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ff3333, transparent);
+            box-shadow: 0 0 12px #ff3333, 0 0 20px #ff3333;
+            animation: neonPulse 1.8s ease-in-out infinite;
+        }
+        @keyframes neonPulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
 
         .hero-title { line-height: 0.9 !important; letter-spacing: -0.02em !important; word-spacing: 0.05em; }
         .gold-text { background: linear-gradient(90deg, #bf953f 0%, #fcf6ba 50%, #b38728 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -56,12 +72,11 @@
         .gallery-thumb { cursor: pointer; transition: 0.3s; filter: grayscale(1); border: 2px solid transparent; flex-shrink: 0; }
         .gallery-thumb:hover, .gallery-thumb.active { filter: grayscale(0); border-color: var(--red); }
         
-        /* Toast notifikace pro kopírování */
         .toast {
             animation: toastPop 0.3s ease forwards;
         }
 
-        /* PARTICLES */
+        /* PARTICLES - OPTIMALIZOVÁNO PRO VÝKON */
         #particles {
             position: fixed;
             top: 0;
@@ -70,12 +85,86 @@
             height: 100%;
             z-index: -1;
             pointer-events: none;
+            will-change: transform;
         }
 
-        /* === NOVÉ ANIMACE PRO JEDNOTLIVÉ TABY === */
+        /* PROPRACOVANÉ ANIMACE - VŠECHNY TABY + EXTRA EFEKTY */
         .tab-content {
-            transition: opacity 0.6s cubic-bezier(0.25, 0.1, 0.25, 1), 
-                        transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+            transition: opacity 0.9s cubic-bezier(0.23, 1, 0.32, 1),
+                        transform 0.9s cubic-bezier(0.23, 1, 0.32, 1);
+            opacity: 1;
+            will-change: transform, opacity;
+        }
+        
+        @keyframes tabEnterPro {
+            0%   { opacity: 0; transform: translateY(70px) scale(0.92); filter: blur(10px); }
+            35%  { opacity: 0.3; transform: translateY(25px) scale(0.96); }
+            65%  { opacity: 0.8; transform: translateY(8px) scale(0.99); filter: blur(3px); }
+            100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+        }
+
+        .tab-content:not(.hidden) {
+            animation: tabEnterPro 950ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        /* EXTRA ANIMACE - KARTY, HOVER, PRESTIGE */
+        .group:hover .shadow-xl {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgb(249 115 22);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .feed-card {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .feed-card:hover {
+            transform: translateY(-6px) rotate(1deg);
+            filter: brightness(1.1);
+        }
+
+        .prestige-glow {
+            animation: prestigeGold 4s ease-in-out infinite;
+        }
+
+        @keyframes prestigeGold {
+            0%, 100% { text-shadow: 0 0 20px #facc15; }
+            50% { text-shadow: 0 0 40px #facc15, 0 0 60px #facc15; }
+        }
+
+        /* Video preview */
+        .video-preview {
+            position: relative;
+            display: block;
+        }
+        .video-preview::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(249, 115, 22, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .video-preview:hover::after {
+            opacity: 1;
+        }
+        .video-preview .play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3.5rem;
+            color: #fff;
+            text-shadow: 0 0 30px #ff3333;
+            z-index: 10;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .video-preview:hover .play-icon {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.15);
         }
     </style>
 </head>
@@ -138,7 +227,7 @@
         
         <div id="tab-elite" class="tab-content hidden">
             <div class="text-center mb-10 md:mb-20">
-                <h2 class="condensed text-5xl md:text-[120px] font-black italic gold-text leading-none">PRESTIGE HALL</h2>
+                <h2 class="condensed text-5xl md:text-[120px] font-black italic gold-text leading-none prestige-glow">PRESTIGE HALL</h2>
                 <p class="text-zinc-500 font-bold tracking-[0.3em] md:tracking-[0.6em] uppercase text-[10px] md:text-xs mt-4">The Absolute Best of Gaming 2026</p>
             </div>
             <div id="hall-full-list" class="max-w-5xl mx-auto space-y-6"></div>
@@ -290,19 +379,19 @@ I přes občasné skákací pasáže, které mohou někoho vytrhnout z tempa, se
 </div>`
 },
                 {
-    id: 203, // Unikátní číslo
+    id: 203,
     game: `Hades II`,
-    score: 91, // Číslo 0-100
+    score: 91,
     rDate: `2024-05-20`,
     img: `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1145350/ss_f28befd916e59b8bf0a8a801b8a498b8adaa01eb.1920x1080.jpg?t=1765831644`,
-    video: `MawBCULz4vE`, // Např. qgvV4GE8vVA
+    video: `MawBCULz4vE`,
     gallery: [
         `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1145350/ss_c8d2b18451a2cc4d5b4fdd78ed84a5e64e051eac.1920x1080.jpg?t=1765831644`,
         `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1145350/ss_ef0f63061d0a0a9a7e46f3b84f125d25330e8f19.1920x1080.jpg?t=1765831644`
     ],
     pros: [`Návykový soubojový systém kombinující zbraně a magii`, `Nádherný art-style a špičkový soundtrack`, `Obrovská znovuhratelnost a hloubka buildů`, `Skvěle napsané postavy a příběhové pozadí`],
     cons: [`Pro nováčky může být obtížnost zpočátku frustrující`, `Některé materiály pro crafting vyžadují velký grind`],
-    cz: false, // true pokud má češtinu
+    cz: false,
     content: `Hades II je vzácným úkazem, kdy pokračování už tak dokonalé hry dokáže posunout laťku ještě o kus výš. Zatímco první díl byl o útěku z otcova sevření, tentokrát se vydáváme na cestu pomsty a záchrany samotného Olympu. V roli Melinoë, princezny podsvětí a sestry Zagrea, musíte čelit samotnému Titanu času, Chronovi.<br><br>
 Čarodějnictví v akci: Melinoë není jen další bojovnice, je to čarodějka. To zásadně mění dynamiku boje. Kromě klasických zbraní využíváte magii (Mana), která vám umožňuje nabíjet útoky (Omega moves) nebo vytvářet magické kruhy, které nepřátele zpomalí či uvězní. Boj je díky tomu taktičtější, hlubší a vizuálně naprosto podmanivý.<br><br>
 Návykový progres: Supergiant Games znovu dokazují, že jsou mistři vyprávění v rámci roguelike žánru. Každá smrt není prohrou, ale příležitostí k dalšímu rozhovoru, odemknutí nových schopností nebo vylepšení vaší základny na křiovatce cest. Rozmanitost požehnání od bohů (Boons) je tentokrát ještě širší a umožňuje vytvářet naprosto šílené kombinace, které z vás udělají nezastavitelnou bohyni.<br><br>
@@ -371,7 +460,6 @@ Návykový progres: Supergiant Games znovu dokazují, že jsou mistři vyprávě
             container.innerHTML = src.includes('youtube.com') ? `<iframe class="w-full aspect-video rounded-3xl mb-6 md:mb-10 shadow-2xl" src="${src}" frameborder="0" allowfullscreen></iframe>` : `<img src="${src}" class="w-full rounded-3xl mb-6 md:mb-10 shadow-2xl">`;
         };
 
-        // === NOVÉ FUNKCE PRO SDÍLENÍ PŘÍSPĚVKŮ ===
         window.copyLink = (id) => {
             const item = findItem(id);
             const title = item.title || item.game || 'Příspěvek na YUKKI';
@@ -487,41 +575,38 @@ Návykový progres: Supergiant Games znovu dokazují, že jsou mistři vyprávě
             const grid = document.getElementById('calendar-grid');
             let items = [...state.calendar].sort((a, b) => new Date(a.rDate) - new Date(b.rDate));
             if(monthFilter !== 'vše') items = items.filter(x => new Date(x.rDate).toLocaleString('cs-CZ', { month: 'long' }).toLowerCase() === monthFilter.toLowerCase());
-            grid.innerHTML = items.map(c => `<div class="bg-zinc-950 border border-zinc-900 rounded-3xl p-6 cursor-pointer hover:border-red-600 transition shadow-xl" onclick="openModal(${c.id})"><div class="text-red-600 font-black condensed mb-3 uppercase text-xs">${new Date(c.rDate).getDate()}. ${new Date(c.rDate).toLocaleString('cs-CZ', { month: 'short' }).toUpperCase()}</div><img src="${c.img}" class="w-full h-36 object-cover rounded-xl mb-4 grayscale hover:grayscale-0 transition duration-500"><h4 class="font-black italic uppercase text-sm mb-4 h-10 overflow-hidden leading-tight text-white">${c.game}</h4><div class="flex flex-wrap gap-2">${getTags(c)}</div></div>`).join('');
+            grid.innerHTML = items.map(c => `<div class="bg-zinc-950 border border-zinc-900 rounded-3xl p-6 cursor-pointer hover:border-red-600 transition shadow-xl feed-card" onclick="openModal(${c.id})"><div class="text-red-600 font-black condensed mb-3 uppercase text-xs">${new Date(c.rDate).getDate()}. ${new Date(c.rDate).toLocaleString('cs-CZ', { month: 'short' }).toUpperCase()}</div><img src="${c.img}" class="w-full h-36 object-cover rounded-xl mb-4 grayscale hover:grayscale-0 transition duration-500"><h4 class="font-black italic uppercase text-sm mb-4 h-10 overflow-hidden leading-tight text-white">${c.game}</h4><div class="flex flex-wrap gap-2">${getTags(c)}</div></div>`).join('');
             document.getElementById('month-list').classList.remove('show');
         };
 
-        // === PARTICLE SYSTEM ===
+        // === OPTIMALIZOVANÝ PARTICLE SYSTEM (žádné lagování) ===
         let particleCanvas, particleCtx, particlesArray = [];
+        let animationFrame;
 
         class Particle {
             constructor() {
                 this.x = Math.random() * particleCanvas.width;
                 this.y = Math.random() * particleCanvas.height;
-                this.size = Math.random() * 2.8 + 0.6;
-                this.speedX = Math.random() * 0.7 - 0.35;
-                this.speedY = Math.random() * 0.7 - 0.35;
-                this.opacity = Math.random() * 0.5 + 0.5;
+                this.size = Math.random() * 2.2 + 0.4;
+                this.speedX = (Math.random() - 0.5) * 0.6;
+                this.speedY = (Math.random() - 0.5) * 0.6;
+                this.opacity = Math.random() * 0.6 + 0.3;
             }
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
-
-                if (this.x < 0 || this.x > particleCanvas.width) this.speedX *= -0.85;
-                if (this.y < 0 || this.y > particleCanvas.height) this.speedY *= -0.85;
-
-                this.speedX += (Math.random() - 0.5) * 0.015;
-                this.speedY += (Math.random() - 0.5) * 0.015;
+                if (this.x < 0 || this.x > particleCanvas.width) this.speedX *= -0.9;
+                if (this.y < 0 || this.y > particleCanvas.height) this.speedY *= -0.9;
+                this.speedX += (Math.random() - 0.5) * 0.008;
+                this.speedY += (Math.random() - 0.5) * 0.008;
             }
             draw() {
                 particleCtx.save();
                 particleCtx.globalAlpha = this.opacity;
-                particleCtx.shadowBlur = 12;
-                particleCtx.shadowColor = '#ff3333';
-                particleCtx.fillStyle = '#ff4444';
-                particleCtx.beginPath();
-                particleCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                particleCtx.fill();
+                particleCtx.shadowBlur = 8;
+                particleCtx.shadowColor = '#ff4444';
+                particleCtx.fillStyle = '#ff5555';
+                particleCtx.fillRect(this.x, this.y, this.size, this.size);
                 particleCtx.restore();
             }
         }
@@ -529,17 +614,19 @@ Návykový progres: Supergiant Games znovu dokazují, že jsou mistři vyprávě
         function initParticles() {
             particleCanvas = document.getElementById('particles');
             if (!particleCanvas) return;
-            particleCtx = particleCanvas.getContext('2d');
+            particleCtx = particleCanvas.getContext('2d', { alpha: true });
 
             const resize = () => {
-                particleCanvas.width = window.innerWidth;
-                particleCanvas.height = window.innerHeight;
+                const dpr = window.devicePixelRatio || 1;
+                particleCanvas.width = window.innerWidth * dpr;
+                particleCanvas.height = window.innerHeight * dpr;
+                particleCtx.scale(dpr, dpr);
             };
             window.addEventListener('resize', resize);
             resize();
 
             particlesArray = [];
-            const count = Math.min(130, Math.floor((window.innerWidth * window.innerHeight) / 11000));
+            const count = Math.min(72, Math.floor((window.innerWidth * window.innerHeight) / 14000));
             for (let i = 0; i < count; i++) {
                 particlesArray.push(new Particle());
             }
@@ -553,7 +640,7 @@ Návykový progres: Supergiant Games znovu dokazují, že jsou mistři vyprávě
                 particlesArray[i].update();
                 particlesArray[i].draw();
             }
-            requestAnimationFrame(animateParticles);
+            animationFrame = requestAnimationFrame(animateParticles);
         }
 
         function init() {
@@ -567,59 +654,80 @@ Návykový progres: Supergiant Games znovu dokazují, že jsou mistři vyprávě
 
             document.getElementById('home-feed').innerHTML = allSorted.slice(1).map(i => {
                 const itemTag = i.score ? 'RECENZE' : 'NOVINKA';
-                return `<div class="flex flex-col md:flex-row gap-6 md:gap-10 py-8 md:py-10 border-b border-zinc-900 group cursor-pointer" onclick="openModal(${i.id})"><div class="relative w-full md:w-80 h-48 md:h-44 shrink-0 overflow-hidden rounded-3xl shadow-xl"><img src="${i.img}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500"><div class="absolute top-4 left-4 bg-red-600 text-white font-black condensed px-3 py-1 text-[10px] italic rounded-lg">${itemTag}</div></div><div class="flex-1"><h3 class="condensed text-3xl md:text-4xl font-black italic group-hover:text-red-600 transition mb-3 uppercase leading-none tracking-tighter text-white">${i.title || i.game}</h3><p class="text-zinc-500 text-base md:text-lg line-clamp-2 mb-4">${i.content.replace(/<[^>]*>/g, '')}</p>${i.score ? `<div class="text-2xl md:text-3xl font-black text-red-600 italic">${i.score}%</div>` : ''}</div></div>`;
+                let mediaHTML = '';
+                if (i.video) {
+                    mediaHTML = `<div class="video-preview relative w-full md:w-80 h-48 md:h-44 shrink-0 overflow-hidden rounded-3xl shadow-xl cursor-pointer" onclick="openModal(${i.id}); event.stopImmediatePropagation();">
+                        <img src="https://img.youtube.com/vi/${i.video}/maxresdefault.jpg" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500">
+                        <i class="fa-solid fa-play-circle play-icon"></i>
+                    </div>`;
+                } else {
+                    mediaHTML = `<div class="relative w-full md:w-80 h-48 md:h-44 shrink-0 overflow-hidden rounded-3xl shadow-xl"><img src="${i.img}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500"><div class="absolute top-4 left-4 bg-red-600 text-white font-black condensed px-3 py-1 text-[10px] italic rounded-lg">${itemTag}</div></div>`;
+                }
+                return `<div class="flex flex-col md:flex-row gap-6 md:gap-10 py-8 md:py-10 border-b border-zinc-900 group cursor-pointer feed-card" onclick="openModal(${i.id})">${mediaHTML}<div class="flex-1"><h3 class="condensed text-3xl md:text-4xl font-black italic group-hover:text-red-600 transition mb-3 uppercase leading-none tracking-tighter text-white">${i.title || i.game}</h3><p class="text-zinc-500 text-base md:text-lg line-clamp-2 mb-4">${i.content.replace(/<[^>]*>/g, '')}</p>${i.score ? `<div class="text-2xl md:text-3xl font-black text-red-600 italic">${i.score}%</div>` : ''}</div></div>`;
             }).join('');
 
-            document.getElementById('news-full-list').innerHTML = state.news.map(n => `<div class="flex flex-col md:flex-row gap-6 md:gap-12 group cursor-pointer" onclick="openModal(${n.id})"><div class="w-full md:w-[450px] h-[250px] md:h-[280px] overflow-hidden rounded-[25px] md:rounded-[40px] shadow-2xl relative"><img src="${n.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700"></div><div class="flex-1 md:py-4"><h3 class="condensed text-3xl md:text-5xl font-black italic group-hover:text-red-600 transition mb-4 md:mb-6 uppercase tracking-tighter leading-none text-white">${n.title}</h3><p class="text-zinc-500 text-base md:text-xl font-medium line-clamp-3">${n.content.replace(/<[^>]*>/g, '')}</p></div></div>`).join('');
-            document.getElementById('reviews-full-list').innerHTML = state.reviews.map(r => `<div class="flex flex-col md:flex-row gap-6 md:gap-12 group cursor-pointer" onclick="openModal(${r.id})"><div class="w-full md:w-[450px] h-[250px] md:h-[280px] overflow-hidden rounded-[25px] md:rounded-[40px] shadow-2xl relative"><img src="${r.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700"><div class="absolute top-4 right-4 md:top-6 md:right-6 bg-red-600 text-white font-black italic condensed px-3 py-1 md:px-4 md:py-2 text-xl md:text-3xl shadow-2xl rounded-lg md:rounded-xl">${r.score}%</div></div><div class="flex-1 md:py-4"><h3 class="condensed text-4xl md:text-6xl font-black italic group-hover:text-red-600 transition mb-4 md:mb-6 uppercase tracking-tighter leading-none text-white">${r.game}</h3><div class="mb-4 md:mb-6 flex gap-2">${getTags(r)}</div><p class="text-zinc-500 text-base md:text-xl font-medium line-clamp-3">${r.content.replace(/<[^>]*>/g, '')}</p></div></div>`).join('');
+            document.getElementById('news-full-list').innerHTML = state.news.map(n => {
+                let mediaHTML = '';
+                if (n.video) {
+                    mediaHTML = `<div class="video-preview w-full md:w-[450px] h-[250px] md:h-[280px] overflow-hidden rounded-[25px] md:rounded-[40px] shadow-2xl relative cursor-pointer" onclick="openModal(${n.id}); event.stopImmediatePropagation();">
+                        <img src="https://img.youtube.com/vi/${n.video}/maxresdefault.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        <i class="fa-solid fa-play-circle play-icon text-7xl"></i>
+                    </div>`;
+                } else {
+                    mediaHTML = `<div class="w-full md:w-[450px] h-[250px] md:h-[280px] overflow-hidden rounded-[25px] md:rounded-[40px] shadow-2xl relative"><img src="${n.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700"></div>`;
+                }
+                return `<div class="flex flex-col md:flex-row gap-6 md:gap-12 group cursor-pointer feed-card" onclick="openModal(${n.id})">${mediaHTML}<div class="flex-1 md:py-4"><h3 class="condensed text-3xl md:text-5xl font-black italic group-hover:text-red-600 transition mb-4 md:mb-6 uppercase tracking-tighter leading-none text-white">${n.title}</h3><p class="text-zinc-500 text-base md:text-xl font-medium line-clamp-3">${n.content.replace(/<[^>]*>/g, '')}</p></div></div>`;
+            }).join('');
+
+            document.getElementById('reviews-full-list').innerHTML = state.reviews.map(r => `<div class="flex flex-col md:flex-row gap-6 md:gap-12 group cursor-pointer feed-card" onclick="openModal(${r.id})"><div class="w-full md:w-[450px] h-[250px] md:h-[280px] overflow-hidden rounded-[25px] md:rounded-[40px] shadow-2xl relative"><img src="${r.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700"><div class="absolute top-4 right-4 md:top-6 md:right-6 bg-red-600 text-white font-black italic condensed px-3 py-1 md:px-4 md:py-2 text-xl md:text-3xl shadow-2xl rounded-lg md:rounded-xl">${r.score}%</div></div><div class="flex-1 md:py-4"><h3 class="condensed text-4xl md:text-6xl font-black italic group-hover:text-red-600 transition mb-4 md:mb-6 uppercase tracking-tighter leading-none text-white">${r.game}</h3><div class="mb-4 md:mb-6 flex gap-2">${getTags(r)}</div><p class="text-zinc-500 text-base md:text-xl font-medium line-clamp-3">${r.content.replace(/<[^>]*>/g, '')}</p></div></div>`).join('');
             
             const sortedReviews = [...state.reviews].sort((a,b) => b.score - a.score);
-            document.getElementById('hall-full-list').innerHTML = sortedReviews.map((e, idx) => `<div class="bg-[#080808] border border-zinc-900 flex flex-col md:flex-row items-center p-6 md:p-10 rounded-[25px] md:rounded-[40px] hover:border-zinc-700 transition group shadow-2xl gap-6 md:gap-0"><div class="condensed text-5xl md:text-7xl font-black italic w-auto md:w-32 text-center ${idx===0?'gold-text':'text-zinc-800'}">#${idx+1}</div><img src="${e.img}" class="w-full md:w-64 h-44 md:h-36 object-cover rounded-2xl md:mx-12 shadow-2xl grayscale group-hover:grayscale-0 transition duration-500"><div class="flex-1 text-center md:text-left"><h3 class="condensed text-3xl md:text-5xl font-black italic uppercase tracking-tighter text-white ${idx===0?'gold-text':''}">${e.game}</h3><div class="mt-4 flex justify-center md:justify-start gap-2">${getTags(e)}</div></div><div class="text-4xl md:text-7xl font-black italic text-red-600">${e.score}%</div></div>`).join('');
+            document.getElementById('hall-full-list').innerHTML = sortedReviews.map((e, idx) => `<div class="bg-[#080808] border border-zinc-900 flex flex-col md:flex-row items-center p-6 md:p-10 rounded-[25px] md:rounded-[40px] hover:border-zinc-700 transition group shadow-2xl gap-6 md:gap-0 feed-card" onclick="openModal(${e.id})"><div class="condensed text-5xl md:text-7xl font-black italic w-auto md:w-32 text-center ${idx===0?'gold-text':'text-zinc-800'}">#${idx+1}</div><img src="${e.img}" class="w-full md:w-64 h-44 md:h-36 object-cover rounded-2xl md:mx-12 shadow-2xl grayscale group-hover:grayscale-0 transition duration-500"><div class="flex-1 text-center md:text-left"><h3 class="condensed text-3xl md:text-5xl font-black italic uppercase tracking-tighter text-white ${idx===0?'gold-text':''}">${e.game}</h3><div class="mt-4 flex justify-center md:justify-start gap-2">${getTags(e)}</div></div><div class="text-4xl md:text-7xl font-black italic text-red-600">${e.score}%</div></div>`).join('');
             document.getElementById('side-hall').innerHTML = sortedReviews.slice(0,5).map((e, idx) => `<div class="flex items-center gap-4 bg-black/40 p-4 rounded-xl border border-zinc-900"><span class="condensed text-2xl font-black italic ${idx===0?'gold-text':'text-zinc-700'}">#${idx+1}</span><span class="text-[10px] font-bold uppercase flex-1 truncate text-zinc-400">${e.game}</span><span class="font-black text-red-600">${e.score}%</span></div>`).join('');
-            document.getElementById('side-pecky').innerHTML = [...state.calendar].sort((a,b) => new Date(a.rDate) - new Date(b.rDate)).map(c => `<div class="flex items-center gap-5 bg-zinc-950 p-4 rounded-2xl border border-zinc-900 cursor-pointer hover:border-red-600 transition shadow-lg" onclick="openModal(${c.id})"><div class="bg-red-600 w-14 h-14 shrink-0 flex flex-col items-center justify-center rounded-xl font-black condensed leading-none text-white"><span class="text-[9px] opacity-70 uppercase">${new Date(c.rDate).toLocaleString('cs-CZ', { month: 'short' })}</span><span class="text-xl">${new Date(c.rDate).getDate()}</span></div><div class="flex-1 truncate"><span class="text-[11px] font-black uppercase block truncate mb-1 text-white">${c.game}</span><div class="flex gap-1 flex-wrap">${getTags(c)}</div></div></div>`).join('');
+            document.getElementById('side-pecky').innerHTML = [...state.calendar].sort((a,b) => new Date(a.rDate) - new Date(b.rDate)).map(c => `<div class="flex items-center gap-5 bg-zinc-950 p-4 rounded-2xl border border-zinc-900 cursor-pointer hover:border-red-600 transition shadow-lg feed-card" onclick="openModal(${c.id})"><div class="bg-red-600 w-14 h-14 shrink-0 flex flex-col items-center justify-center rounded-xl font-black condensed leading-none text-white"><span class="text-[9px] opacity-70 uppercase">${new Date(c.rDate).toLocaleString('cs-CZ', { month: 'short' })}</span><span class="text-xl">${new Date(c.rDate).getDate()}</span></div><div class="flex-1 truncate"><span class="text-[11px] font-black uppercase block truncate mb-1 text-white">${c.game}</span><div class="flex gap-1 flex-wrap">${getTags(c)}</div></div></div>`).join('');
 
             const months = [...new Set(state.calendar.map(x => new Date(x.rDate).toLocaleString('cs-CZ', { month: 'long' })))];
             document.getElementById('month-list').innerHTML = months.map(m => `<div class="p-4 hover:bg-zinc-800 cursor-pointer text-xs font-black uppercase border-b border-zinc-900 transition text-white" onclick="renderCalendar('${m}')">${m} 2026</div>`).join('') + `<div class="p-4 hover:bg-red-600 cursor-pointer text-xs font-black uppercase transition text-white" onclick="renderCalendar('vše')">Zobrazit vše</div>`;
             renderCalendar('vše');
 
-            // === PARTICLES INITIALIZATION ===
             initParticles();
             animateParticles();
         }
 
         document.getElementById('month-toggle-btn').onclick = (e) => { e.stopPropagation(); document.getElementById('month-list').classList.toggle('show'); };
         
-        /* === ANIMACE PRO JEDNOTLIVÉ TABY (přidáno přesně podle tvého požadavku) === */
         document.querySelectorAll('.nav-link').forEach(link => { 
             link.addEventListener('click', () => { 
-                // Fade out aktuální tab
                 const currentActive = document.querySelector('.tab-content:not(.hidden)');
                 if (currentActive) {
+                    currentActive.style.transition = 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
                     currentActive.style.opacity = '0';
-                    currentActive.style.transform = 'translateY(30px)';
+                    currentActive.style.transform = 'translateY(40px) scale(0.96)';
                     setTimeout(() => {
                         currentActive.classList.add('hidden');
-                        currentActive.style.opacity = '';
-                        currentActive.style.transform = '';
-                    }, 600);
+                        currentActive.style.transition = '';
+                        currentActive.style.opacity = '1';
+                        currentActive.style.transform = 'translateY(0) scale(1)';
+                    }, 650);
                 }
 
-                // Aktivace nového tabu + animace
                 document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-nav')); 
                 link.classList.add('active-nav'); 
 
                 const newTab = document.getElementById('tab-' + link.dataset.tab);
                 newTab.classList.remove('hidden');
                 newTab.style.opacity = '0';
-                newTab.style.transform = 'translateY(30px)';
+                newTab.style.transform = 'translateY(70px) scale(0.92)';
+                newTab.style.filter = 'blur(10px)';
 
-                // Trigger animace (slide + fade in)
                 setTimeout(() => {
+                    newTab.style.transition = 'all 0.95s cubic-bezier(0.23, 1, 0.32, 1)';
                     newTab.style.opacity = '1';
-                    newTab.style.transform = 'translateY(0)';
-                }, 10);
+                    newTab.style.transform = 'translateY(0) scale(1)';
+                    newTab.style.filter = 'blur(0)';
+                }, 20);
 
-                window.scrollTo(0,0); 
+                window.scrollTo({ top: 0, behavior: 'smooth' }); 
             }); 
         });
         
