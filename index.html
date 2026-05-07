@@ -31,10 +31,9 @@
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 
-        .badge { font-size: 9px; font-weight: 900; padding: 3px 10px; border-radius: 5px; text-transform: uppercase; }
+        .badge { font-size: 9px; font-weight: 900; padding: 3px 10px; border-radius: 5px; text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
         .plat-tag { font-size: 9px; font-weight: 900; color: rgba(255,255,255,0.3); letter-spacing: 1px; }
 
-        /* Animace pulzování pro Hero */
         @keyframes pulse-slow { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.6; } }
         .hero-bg-animate { animation: pulse-slow 5s infinite; }
     </style>
@@ -93,22 +92,22 @@
 
         let state = {
             news: [
-                { id: 101, title: "Sony se má u PlayStationu 6 poučit z chyb Xboxu", img: "https://indian-tv.cz/uploads/ls/c1611a4a8fcd4083837042b2ef4994a8/1749806929.jpg?", rDate: "2026-05-07", content: "Spekulace kolem nové generace konzolí nabírají na síle a stále častěji se mluví o tom, že PlayStation 6 dorazí hned ve více variantách. Z této informace některým hráčům hrůzou vstávají vlasy na hlavě, protože vědí, jaký problém mají vývojáři kvůli Xboxu Series S. Slabší verze konzole dle tvůrců komplikuje vývoj a omezuje možnosti her.\n\nV Sony se ale měli poučit a slabší model by neměl omezovat ten výkonnější. Japonská společnost se má chtít scénáři Microsoftu vyhnout. Údajně plánuje, aby rozdíly mezi zařízeními byly relativně malé, například v oblasti paměti RAM má jít zhruba o 30 GB u výkonnější (standardní) verze konzole a 24 GB u přenosné konzole, tedy handheldu. To je podstatně menší propast než u Xboxu, kde rozdíl dosahuje až zhruba 60 %. Alespoň to tvrdí Moore’s Law is Dead.\n\nPrakticky by to mělo znamenat, že na obou zařízení poběží hry bez zásadních kompromisů v designu. Slabší model by mohl mít u her nižší rozlišení, jednodušší textury nebo nižší grafické detaily. Nebude se ale lišit funkcemi či herními systémy.\n\nZajímavostí je, že se objevují i spekulace o třetím modelu, který by kombinoval prvky obou zařízení. Ten by ale údajně neměl dorazit hned při uvedení nové generace, ale až později.\n\nJe potřeba zdůraznit, že Sony zatím nic oficiálně nepotvrdila. O handheldu, který doprovodí PlayStation 6, se ale v zákulisí mluví už velice dlouho. A vzhledem k popularitě PlayStation Portalu, Nintenda Switch nebo Steam Decku dává tahle strategie Sony smysl." },
-                { id: 102, title: "Game Pass v květnu: Forza Horizon 6 a Subnautica 2", img: "https://indian-tv.cz/uploads/ls/36e56838c4764a7492018688930ce83e/1777998805.jpg?", rDate: "2026-05-06", content: "Microsoft odhalil bombastickou nabídku pro tento měsíc." },
-                { id: 103, title: "Proč si PC hráči musejí počkat na Grand Theft Auto VI?", img: "https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg", rDate: "2026-05-05", content: "Rockstar Games tradičně upřednostňují konzole kvůli exkluzivním smlouvám se Sony." },
-                { id: 104, title: "Zaklínač 4: Vývojáři slibují návrat ke kořenům", img: "https://cdn.mos.cms.futurecdn.net/ZpE6Q6v7T6X2R6V7X2R6V7.jpg", rDate: "2026-05-04", content: "Nová sága začíná a Unreal Engine 5 vypadá naprosto neuvěřitelně." }
+                { id: 101, title: "Sony se má u PlayStationu 6 poučit z chyb Xboxu", img: "https://indian-tv.cz/uploads/ls/c1611a4a8fcd4083837042b2ef4994a8/1749806929.jpg?", rDate: "2026-05-07", cz: false, isEA: false, isDLC: false, content: "Spekulace kolem nové generace konzolí nabírají na síle..." },
+                { id: 102, title: "Game Pass v květnu: Forza Horizon 6 a Subnautica 2", img: "https://indian-tv.cz/uploads/ls/36e56838c4764a7492018688930ce83e/1777998805.jpg?", rDate: "2026-05-06", cz: false, isEA: false, isDLC: false, content: "Microsoft odhalil bombastickou nabídku pro tento měsíc." },
+                { id: 103, title: "Proč si PC hráči musejí počkat na Grand Theft Auto VI?", img: "https://indian-tv.cz/uploads/ls/3b893ce7590d4371b06532dcac210d72/1777975974.jpg", rDate: "2026-05-05", cz: false, isEA: false, isDLC: false, content: "Rockstar Games tradičně upřednostňují konzole..." },
+                { id: 104, title: "Zaklínač 4: Vývojáři slibují návrat ke kořenům", img: "https://cdn.mos.cms.futurecdn.net/ZpE6Q6v7T6X2R6V7X2R6V7.jpg", rDate: "2026-05-04", cz: false, isEA: false, isDLC: false, content: "Nová sága začíná a Unreal Engine 5 vypadá naprosto neuvěřitelně." }
             ],
             reviews: [
-                { id: 201, game: "Kingdom Come: Deliverance II", score: 95, img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1771300/header.jpg", rDate: "2026-02-11", cz: true, content: "Jindra se vrací v životní formě. Kutná Hora bere dech a hratelnost je vybroušená k dokonalosti." },
-                { id: 202, game: "ELDEN RING: Shadow of the Erdtree", score: 98, img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2778580/header.jpg", rDate: "2026-05-06", isDLC: true, content: "Nejlepší DLC všech dob. Tečka." },
-                { id: 203, game: "Hades II", score: 92, img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1145350/header.jpg", rDate: "2026-05-01", isEA: true, content: "Návykovější než jednička. Supergiant Games opět trefili desítku." },
-                { id: 204, game: "Life is Strange: Reunion", score: 84, img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2624870/4a44a2dce89e2d5194f939bd221a79d869169bdf/ss_4a44a2dce89e2d5194f939bd221a79d869169bdf.1920x1080.jpg?t=1777999087", rDate: "2026-04-02", video: "qf1Um7RKjkc", content: "Life is Strange: Reunion představuje návrat Max Caulfield a Chloe Price po více než deseti letech od původní hry. Deck Nine tentokrát vsadilo hlavně na emoce, nostalgii a uzavření příběhu dvou nejikoničtějších postav celé série.\n\nNejvětší sílou hry jsou opět postavy a atmosféra. Chemie mezi Max a Chloe funguje velmi dobře a jejich společné momenty patří k tomu nejlepšímu, co Reunion nabízí. Hra dokáže být emotivní, osobní a v nejsilnějších scénách připomene, proč si původní Life is Strange získalo tolik fanoušků.\n\nHratelnost zůstává věrná sérii. Vrací se schopnost vracet čas a nově si hráč může zahrát za obě hlavní postavy. Nejde o revoluci, ale mechaniky dobře podporují tempo příběhu a rozhodování.\n\nAudiovizuálně hra působí velmi silně. Soundtrack je opět výborný a atmosféra univerzitního prostředí funguje skvěle. Technicky nejde o bezchybný titul a občas se objeví slabší animace nebo drobné bugy, ale nic zásadního.\n\nSlabší stránkou je samotný příběh. Některé dějové linky působí překombinovaně a hra místy až moc spoléhá na nostalgii. Ne každému také sedne způsob, jakým Reunion navazuje na předchozí díly série.\n\nVerdikt:\n\nLife is Strange: Reunion není perfektní pokračování, ale nabízí silný emotivní zážitek a důstojný návrat Max a Chloe. Nejvíc boduje atmosférou, hudbou a postavami, zatímco slabší příběhové tempo a přílišná nostalgie ho lehce sráží." }
+                { id: 201, game: "Kingdom Come: Deliverance II", score: 95, img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1771300/header.jpg", rDate: "2026-02-11", cz: true, isEA: false, isDLC: false, content: "Jindra se vrací v životní formě..." },
+                { id: 202, game: "ELDEN RING: Shadow of the Erdtree", score: 98, img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2778580/header.jpg", rDate: "2026-05-06", cz: false, isEA: false, isDLC: true, content: "Nejlepší DLC všech dob. Tečka." },
+                { id: 203, game: "Hades II", score: 91, img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1145350/ss_93a2b3a39788031aac115b2edeebcefe585d6c8d.1920x1080.jpg?t=1765831644", rDate: "2026-05-01", cz: false, isEA: false, isDLC: false, video: "MawBCULz4vE" content: "Hades II od studia Supergiant Games navazuje na jeden z nejlépe hodnocených roguelike titulů posledních let a téměř ve všech směrech působí větší, propracovanější a sebevědomější než první díl.\n\nTentokrát se hráč ujímá Melinoë, sestry Zagreuse, která vyráží zastavit Titána času Chrona. Základ hratelnosti zůstává stejný – rychlé souboje, opakované průchody a postupné vylepšování postavy – ale pokračování přidává nové mechaniky, větší variabilitu buildů a více možností při soubojích.\n\nSoubojový systém je výborný. Hra je rychlá, plynulá a každá zbraň působí odlišně. Velkým plusem je práce s magií a schopnostmi, díky kterým mají souboje větší hloubku než v prvním Hades. Boss fighty patří k tomu nejlepšímu, co žánr nabízí.\n\nAudiovizuálně jde opět o špičku. Stylizace, soundtrack i dabing mají obrovskou atmosféru a hra si drží unikátní identitu od začátku do konce.\n\nNevýhodou pro některé hráče může být vyšší obtížnost a fakt, že hra pořád stojí na repetitivní roguelike smyčce. Pokud tě tenhle typ her nebaví, Hades II tě pravděpodobně nepřesvědčí.\nVerdikt:Hades II je výborné pokračování, které nesází na revoluci, ale na vylepšení téměř všech aspektů prvního dílu. Skvělé souboje, silná atmosféra a obrovská znovuhratelnost z něj dělají jeden z nejlepších roguelike titulů současnosti." },
+                { id: 204, game: "Life is Strange: Reunion", score: 84, img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2624870/4a44a2dce89e2d5194f939bd221a79d869169bdf/ss_4a44a2dce89e2d5194f939bd221a79d869169bdf.1920x1080.jpg?t=1777999087", rDate: "2026-04-02", cz: true, isEA: false, isDLC: false, video: "qf1Um7RKjkc", content: "Life is Strange: Reunion představuje návrat Max a Chloe..." }
             ],
             calendar: [
-                { id: 301, game: "Grand Theft Auto VI", date: "19. listopadu 2026", img: "https://www.rockstargames.com/VI/_next/image?url=%2FVI%2F_next%2Fstatic%2Fmedia%2FJason_Duval_05.921c79be.jpg&w=1280&q=75", rDate: "2026-11-19", platforms: ['ps5', 'xbox'], video: "QdBZY2fkU-0" },
-                { id: 302, game: "Forza Horizon 6", date: "19. května 2026", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2483190/383ace7815eaa8f8f5128a58fd8ca7df911d3e14/ss_383ace7815eaa8f8f5128a58fd8ca7df911d3e14.1920x1080.jpg?t=1778004187", rDate: "2026-05-19", platforms: ['pc', 'xbox'], video: "pWw-UENvdTw", cz: true },
-                { id: 303, game: "LEGO® Batman™: Legacy of the Dark Knight", date: "22. května 2026", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2215200/26d8ea3f288ffaa1fe9956620cbd920f10b171f4/ss_26d8ea3f288ffaa1fe9956620cbd920f10b171f4.1920x1080.jpg?t=1777655946", rDate: "2026-05-22", platforms: ['pc', 'ps5', 'switch'], video: "j5ha2VwHJCw", cz: true },
-                { id: 304, game: "Subnautica 2", date: "14. května 2026", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1962700/787e2315a1eb5aaba73c4f75e6f7d7d8835fa260/ss_787e2315a1eb5aaba73c4f75e6f7d7d8835fa260.1920x1080.jpg?t=1778079698", rDate: "2026-05-14", platforms: ['pc', 'xbox'], video: "8EZhCzFaQuw" }
+                { id: 301, game: "Grand Theft Auto VI", date: "19. listopadu 2026", img: "https://www.rockstargames.com/VI/_next/image?url=%2FVI%2F_next%2Fstatic%2Fmedia%2FJason_Duval_05.921c79be.jpg&w=1280&q=75", rDate: "2026-11-19", platforms: ['ps5', 'xbox'], cz: false, isEA: false, isDLC: false, video: "QdBZY2fkU-0" },
+                { id: 302, game: "Forza Horizon 6", date: "19. května 2026", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2483190/383ace7815eaa8f8f5128a58fd8ca7df911d3e14/ss_383ace7815eaa8f8f5128a58fd8ca7df911d3e14.1920x1080.jpg?t=1778004187", rDate: "2026-05-19", platforms: ['pc', 'xbox'], cz: true, isEA: false, isDLC: false, video: "pWw-UENvdTw" },
+                { id: 303, game: "LEGO® Batman™: Legacy of the Dark Knight", date: "22. května 2026", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2215200/26d8ea3f288ffaa1fe9956620cbd920f10b171f4/ss_26d8ea3f288ffaa1fe9956620cbd920f10b171f4.1920x1080.jpg?t=1777655946", rDate: "2026-05-22", platforms: ['pc', 'ps5', 'switch'], cz: true, isEA: false, isDLC: false, video: "j5ha2VwHJCw" },
+                { id: 304, game: "Subnautica 2", date: "14. května 2026", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1962700/787e2315a1eb5aaba73c4f75e6f7d7d8835fa260/ss_787e2315a1eb5aaba73c4f75e6f7d7d8835fa260.1920x1080.jpg?t=1778079698", rDate: "2026-05-14", platforms: ['pc', 'xbox'], cz: false, isEA: true, isDLC: false, video: "8EZhCzFaQuw" }
             ]
         };
 
@@ -120,23 +119,52 @@
             renderAll();
         }
 
+        // Pomocná funkce pro vygenerování štítků s vlaječkou u češtiny
+        function getBadges(item) {
+            let html = '';
+            if (item.cz) {
+                html += `
+                <span class="badge bg-green-700/80 text-white border border-green-500/50">
+                    <svg width="12" height="10" viewBox="0 0 32 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="32" height="12" fill="white"/>
+                        <rect y="12" width="32" height="12" fill="#D7141A"/>
+                        <path d="M0 0L16 12L0 24V0Z" fill="#11457E"/>
+                    </svg>
+                    Čeština
+                </span>`;
+            }
+            if (item.isEA) html += '<span class="badge bg-orange-600">Early Access</span>';
+            if (item.isDLC) html += '<span class="badge bg-blue-600">DLC</span>';
+            return html;
+        }
+
         function renderAll() {
+            // Seřazení novinek a recenzí podle data (nejnovější nahoře)
+            state.news.sort((a, b) => new Date(b.rDate) - new Date(a.rDate));
+            state.reviews.sort((a, b) => new Date(b.rDate) - new Date(a.rDate));
+            // Seřazení kalendáře podle data vydání (nejbližší jako první)
+            state.calendar.sort((a, b) => new Date(a.rDate) - new Date(b.rDate));
+
             renderHome(); renderNews(); renderReviews(); renderCalendar(); renderHallOfFame();
         }
 
         function renderHome() {
             const top = state.news[0];
             const heroSlot = document.getElementById('hero-slot');
-            if(heroSlot) {
+            if(heroSlot && top) {
                 heroSlot.innerHTML = `<div class="glass rounded-[50px] h-[550px] overflow-hidden relative cursor-pointer group card-hover" onclick="openDetail('news', ${top.id})">
                     <img src="${top.img}" class="w-full h-full object-cover opacity-40 group-hover:scale-105 transition duration-1000 hero-bg-animate">
+                    <div class="absolute top-10 left-10 flex gap-2">${getBadges(top)}</div>
                     <div class="absolute bottom-16 left-16"><h1 class="text-6xl font-black logo-font italic uppercase group-hover:text-red-600 transition">${top.title}</h1></div>
                 </div>`;
             }
 
             document.getElementById('home-news-extra').innerHTML = state.news.slice(1,5).map(n => `
                 <div class="glass p-5 rounded-3xl cursor-pointer card-hover" onclick="openDetail('news', ${n.id})">
-                    <img src="${n.img}" class="w-full h-32 object-cover rounded-xl mb-4 opacity-60">
+                    <div class="relative mb-4">
+                        <img src="${n.img}" class="w-full h-32 object-cover rounded-xl opacity-60">
+                        <div class="absolute top-2 left-2 flex gap-1 flex-wrap">${getBadges(n)}</div>
+                    </div>
                     <h4 class="font-black text-[10px] uppercase italic leading-tight">${n.title}</h4>
                 </div>`).join('');
 
@@ -144,29 +172,86 @@
                 <div class="glass p-4 rounded-2xl flex items-center justify-between cursor-pointer card-hover" onclick="openDetail('calendar', ${g.id})">
                     <div class="flex items-center gap-4">
                         <img src="${g.img}" class="w-16 h-10 object-cover rounded-lg shadow-lg">
-                        <div><h4 class="font-black text-xs uppercase italic">${g.game}</h4><p class="text-red-600 font-black text-[9px] uppercase">${g.date}</p></div>
+                        <div>
+                            <h4 class="font-black text-xs uppercase italic">${g.game}</h4>
+                            <div class="flex items-center gap-2">
+                                <p class="text-red-600 font-black text-[9px] uppercase">${g.date}</p>
+                                ${getBadges(g)}
+                            </div>
+                        </div>
                     </div>
                     ${g.video ? '<i class="fa fa-play-circle text-red-600 opacity-30 group-hover:opacity-100 text-xl transition"></i>' : ''}
                 </div>`).join('');
 
             document.getElementById('home-rev').innerHTML = state.reviews.slice(0,4).map(r => `
                 <div class="glass p-4 rounded-2xl flex justify-between items-center px-6 cursor-pointer card-hover" onclick="openDetail('reviews', ${r.id})">
-                    <h4 class="font-black text-xs uppercase italic">${r.game}</h4>
+                    <div class="flex flex-col gap-1">
+                        <h4 class="font-black text-xs uppercase italic">${r.game}</h4>
+                        <div class="flex gap-1">${getBadges(r)}</div>
+                    </div>
                     <span class="text-red-600 font-black text-xl italic">${r.score}%</span>
                 </div>`).join('');
         }
 
-        function renderNews() { document.getElementById('news-grid').innerHTML = state.news.map(n => `<div class="glass rounded-3xl overflow-hidden card-hover cursor-pointer group" onclick="openDetail('news', ${n.id})"><img src="${n.img}" class="w-full h-56 object-cover opacity-80 group-hover:opacity-100 transition"><div class="p-8"><h3 class="font-black italic text-xl uppercase group-hover:text-red-600 transition">${n.title}</h3></div></div>`).join(''); }
-        function renderReviews() { document.getElementById('reviews-grid').innerHTML = state.reviews.map(r => `<div class="glass rounded-3xl p-6 card-hover cursor-pointer group" onclick="openDetail('reviews', ${r.id})"><div class="relative mb-4"><img src="${r.img}" class="w-full h-44 object-cover rounded-2xl"><div class="absolute top-3 left-3 flex gap-2">${r.isDLC ? '<span class="badge bg-blue-600">DLC</span>' : ''}${r.cz ? '<span class="badge bg-green-600 font-black">CZ</span>' : ''}</div></div><div class="flex justify-between items-end"><h4 class="font-black text-xs uppercase italic w-2/3">${r.game}</h4><span class="text-3xl font-black text-red-600 italic">${r.score}%</span></div></div>`).join(''); }
-        function renderCalendar() { document.getElementById('calendar-grid').innerHTML = state.calendar.map(g => `<div class="glass p-10 rounded-[40px] text-center card-hover cursor-pointer group" onclick="openDetail('calendar', ${g.id})">${g.cz ? '<div class="badge bg-red-600 mb-4 inline-block">ČEŠTINA</div>' : ''}<img src="${g.img}" class="w-full h-48 object-cover rounded-3xl mb-8 shadow-2xl group-hover:scale-105 transition"><h3 class="text-2xl font-black italic uppercase mb-4">${g.game}</h3><div class="flex justify-center gap-3 mb-6">${g.platforms.map(p => `<span class="plat-tag">${platLabels[p]}</span>`).join(' • ')}</div><div class="text-red-600 font-black italic text-xl">${g.date}</div></div>`).join(''); }
-        function renderHallOfFame() { const sorted = [...state.reviews].sort((a,b) => b.score - a.score); document.getElementById('hall-of-fame').innerHTML = sorted.map((r, i) => `<div class="glass p-8 rounded-[30px] flex items-center justify-between border-l-8 border-red-600 card-hover cursor-pointer" onclick="openDetail('reviews', ${r.id})"><div class="flex items-center gap-10"><span class="text-5xl font-black italic opacity-10">${i+1}</span><img src="${r.img}" class="w-20 h-12 object-cover rounded-xl shadow-xl"><h3 class="text-xl font-black italic uppercase">${r.game}</h3></div><span class="text-4xl font-black text-red-600 italic">${r.score}%</span></div>`).join(''); }
+        function renderNews() { 
+            document.getElementById('news-grid').innerHTML = state.news.map(n => `
+                <div class="glass rounded-3xl overflow-hidden card-hover cursor-pointer group" onclick="openDetail('news', ${n.id})">
+                    <div class="relative">
+                        <img src="${n.img}" class="w-full h-56 object-cover opacity-80 group-hover:opacity-100 transition">
+                        <div class="absolute top-4 left-4 flex gap-2">${getBadges(n)}</div>
+                    </div>
+                    <div class="p-8">
+                        <h3 class="font-black italic text-xl uppercase group-hover:text-red-600 transition">${n.title}</h3>
+                    </div>
+                </div>`).join(''); 
+        }
+
+        function renderReviews() { 
+            document.getElementById('reviews-grid').innerHTML = state.reviews.map(r => `
+                <div class="glass rounded-3xl p-6 card-hover cursor-pointer group" onclick="openDetail('reviews', ${r.id})">
+                    <div class="relative mb-4">
+                        <img src="${r.img}" class="w-full h-44 object-cover rounded-2xl">
+                        <div class="absolute top-3 left-3 flex gap-2 flex-wrap">${getBadges(r)}</div>
+                    </div>
+                    <div class="flex justify-between items-end">
+                        <h4 class="font-black text-xs uppercase italic w-2/3">${r.game}</h4>
+                        <span class="text-3xl font-black text-red-600 italic">${r.score}%</span>
+                    </div>
+                </div>`).join(''); 
+        }
+
+        function renderCalendar() { 
+            document.getElementById('calendar-grid').innerHTML = state.calendar.map(g => `
+                <div class="glass p-10 rounded-[40px] text-center card-hover cursor-pointer group" onclick="openDetail('calendar', ${g.id})">
+                    <div class="flex justify-center gap-2 mb-4">${getBadges(g)}</div>
+                    <img src="${g.img}" class="w-full h-48 object-cover rounded-3xl mb-8 shadow-2xl group-hover:scale-105 transition">
+                    <h3 class="text-2xl font-black italic uppercase mb-4">${g.game}</h3>
+                    <div class="flex justify-center gap-3 mb-6">${g.platforms.map(p => `<span class="plat-tag">${platLabels[p]}</span>`).join(' • ')}</div>
+                    <div class="text-red-600 font-black italic text-xl">${g.date}</div>
+                </div>`).join(''); 
+        }
+
+        function renderHallOfFame() { 
+            const sorted = [...state.reviews].sort((a,b) => b.score - a.score); 
+            document.getElementById('hall-of-fame').innerHTML = sorted.map((r, i) => `
+                <div class="glass p-8 rounded-[30px] flex items-center justify-between border-l-8 border-red-600 card-hover cursor-pointer" onclick="openDetail('reviews', ${r.id})">
+                    <div class="flex items-center gap-10">
+                        <span class="text-5xl font-black italic opacity-10">${i+1}</span>
+                        <img src="${r.img}" class="w-20 h-12 object-cover rounded-xl shadow-xl">
+                        <div>
+                            <h3 class="text-xl font-black italic uppercase">${r.game}</h3>
+                            <div class="flex gap-2 mt-1">${getBadges(r)}</div>
+                        </div>
+                    </div>
+                    <span class="text-4xl font-black text-red-600 italic">${r.score}%</span>
+                </div>`).join(''); 
+        }
 
         function openDetail(type, id) {
             const item = state[type].find(x => x.id === id);
             let media = `<img src="${item.img}" class="w-full h-96 object-cover rounded-[40px] mb-10 shadow-2xl">`;
             
             if (item.video) {
-                // Oprava pro embedding YouTube bez chyb
                 media = `<div class="video-container mb-10">
                     <iframe src="https://www.youtube.com/embed/${item.video}?autoplay=1&rel=0&modestbranding=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>`;
@@ -176,6 +261,7 @@
                 ${media}
                 <div class="flex flex-col md:flex-row justify-between items-start gap-10 mb-10 border-b border-white/5 pb-10">
                     <div class="flex-1">
+                        <div class="flex gap-2 mb-4">${getBadges(item)}</div>
                         <h2 class="text-6xl font-black italic uppercase leading-none mb-6">${item.game || item.title}</h2>
                         ${item.platforms ? `<div class="flex gap-4">${item.platforms.map(p => `<span class="plat-tag bg-white/5 px-4 py-2 rounded-lg">${platLabels[p]}</span>`).join('')}</div>` : ''}
                     </div>
