@@ -13,7 +13,11 @@
         .condensed { font-family: 'Barlow Condensed', sans-serif; text-transform: uppercase; }
         
         nav { background: #000; border-bottom: 1px solid var(--border); position: fixed; width: 100%; top: 0; z-index: 1000; height: 70px; }
-        .nav-link { font-weight: 800; font-size: 12px; text-transform: uppercase; padding: 0 20px; cursor: pointer; opacity: 0.5; transition: 0.3s; line-height: 70px; display: inline-block; letter-spacing: 1px; }
+        /* Mobilní menu - horizontální scroll */
+        .nav-container { overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+        .nav-container::-webkit-scrollbar { display: none; }
+        
+        .nav-link { font-weight: 800; font-size: 12px; text-transform: uppercase; padding: 0 15px; cursor: pointer; opacity: 0.5; transition: 0.3s; line-height: 70px; display: inline-block; letter-spacing: 1px; }
         .nav-link:hover, .active-nav { opacity: 1; color: var(--red); }
 
         .hero-title { line-height: 0.9 !important; letter-spacing: -0.02em !important; word-spacing: 0.05em; }
@@ -21,13 +25,21 @@
         
         .tag { font-size: 9px; font-weight: 900; padding: 2px 6px; border-radius: 3px; text-transform: uppercase; }
         .tag-cz { background: #10b98120; color: #10b981; border: 1px solid #10b98140; }
-        .tag-ea { background: #f59e0b20; color: #f59e0b; border: 1px solid #f59e0b40; }
+        .tag-ea { background: #f59e0b20; color: #f59e0b; border: 1px solid #10b98140; }
         .tag-dlc { background: #8b5cf620; color: #8b5cf6; border: 1px solid #8b5cf640; }
         .tag-plat { background: #222; color: #888; border: 1px solid #333; }
 
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 2000; overflow-y: auto; }
-        .modal-body { max-width: 1000px; margin: 80px auto; padding: 40px; position: relative; }
-        .close-modal { position: fixed; top: 30px; right: 50px; font-size: 40px; cursor: pointer; z-index: 2100; color: #fff; transition: 0.3s; }
+        .modal-body { max-width: 1000px; margin: 20px auto; padding: 20px; position: relative; }
+        
+        @media (min-width: 768px) {
+            .modal-body { margin: 80px auto; padding: 40px; }
+        }
+
+        .close-modal { position: fixed; top: 20px; right: 20px; font-size: 30px; cursor: pointer; z-index: 2100; color: #fff; transition: 0.3s; background: rgba(0,0,0,0.5); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        @media (min-width: 768px) {
+            .close-modal { top: 30px; right: 50px; font-size: 40px; background: none; }
+        }
         .close-modal:hover { color: var(--red); transform: rotate(90deg); }
 
         .dropdown-content { display: none; position: absolute; right: 0; top: 65px; width: 220px; background: #0a0a0a; border: 1px solid #222; z-index: 100; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
@@ -35,16 +47,16 @@
 
         .pro-item { color: #10b981; }
         .con-item { color: #ef4444; }
-        .gallery-thumb { cursor: pointer; transition: 0.3s; filter: grayscale(1); border: 2px solid transparent; }
+        .gallery-thumb { cursor: pointer; transition: 0.3s; filter: grayscale(1); border: 2px solid transparent; flex-shrink: 0; }
         .gallery-thumb:hover, .gallery-thumb.active { filter: grayscale(0); border-color: var(--red); }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="max-w-[1600px] mx-auto flex items-center px-8 h-full text-white">
-            <div class="text-3xl font-black italic tracking-tighter cursor-pointer mr-12" onclick="location.reload()">YUKKI<span class="text-red-600">.</span></div>
-            <div class="flex">
+        <div class="max-w-[1600px] mx-auto flex items-center px-4 md:px-8 h-full text-white">
+            <div class="text-2xl md:text-3xl font-black italic tracking-tighter cursor-pointer mr-4 md:mr-12" onclick="location.reload()">YUKKI<span class="text-red-600">.</span></div>
+            <div class="flex nav-container">
                 <div class="nav-link active-nav" data-tab="domu">Úvod</div>
                 <div class="nav-link" data-tab="novinky">Novinky</div>
                 <div class="nav-link" data-tab="recenze">Recenze</div>
@@ -54,16 +66,52 @@
         </div>
     </nav>
 
-    <div class="max-w-[1600px] mx-auto px-8 pt-32 pb-20">
-        <div id="tab-domu" class="tab-content"><div id="hero-area" class="mb-20"></div><div class="grid grid-cols-12 gap-16"><div id="home-feed" class="col-span-8 space-y-10"></div><div class="col-span-4 space-y-12"><div class="bg-[#080808] p-8 rounded-3xl border border-zinc-900 shadow-xl"><h3 class="condensed text-2xl font-black mb-6 italic">Prestige Hall <span class="text-zinc-700">#Top5</span></h3><div id="side-hall" class="space-y-3"></div></div><div><h3 class="condensed text-2xl font-black mb-6 italic">Pecky měsíce</h3><div id="side-pecky" class="space-y-4"></div></div></div></div></div>
+    <div class="max-w-[1600px] mx-auto px-4 md:px-8 pt-24 md:pt-32 pb-20">
+        <div id="tab-domu" class="tab-content">
+            <div id="hero-area" class="mb-10 md:mb-20"></div>
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16">
+                <div id="home-feed" class="md:col-span-8 space-y-10"></div>
+                <div class="md:col-span-4 space-y-12">
+                    <div class="bg-[#080808] p-6 md:p-8 rounded-3xl border border-zinc-900 shadow-xl">
+                        <h3 class="condensed text-xl md:text-2xl font-black mb-6 italic">Prestige Hall <span class="text-zinc-700">#Top5</span></h3>
+                        <div id="side-hall" class="space-y-3"></div>
+                    </div>
+                    <div>
+                        <h3 class="condensed text-xl md:text-2xl font-black mb-6 italic">Pecky měsíce</h3>
+                        <div id="side-pecky" class="space-y-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
         
-        <div id="tab-novinky" class="tab-content hidden"><h2 class="condensed text-7xl font-black italic mb-16 uppercase">Novinky</h2><div id="news-full-list" class="space-y-16 max-w-5xl"></div></div>
+        <div id="tab-novinky" class="tab-content hidden">
+            <h2 class="condensed text-4xl md:text-7xl font-black italic mb-10 md:mb-16 uppercase">Novinky</h2>
+            <div id="news-full-list" class="space-y-10 md:space-y-16 max-w-5xl"></div>
+        </div>
         
-        <div id="tab-recenze" class="tab-content hidden"><h2 class="condensed text-7xl font-black italic mb-16 uppercase">Recenze</h2><div id="reviews-full-list" class="space-y-16 max-w-5xl"></div></div>
+        <div id="tab-recenze" class="tab-content hidden">
+            <h2 class="condensed text-4xl md:text-7xl font-black italic mb-10 md:mb-16 uppercase">Recenze</h2>
+            <div id="reviews-full-list" class="space-y-10 md:space-y-16 max-w-5xl"></div>
+        </div>
         
-        <div id="tab-kalendar" class="tab-content hidden"><div class="flex justify-between items-end mb-16"><h2 class="condensed text-7xl font-black italic uppercase">Kalendář 2026</h2><div class="relative"><button id="month-toggle-btn" class="bg-red-600 px-8 py-4 rounded-xl font-black condensed flex items-center gap-3 tracking-widest hover:bg-red-700 transition">VYBRAT MĚSÍC <i class="fa-solid fa-chevron-down text-xs"></i></button><div id="month-list" class="dropdown-content"></div></div></div><div id="calendar-grid" class="grid grid-cols-4 gap-6"></div></div>
+        <div id="tab-kalendar" class="tab-content hidden">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-16 gap-6">
+                <h2 class="condensed text-4xl md:text-7xl font-black italic uppercase">Kalendář 2026</h2>
+                <div class="relative w-full md:w-auto">
+                    <button id="month-toggle-btn" class="w-full md:w-auto bg-red-600 px-8 py-4 rounded-xl font-black condensed flex justify-center items-center gap-3 tracking-widest hover:bg-red-700 transition">VYBRAT MĚSÍC <i class="fa-solid fa-chevron-down text-xs"></i></button>
+                    <div id="month-list" class="dropdown-content w-full md:w-[220px]"></div>
+                </div>
+            </div>
+            <div id="calendar-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6"></div>
+        </div>
         
-        <div id="tab-elite" class="tab-content hidden"><div class="text-center mb-20"><h2 class="condensed text-[120px] font-black italic gold-text leading-none">PRESTIGE HALL</h2><p class="text-zinc-500 font-bold tracking-[0.6em] uppercase text-xs mt-4">The Absolute Best of Gaming 2026</p></div><div id="hall-full-list" class="max-w-5xl mx-auto space-y-6"></div></div>
+        <div id="tab-elite" class="tab-content hidden">
+            <div class="text-center mb-10 md:mb-20">
+                <h2 class="condensed text-5xl md:text-[120px] font-black italic gold-text leading-none">PRESTIGE HALL</h2>
+                <p class="text-zinc-500 font-bold tracking-[0.3em] md:tracking-[0.6em] uppercase text-[10px] md:text-xs mt-4">The Absolute Best of Gaming 2026</p>
+            </div>
+            <div id="hall-full-list" class="max-w-5xl mx-auto space-y-6"></div>
+        </div>
     </div>
 
     <div id="modal-overlay" class="modal"><div class="close-modal" onclick="closeModal()">&times;</div><div class="modal-body" id="modal-content"></div></div>
@@ -80,32 +128,33 @@
                 { id: 104, title: `Zaklínač 4: Vývojáři slibují návrat ke kořenům série`, img: `https://cdn.myshoptet.com/usr/www.konzoliste.cz/user/documents/upload/clanky/witcher-4.jpg`, rDate: `2026-05-04`, cz: true, video: `54dabgZJ5YA`, content: `Po letech spekulací a očekávání začíná být kolem The Witcher 4 konečně jasněji...` }
             ],
             reviews: [
-{
-    id: 201,
-    game: `Kingdom Come: Deliverance II`,
-    score: 92,
-    rDate: `2026-02-08`, 
-    img: `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1771300/ss_935ddb59f90bc2c21c706132cb9b446fe7851c19.1920x1080.jpg?t=1777975568`,
-    video: `7ynJN-HejlY`,
-    gallery: [
-        `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1771300/ss_bd668f4d12300c019fa3fa73108aa62929fbf862.1920x1080.jpg?t=1777975568`,
-        `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1771300/ss_709f3329562cd2cfe6db70bac908b3e72eaef83b.1920x1080.jpg?t=1777975568`
-    ],
-    pros: [`Výborně napsaný příběh a postavy`, `Autentická atmosféra`, `Skvělý quest design`],
-    cons: [`Občasné bugy`, `Pomalejší tempo`],
-    cz: true,
-    content: `Kingdom Come: Deliverance II od Warhorse Studios navazuje přesně tam, kde první díl skončil, a prakticky ve všech směrech působí větší, propracovanější a sebevědomější. Hra znovu sází na realistické středověké RPG bez magie a fantasy prvků, což ji i dnes odlišuje od veškeré konkurence.<br>
-Největší sílou hry zůstává dechberoucí atmosféra. Středověké Čechy působí neuvěřitelně autenticky – od hlubokých lesů a vesnic až po ruch Kutné Hory. Vývojáři si znovu dali obrovskou práci s historickou věrností a výsledkem je jeden z nejuvěřitelnějších otevřených světů v herní historii.<br>
-<b>Jindřichův posun:</b> Z neohrabaného kovářského učně se stal muž, který už ví, jak držet meč, ale jeho lidskost a humor zůstaly zachovány. Scenáristé odvedli skvělou práci v tom, jak postavy reagují na váš status – jinak na vás koukají v nablýskaném brnění a jinak, když jste špinaví od bláta. Právě tyto detaily dělají z Jindřicha postavu, se kterou se snadno ztotožníte.<br>
-Soubojový systém je plynulejší a přístupnější než v prvním díle, ale nenechte se mýlit – pořád vyžaduje trpělivost. Hra vás nebude vodit za ručičku a každá chyba v boji může být vaše poslední, což k celkovému realismu perfektně sedí.<br>
-Technicky je hra v mnohem lepším stavu, než byla jednička při vydání. I když se občas objeví drobný bug, nejde o nic, co by vám zkazilo ten neskutečný zážitek z prozkoumávání českého středověku.<br>
-<div class="mt-6 p-6 bg-zinc-900/50 rounded-2xl border border-zinc-800">
-    <span class="text-white font-black text-2xl uppercase block mb-1">VERDIKT:</span>
-    <span class="text-white font-black text-lg leading-tight">
-        Kingdom Come: Deliverance II je přesně tím pokračováním, na které fanoušci léta čekali. Je to větší, dospělejší a poctivě vybroušený klenot, který dokazuje, že české hry patří ke světové špičce. Povinnost pro každého fanouška RPG.
-    </span>
-</div>`
-},                { id: 202, game: `ELDEN RING: Shadow of the Erdtree`, score: 98, img: `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2778580/header.jpg`, rDate: `2026-05-06`, isDLC: true, content: `Nejlepší DLC všech dob.` },
+                {
+                    id: 201,
+                    game: `Kingdom Come: Deliverance II`,
+                    score: 92,
+                    rDate: `2026-02-08`, 
+                    img: `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1771300/ss_935ddb59f90bc2c21c706132cb9b446fe7851c19.1920x1080.jpg?t=1777975568`,
+                    video: `7ynJN-HejlY`,
+                    gallery: [
+                        `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1771300/ss_bd668f4d12300c019fa3fa73108aa62929fbf862.1920x1080.jpg?t=1777975568`,
+                        `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1771300/ss_709f3329562cd2cfe6db70bac908b3e72eaef83b.1920x1080.jpg?t=1777975568`
+                    ],
+                    pros: [`Výborně napsaný příběh a postavy`, `Autentická atmosféra`, `Skvělý quest design`],
+                    cons: [`Občasné bugy`, `Pomalejší tempo`],
+                    cz: true,
+                    content: `Kingdom Come: Deliverance II od Warhorse Studios navazuje přesně tam, kde první díl skončil, a prakticky ve všech směrech působí větší, propracovanější a sebevědomější. Hra znovu sází na realistické středověké RPG bez magie a fantasy prvků, což ji i dnes odlišuje od veškeré konkurence.<br>
+        Největší sílou hry zůstává dechberoucí atmosféra. Středověké Čechy působí neuvěřitelně autenticky – od hlubokých lesů a vesnic až po ruch Kutné Hory. Vývojáři si znovu dali obrovskou práci s historickou věrností a výsledkem je jeden z nejuvěřitelnějších otevřených světů v herní historii.<br>
+        <b>Jindřichův posun:</b> Z neohrabaného kovářského učně se stal muž, který už ví, jak držet meč, ale jeho lidskost a humor zůstaly zachovány. Scenáristé odvedli skvělou práci v tom, jak postavy reagují na váš status – jinak na vás koukají v nablýskaném brnění a jinak, když jste špinaví od bláta. Právě tyto detaily dělají z Jindřicha postavu, se kterou se snadno ztotožníte.<br>
+        Soubojový systém je plynulejší a přístupnější než v prvním díle, ale nenechte se mýlit – pořád vyžaduje trpělivost. Hra vás nebude vodit za ručičku a každá chyba v boji může být vaše poslední, což k celkovému realismu perfektně sedí.<br>
+        Technicky je hra v mnohem lepším stavu, než byla jednička při vydání. I když se občas objeví drobný bug, nejde o nic, co by vám zkazilo ten neskutečný zážitek z prozkoumávání českého středověku.<br>
+        <div class="mt-6 p-6 bg-zinc-900/50 rounded-2xl border border-zinc-800">
+            <span class="text-white font-black text-2xl uppercase block mb-1">VERDIKT:</span>
+            <span class="text-white font-black text-lg leading-tight">
+                Kingdom Come: Deliverance II je přesně tím pokračováním, na které fanoušci léta čekali. Je to větší, dospělejší a poctivě vybroušený klenot, který dokazuje, že české hry patří ke světové špičce. Povinnost pro každého fanouška RPG.
+            </span>
+        </div>`
+                },                
+                { id: 202, game: `ELDEN RING: Shadow of the Erdtree`, score: 98, img: `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2778580/header.jpg`, rDate: `2026-05-06`, isDLC: true, content: `Nejlepší DLC všech dob.` },
                 { id: 204, game: `Life is Strange: Reunion`, score: 84, img: `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2624870/4a44a2dce89e2d5194f939bd221a79d869169bdf/ss_4a44a2dce89e2d5194f939bd221a79d869169bdf.1920x1080.jpg?t=1777999087`, rDate: `2026-04-02`, cz: true, content: `Emotivní návrat Max a Chloe.` },
                 { id: 205, game: `Hades II`, score: 91, img: `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1145350/ss_47e14ed55ac7f1bf9266b2cd5b3e4d9eae0ca54c.1920x1080.jpg?t=1765831644`, rDate: `2025-10-11`, video: `MawBCULz4vE`, pros: [`Návyková hratelnost`], cons: [`Chybí CZ`], content: `Roguelike mistrovské dílo.` }
             ],
@@ -130,17 +179,17 @@ Technicky je hra v mnohem lepším stavu, než byla jednička při vydání. I k
 
         window.changeMainMedia = (src) => {
             const container = document.getElementById('main-media-container');
-            container.innerHTML = src.includes('youtube.com') ? `<iframe class="w-full aspect-video rounded-3xl mb-10 shadow-2xl" src="${src}" frameborder="0" allowfullscreen></iframe>` : `<img src="${src}" class="w-full rounded-3xl mb-10 shadow-2xl">`;
+            container.innerHTML = src.includes('youtube.com') ? `<iframe class="w-full aspect-video rounded-3xl mb-6 md:mb-10 shadow-2xl" src="${src}" frameborder="0" allowfullscreen></iframe>` : `<img src="${src}" class="w-full rounded-3xl mb-6 md:mb-10 shadow-2xl">`;
         };
 
         window.openModal = (id) => {
             const i = findItem(id);
             const scoreHtml = i.score ? `<span class="text-red-600 ml-4">${i.score}%</span>` : '';
-            let galleryHtml = (i.gallery || i.video) ? `<div class="flex gap-4 mb-10 overflow-x-auto pb-2">${i.video ? `<img src="https://img.youtube.com/vi/${i.video}/0.jpg" class="w-32 h-20 object-cover rounded-lg gallery-thumb active" onclick="changeMainMedia('https://www.youtube.com/embed/${i.video}?autoplay=1')">` : ''}<img src="${i.img}" class="w-32 h-20 object-cover rounded-lg gallery-thumb" onclick="changeMainMedia('${i.img}')">${(i.gallery || []).map(img => `<img src="${img}" class="w-32 h-20 object-cover rounded-lg gallery-thumb" onclick="changeMainMedia('${img}')">`).join('')}</div>` : '';
-            let prosConsHtml = (i.pros || i.cons) ? `<div class="grid grid-cols-2 gap-8 my-12 p-8 bg-zinc-950 rounded-[30px] border border-zinc-900"><div><h4 class="condensed text-2xl font-black text-white mb-4">KLADY</h4><ul class="space-y-2">${(i.pros || []).map(p => `<li class="pro-item font-bold italic text-lg">+ ${p}</li>`).join('')}</ul></div><div><h4 class="condensed text-2xl font-black text-white mb-4">ZÁPORY</h4><ul class="space-y-2">${(i.cons || []).map(c => `<li class="con-item font-bold italic text-lg">- ${c}</li>`).join('')}</ul></div></div>` : '';
+            let galleryHtml = (i.gallery || i.video) ? `<div class="flex gap-4 mb-6 md:mb-10 overflow-x-auto pb-2">${i.video ? `<img src="https://img.youtube.com/vi/${i.video}/0.jpg" class="w-24 h-16 md:w-32 md:h-20 object-cover rounded-lg gallery-thumb active" onclick="changeMainMedia('https://www.youtube.com/embed/${i.video}?autoplay=1')">` : ''}<img src="${i.img}" class="w-24 h-16 md:w-32 md:h-20 object-cover rounded-lg gallery-thumb" onclick="changeMainMedia('${i.img}')">${(i.gallery || []).map(img => `<img src="${img}" class="w-24 h-16 md:w-32 md:h-20 object-cover rounded-lg gallery-thumb" onclick="changeMainMedia('${img}')">`).join('')}</div>` : '';
+            let prosConsHtml = (i.pros || i.cons) ? `<div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-8 md:my-12 p-6 md:p-8 bg-zinc-950 rounded-[20px] md:rounded-[30px] border border-zinc-900"><div><h4 class="condensed text-xl md:text-2xl font-black text-white mb-4">KLADY</h4><ul class="space-y-2">${(i.pros || []).map(p => `<li class="pro-item font-bold italic text-base md:text-lg">+ ${p}</li>`).join('')}</ul></div><div><h4 class="condensed text-xl md:text-2xl font-black text-white mb-4">ZÁPORY</h4><ul class="space-y-2">${(i.cons || []).map(c => `<li class="con-item font-bold italic text-base md:text-lg">- ${c}</li>`).join('')}</ul></div></div>` : '';
             const related = [...state.news, ...state.reviews].filter(x => x.id !== i.id).sort(() => 0.5 - Math.random()).slice(0, 3);
-            const relatedHtml = `<div class="mt-20 pt-10 border-t border-zinc-900"><h4 class="condensed text-3xl font-black text-white mb-8 italic uppercase">Mohlo by tě zajímat</h4><div class="grid grid-cols-3 gap-6">${related.map(r => `<div class="cursor-pointer group" onclick="openModal(${r.id})"><div class="relative overflow-hidden rounded-2xl mb-3 h-32"><img src="${r.img}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500"><div class="absolute top-2 left-2 bg-red-600 text-white font-black condensed px-2 py-0.5 text-[8px] italic rounded uppercase z-10">${r.score ? 'RECENZE' : 'NOVINKA'}</div></div><h5 class="text-sm font-black condensed uppercase text-zinc-400 group-hover:text-white transition leading-tight">${r.title || r.game}</h5></div>`).join('')}</div></div>`;
-            document.getElementById('modal-content').innerHTML = `<div id="main-media-container">${i.video ? `<iframe class="w-full aspect-video rounded-3xl mb-10 shadow-2xl" src="https://www.youtube.com/embed/${i.video}?autoplay=1" frameborder="0" allowfullscreen></iframe>` : `<img src="${i.img}" class="w-full rounded-3xl mb-10 shadow-2xl">`}</div>${galleryHtml}<div class="flex gap-2 mb-6">${getTags(i)}</div><h2 class="hero-title condensed text-7xl font-black italic mb-8 uppercase text-white">${i.title || i.game}${scoreHtml}</h2><div class="text-zinc-400 text-2xl leading-relaxed space-y-8 font-medium"><p>${(i.content || '...').replace(/\n/g, '<br>')}</p></div>${prosConsHtml}${relatedHtml}`;
+            const relatedHtml = `<div class="mt-10 md:mt-20 pt-10 border-t border-zinc-900"><h4 class="condensed text-2xl md:text-3xl font-black text-white mb-6 md:mb-8 italic uppercase">Mohlo by tě zajímat</h4><div class="grid grid-cols-1 sm:grid-cols-3 gap-6">${related.map(r => `<div class="cursor-pointer group" onclick="openModal(${r.id})"><div class="relative overflow-hidden rounded-2xl mb-3 h-32"><img src="${r.img}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500"><div class="absolute top-2 left-2 bg-red-600 text-white font-black condensed px-2 py-0.5 text-[8px] italic rounded uppercase z-10">${r.score ? 'RECENZE' : 'NOVINKA'}</div></div><h5 class="text-sm font-black condensed uppercase text-zinc-400 group-hover:text-white transition leading-tight">${r.title || r.game}</h5></div>`).join('')}</div></div>`;
+            document.getElementById('modal-content').innerHTML = `<div id="main-media-container">${i.video ? `<iframe class="w-full aspect-video rounded-3xl mb-6 md:mb-10 shadow-2xl" src="https://www.youtube.com/embed/${i.video}?autoplay=1" frameborder="0" allowfullscreen></iframe>` : `<img src="${i.img}" class="w-full rounded-3xl mb-6 md:mb-10 shadow-2xl">`}</div>${galleryHtml}<div class="flex gap-2 mb-6">${getTags(i)}</div><h2 class="hero-title condensed text-4xl md:text-7xl font-black italic mb-6 md:mb-8 uppercase text-white">${i.title || i.game}${scoreHtml}</h2><div class="text-zinc-400 text-lg md:text-2xl leading-relaxed space-y-6 md:space-y-8 font-medium"><p>${(i.content || '...').replace(/\n/g, '<br>')}</p></div>${prosConsHtml}${relatedHtml}`;
             document.getElementById('modal-overlay').style.display = 'block';
             document.body.style.overflow = 'hidden';
             document.querySelector('.modal').scrollTo({ top: 0 });
@@ -157,29 +206,24 @@ Technicky je hra v mnohem lepším stavu, než byla jednička při vydání. I k
         };
 
         function init() {
-            // AUTOMATICKÉ SEŘAZENÍ DLE DATA
             state.news.sort((a, b) => new Date(b.rDate) - new Date(a.rDate));
             state.reviews.sort((a, b) => new Date(b.rDate) - new Date(a.rDate));
             const allSorted = [...state.news, ...state.reviews].sort((a, b) => new Date(b.rDate) - new Date(a.rDate));
 
-            // Hero
             const hero = allSorted[0];
             const heroTag = hero.score ? 'RECENZE' : 'NOVINKA';
-            document.getElementById('hero-area').innerHTML = `<div class="relative h-[650px] rounded-[50px] overflow-hidden cursor-pointer group shadow-2xl" onclick="openModal(${hero.id})"><img src="${hero.img}" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition duration-[10s]"><div class="absolute top-10 right-10 bg-red-600 text-white font-black condensed px-6 py-2 text-xl italic rounded-xl z-10">${heroTag}</div><div class="absolute bottom-20 left-20 max-w-5xl"><span class="bg-red-600 px-4 py-1 text-[11px] font-black condensed mb-6 inline-block tracking-widest uppercase">PRÁVĚ VYŠLO</span><h1 class="hero-title condensed text-9xl font-black italic uppercase text-white">${hero.title || hero.game}</h1></div></div>`;
+            document.getElementById('hero-area').innerHTML = `<div class="relative h-[400px] md:h-[650px] rounded-[30px] md:rounded-[50px] overflow-hidden cursor-pointer group shadow-2xl" onclick="openModal(${hero.id})"><img src="${hero.img}" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition duration-[10s]"><div class="absolute top-6 right-6 md:top-10 md:right-10 bg-red-600 text-white font-black condensed px-4 py-1 md:px-6 md:py-2 text-sm md:text-xl italic rounded-lg md:rounded-xl z-10">${heroTag}</div><div class="absolute bottom-10 left-10 md:bottom-20 md:left-20 max-w-[90%] md:max-w-5xl"><span class="bg-red-600 px-3 py-0.5 md:px-4 md:py-1 text-[9px] md:text-[11px] font-black condensed mb-4 md:mb-6 inline-block tracking-widest uppercase">PRÁVĚ VYŠLO</span><h1 class="hero-title condensed text-4xl md:text-9xl font-black italic uppercase text-white">${hero.title || hero.game}</h1></div></div>`;
 
-            // Home Feed
             document.getElementById('home-feed').innerHTML = allSorted.slice(1).map(i => {
                 const itemTag = i.score ? 'RECENZE' : 'NOVINKA';
-                return `<div class="flex gap-10 py-10 border-b border-zinc-900 group cursor-pointer" onclick="openModal(${i.id})"><div class="relative w-80 h-44 shrink-0 overflow-hidden rounded-3xl shadow-xl"><img src="${i.img}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500"><div class="absolute top-4 left-4 bg-red-600 text-white font-black condensed px-3 py-1 text-[10px] italic rounded-lg">${itemTag}</div></div><div class="flex-1"><h3 class="condensed text-4xl font-black italic group-hover:text-red-600 transition mb-3 uppercase leading-none tracking-tighter text-white">${i.title || i.game}</h3><p class="text-zinc-500 text-lg line-clamp-2 mb-4">${i.content.replace(/<[^>]*>/g, '')}</p>${i.score ? `<div class="text-3xl font-black text-red-600 italic">${i.score}%</div>` : ''}</div></div>`;
+                return `<div class="flex flex-col md:flex-row gap-6 md:gap-10 py-8 md:py-10 border-b border-zinc-900 group cursor-pointer" onclick="openModal(${i.id})"><div class="relative w-full md:w-80 h-48 md:h-44 shrink-0 overflow-hidden rounded-3xl shadow-xl"><img src="${i.img}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500"><div class="absolute top-4 left-4 bg-red-600 text-white font-black condensed px-3 py-1 text-[10px] italic rounded-lg">${itemTag}</div></div><div class="flex-1"><h3 class="condensed text-3xl md:text-4xl font-black italic group-hover:text-red-600 transition mb-3 uppercase leading-none tracking-tighter text-white">${i.title || i.game}</h3><p class="text-zinc-500 text-base md:text-lg line-clamp-2 mb-4">${i.content.replace(/<[^>]*>/g, '')}</p>${i.score ? `<div class="text-2xl md:text-3xl font-black text-red-600 italic">${i.score}%</div>` : ''}</div></div>`;
             }).join('');
 
-            // Full Lists (seřazené)
-            document.getElementById('news-full-list').innerHTML = state.news.map(n => `<div class="flex gap-12 group cursor-pointer" onclick="openModal(${n.id})"><div class="w-[450px] h-[280px] overflow-hidden rounded-[40px] shadow-2xl relative"><img src="${n.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700"></div><div class="flex-1 py-4"><h3 class="condensed text-5xl font-black italic group-hover:text-red-600 transition mb-6 uppercase tracking-tighter leading-none text-white">${n.title}</h3><p class="text-zinc-500 text-xl font-medium line-clamp-3">${n.content.replace(/<[^>]*>/g, '')}</p></div></div>`).join('');
-            document.getElementById('reviews-full-list').innerHTML = state.reviews.map(r => `<div class="flex gap-12 group cursor-pointer" onclick="openModal(${r.id})"><div class="w-[450px] h-[280px] overflow-hidden rounded-[40px] shadow-2xl relative"><img src="${r.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700"><div class="absolute top-6 right-6 bg-red-600 text-white font-black italic condensed px-4 py-2 text-3xl shadow-2xl rounded-xl">${r.score}%</div></div><div class="flex-1 py-4"><h3 class="condensed text-6xl font-black italic group-hover:text-red-600 transition mb-6 uppercase tracking-tighter leading-none text-white">${r.game}</h3><div class="mb-6 flex gap-2">${getTags(r)}</div><p class="text-zinc-500 text-xl font-medium line-clamp-3">${r.content.replace(/<[^>]*>/g, '')}</p></div></div>`).join('');
+            document.getElementById('news-full-list').innerHTML = state.news.map(n => `<div class="flex flex-col md:flex-row gap-6 md:gap-12 group cursor-pointer" onclick="openModal(${n.id})"><div class="w-full md:w-[450px] h-[250px] md:h-[280px] overflow-hidden rounded-[25px] md:rounded-[40px] shadow-2xl relative"><img src="${n.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700"></div><div class="flex-1 md:py-4"><h3 class="condensed text-3xl md:text-5xl font-black italic group-hover:text-red-600 transition mb-4 md:mb-6 uppercase tracking-tighter leading-none text-white">${n.title}</h3><p class="text-zinc-500 text-base md:text-xl font-medium line-clamp-3">${n.content.replace(/<[^>]*>/g, '')}</p></div></div>`).join('');
+            document.getElementById('reviews-full-list').innerHTML = state.reviews.map(r => `<div class="flex flex-col md:flex-row gap-6 md:gap-12 group cursor-pointer" onclick="openModal(${r.id})"><div class="w-full md:w-[450px] h-[250px] md:h-[280px] overflow-hidden rounded-[25px] md:rounded-[40px] shadow-2xl relative"><img src="${r.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700"><div class="absolute top-4 right-4 md:top-6 md:right-6 bg-red-600 text-white font-black italic condensed px-3 py-1 md:px-4 md:py-2 text-xl md:text-3xl shadow-2xl rounded-lg md:rounded-xl">${r.score}%</div></div><div class="flex-1 md:py-4"><h3 class="condensed text-4xl md:text-6xl font-black italic group-hover:text-red-600 transition mb-4 md:mb-6 uppercase tracking-tighter leading-none text-white">${r.game}</h3><div class="mb-4 md:mb-6 flex gap-2">${getTags(r)}</div><p class="text-zinc-500 text-base md:text-xl font-medium line-clamp-3">${r.content.replace(/<[^>]*>/g, '')}</p></div></div>`).join('');
             
-            // Sidebars
             const sortedReviews = [...state.reviews].sort((a,b) => b.score - a.score);
-            document.getElementById('hall-full-list').innerHTML = sortedReviews.map((e, idx) => `<div class="bg-[#080808] border border-zinc-900 flex items-center p-10 rounded-[40px] hover:border-zinc-700 transition group shadow-2xl"><div class="condensed text-7xl font-black italic w-32 text-center ${idx===0?'gold-text':'text-zinc-800'}">#${idx+1}</div><img src="${e.img}" class="w-64 h-36 object-cover rounded-2xl mx-12 shadow-2xl grayscale group-hover:grayscale-0 transition duration-500"><div class="flex-1"><h3 class="condensed text-5xl font-black italic uppercase tracking-tighter text-white ${idx===0?'gold-text':''}">${e.game}</h3><div class="mt-4 flex gap-2">${getTags(e)}</div></div><div class="text-7xl font-black italic text-red-600">${e.score}%</div></div>`).join('');
+            document.getElementById('hall-full-list').innerHTML = sortedReviews.map((e, idx) => `<div class="bg-[#080808] border border-zinc-900 flex flex-col md:flex-row items-center p-6 md:p-10 rounded-[25px] md:rounded-[40px] hover:border-zinc-700 transition group shadow-2xl gap-6 md:gap-0"><div class="condensed text-5xl md:text-7xl font-black italic w-auto md:w-32 text-center ${idx===0?'gold-text':'text-zinc-800'}">#${idx+1}</div><img src="${e.img}" class="w-full md:w-64 h-44 md:h-36 object-cover rounded-2xl md:mx-12 shadow-2xl grayscale group-hover:grayscale-0 transition duration-500"><div class="flex-1 text-center md:text-left"><h3 class="condensed text-3xl md:text-5xl font-black italic uppercase tracking-tighter text-white ${idx===0?'gold-text':''}">${e.game}</h3><div class="mt-4 flex justify-center md:justify-start gap-2">${getTags(e)}</div></div><div class="text-4xl md:text-7xl font-black italic text-red-600">${e.score}%</div></div>`).join('');
             document.getElementById('side-hall').innerHTML = sortedReviews.slice(0,5).map((e, idx) => `<div class="flex items-center gap-4 bg-black/40 p-4 rounded-xl border border-zinc-900"><span class="condensed text-2xl font-black italic ${idx===0?'gold-text':'text-zinc-700'}">#${idx+1}</span><span class="text-[10px] font-bold uppercase flex-1 truncate text-zinc-400">${e.game}</span><span class="font-black text-red-600">${e.score}%</span></div>`).join('');
             document.getElementById('side-pecky').innerHTML = [...state.calendar].sort((a,b) => new Date(a.rDate) - new Date(b.rDate)).map(c => `<div class="flex items-center gap-5 bg-zinc-950 p-4 rounded-2xl border border-zinc-900 cursor-pointer hover:border-red-600 transition shadow-lg" onclick="openModal(${c.id})"><div class="bg-red-600 w-14 h-14 shrink-0 flex flex-col items-center justify-center rounded-xl font-black condensed leading-none text-white"><span class="text-[9px] opacity-70 uppercase">${new Date(c.rDate).toLocaleString('cs-CZ', { month: 'short' })}</span><span class="text-xl">${new Date(c.rDate).getDate()}</span></div><div class="flex-1 truncate"><span class="text-[11px] font-black uppercase block truncate mb-1 text-white">${c.game}</span><div class="flex gap-1 flex-wrap">${getTags(c)}</div></div></div>`).join('');
 
