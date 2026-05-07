@@ -123,17 +123,6 @@
 let state = {
             news: [
                 { 
-    id: 110, 
-    title: `Revoluce jménem Xbox: Příští generace vsadí na otevřenost a Windows`, 
-    img: `https://indian-tv.cz/uploads/ls/f1c99dae011e4018a82bb912c38a9946/1761807885.jpg?`, 
-    rDate: `2026-05-07T19:30:00`, 
-    cz: false, 
-    content: `Microsoft začíná odkrývat karty a jeho vize příští generace Xboxu zní naprosto přelomově. Už nepůjde jen o uzavřenou konzoli, ale o zařízení, které má v plánu zbořit zdi mezi světem obývákového hraní a svobodou osobních počítačů.<br><br>
-<b>Konzole nebo PC?</b> Klíčovou novinkou má být integrace upraveného systému Windows, což by v praxi mohlo znamenat konec exkluzivních digitálních obchodů. Spekuluje se o tom, že Microsoft na své nové generaci povolí platformy jako Steam nebo Epic Games Store. Xbox by se tak stal nejvýkonnějším a nejjednodušším „herním PC“ na trhu.<br><br>
-<b>Největší technický skok:</b> Sarah Bond z Xboxu potvrdila, že hardwarový tým cílí na největší mezigenerační nárůst výkonu, jaký jsme kdy viděli. Velkou roli v tom má hrát umělá inteligence a neuronové renderování, které umožní dosáhnout fotorealistické grafiky bez extrémních nároků na spotřebu.<br><br>
-Tento krok dává smysl – Microsoft už neprodává jen hardware, ale především ekosystém. Pokud se tyto plány potvrdí, příští Xbox by mohl být posledním zařízením, které kdy budete k hraní potřebovat, ať už jste fanoušci konzolového pohodlí nebo PC knihovny.` 
-},
-                { 
                     id: 107, 
                     title: `Vůně středověku? Kingdom Come 2 dostává vlastní unikátní parfém`, 
                     img: `https://indian-tv.cz/uploads/lb/695be8121bc4439ea74a48b7e5c04b13`, 
@@ -177,7 +166,6 @@ Květnová sestava je tedy víc než solidní a <b class="text-white">Hellblade 
                 { id: 104, title: `Zaklínač 4: Vývojáři slibují návrat ke kořenům série`, img: `https://cdn.myshoptet.com/usr/www.konzoliste.cz/user/documents/upload/clanky/witcher-4.jpg`, rDate: `2026-05-04`, cz: true, video: `54dabgZJ5YA`, content: `Po letech spekulací a očekávání začíná být kolem The Witcher 4 konečně jasněji...` }
             ],
             reviews: [
-                
                 {
                     id: 201,
                     game: `Kingdom Come: Deliverance II`,
@@ -272,8 +260,10 @@ Návykový progres: Supergiant Games znovu dokazují, že jsou mistři vyprávě
     </span>
 </div>`
 },
-                calendar: [ // <--- TADY NESMÍ BÝT ŽÁDNÁ MEZERA NEBO DALŠÍ TEXT
-    { id: 305, game: `Assassin’s Creed Black Flag: Resynced`, ... rDate: `2026-07-09`, img: `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3751950/3a0de67fdb133b4b21c53cc23a813b766f0c612c/ss_3a0de67fdb133b4b21c53cc23a813b766f0c612c.1920x1080.jpg?t=1777900688`, platforms: ['pc', 'ps5', 'xbox'], video: `WjsTLe7bBUA`, content: `Legendární pirátský Assassin se vrací.` },
+                { id: 205, game: `Hades II`, score: 91, img: `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1145350/ss_47e14ed55ac7f1bf9266b2cd5b3e4d9eae0ca54c.1920x1080.jpg?t=1765831644`, rDate: `2025-10-11`, video: `MawBCULz4vE`, pros: [`Návyková hratelnost`], cons: [`Chybí CZ`], content: `Roguelike mistrovské dílo.` }
+            ],
+            calendar: [
+                { id: 305, game: `Assassin’s Creed Black Flag: Resynced`, rDate: `2026-07-09`, img: `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3751950/3a0de67fdb133b4b21c53cc23a813b766f0c612c/ss_3a0de67fdb133b4b21c53cc23a813b766f0c612c.1920x1080.jpg?t=1777900688`, platforms: ['pc', 'ps5', 'xbox'], video: `WjsTLe7bBUA`, content: `Legendární pirátský Assassin se vrací.` },
                 { id: 301, game: `Grand Theft Auto VI`, rDate: `2026-11-19`, img: `https://www.rockstargames.com/VI/_next/image?url=%2FVI%2F_next%2Fstatic%2Fmedia%2FJason_Duval_05.921c79be.jpg&w=1280&q=75`, platforms: ['ps5', 'xbox'], video: `QdBZY2fkU-0` },
                 { id: 302, game: `Forza Horizon 6`, rDate: `2026-05-19`, img: `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2483190/383ace7815eaa8f8f5128a58fd8ca7df911d3e14/ss_383ace7815eaa8f8f5128a58fd8ca7df911d3e14.1920x1080.jpg`, platforms: ['pc', 'xbox'], cz: true },
                 { id: 304, game: `Subnautica 2`, rDate: `2026-05-14`, img: `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1962700/787e2315a1eb5aaba73c4f75e6f7d7d8835fa260/ss_787e2315a1eb5aaba73c4f75e6f7d7d8835fa260.1920x1080.jpg`, platforms: ['pc', 'xbox'], isEA: true }
