@@ -41,7 +41,7 @@
         .filter-btn { padding: 8px 18px; border-radius: 9999px; background: #111; border: 1px solid #222; font-weight: 800; font-size: 13px; text-transform: uppercase; color: #aaa; transition: 0.3s; white-space: nowrap; }
         .filter-btn.active { background: var(--red); border-color: var(--red); color: #fff; }
 
-        /* Main grid – feed + sidebar NA PRAVO i na telefonu */
+        /* Main grid – feed + sidebar NA PRAVO i na telefonu (sticky scroll) */
         .main-grid { 
             display: grid; 
             grid-template-columns: 1fr 320px; 
@@ -52,12 +52,25 @@
             #mobileMenu { display: none; position: fixed; top: 70px; left: 0; right: 0; background: #0a0a0a; border-top: 1px solid #222; z-index: 9999; padding: 20px 0; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3); }
             #mobileMenu.show { display: block; }
             .main-grid { grid-template-columns: 1fr 300px; gap: 16px; }
-            #home-feed .feed-card { margin-bottom: 16px; }
-            .same-day-card img { height: 125px; }
+            .sidebar-wrapper { position: sticky; top: 90px; align-self: start; }
         }
         @media (max-width: 640px) {
             .main-grid { grid-template-columns: 1fr; }
-            .sidebar-wrapper { margin-top: 24px; }
+            .sidebar-wrapper { position: static; margin-top: 24px; }
+        }
+
+        /* Lepší česká vlajka */
+        .cz-flag { 
+            display: inline-flex; 
+            align-items: center; 
+            background: #0b9e3d; 
+            color: white; 
+            padding: 4px 12px 4px 6px; 
+            border-radius: 9999px; 
+            font-size: 11px; 
+            font-weight: 900; 
+            gap: 6px; 
+            box-shadow: 0 2px 8px rgba(11, 158, 61, 0.3);
         }
     </style>
 </head>
@@ -129,12 +142,14 @@
         <div id="tab-novinky" class="tab-content hidden">
             <h2 class="condensed text-5xl font-black italic mb-10 text-center">NOVINKY</h2>
             <div id="news-full-list" class="space-y-6"></div>
+            <div id="news-pagination" class="flex justify-center gap-4 mt-12"></div>
         </div>
 
         <!-- RECENZE -->
         <div id="tab-recenze" class="tab-content hidden">
             <h2 class="condensed text-5xl font-black italic mb-10 text-center">RECENZE</h2>
             <div id="reviews-full-list" class="space-y-6"></div>
+            <div id="reviews-pagination" class="flex justify-center gap-4 mt-12"></div>
         </div>
 
         <!-- PRESTIGE HALL -->
@@ -146,8 +161,13 @@
         <!-- KALENDÁŘ -->
         <div id="tab-kalendar" class="tab-content hidden">
             <h2 class="condensed text-5xl md:text-6xl font-black italic mb-10 text-center">KALENDÁŘ HER</h2>
+            
+            <!-- Roky na jednom řádku -->
             <div class="flex items-center justify-center gap-6 mb-8" id="year-nav"></div>
+            
+            <!-- Měsíce -->
             <div class="no-scrollbar flex gap-3 mb-12 overflow-x-auto pb-4 px-4" id="month-nav"></div>
+            
             <div id="calendar-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
         </div>
     </div>
@@ -161,29 +181,59 @@
     const state = {
         selectedYear: 2026,
         selectedMonth: 5,
+        newsPage: 1,
+        reviewsPage: 1,
+        itemsPerPage: 4,
         news: [
             { id: 1001, title: "RISK S PRAGMATOU SE CAPCOMU VYPLÁCÍ", img: "https://picsum.photos/id/1015/1200/630", rDate: "2026-05-07", content: "Dlouho odkládaný sci-fi projekt od Capcomu konečně ukazuje své kvality." },
             { id: 1002, title: "NOVINKY O 007 FIRST LIGHT", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3768760/header.jpg", rDate: "2026-05-08", content: "Agent 007 se vrací v nové vizuální podobě, která bere dech." }
         ],
         reviews: [
             { 
-                id: 2008,
+                id: 2001,
                 game: "Mafia: The Old Country",
                 score: 80,
                 rDate: "2025-09-29T10:30:00",
                 img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1941540/ss_44047e62744c4a7201a0238994d23f3ca72649cb.1920x1080.jpg?t=1764177372",
-                gallery: [
-                    "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1941540/ss_b0790cd935e11df0aca08f947c6e90ddce39e683.1920x1080.jpg?t=1764177372",
-                    "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1941540/ss_19e3bf0b15bd64f10a8d2702758d82d5291220af.1920x1080.jpg?t=1764177372",
-                    "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1941540/ss_ecfbf9a220417bb61285a981a8a6630d98d56d27.1920x1080.jpg?t=1764177372"
-                ],
+                gallery: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1941540/ss_b0790cd935e11df0aca08f947c6e90ddce39e683.1920x1080.jpg?t=1764177372","https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1941540/ss_19e3bf0b15bd64f10a8d2702758d82d5291220af.1920x1080.jpg?t=1764177372","https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1941540/ss_ecfbf9a220417bb61285a981a8a6630d98d56d27.1920x1080.jpg?t=1764177372"],
                 pros: ["Nádherná a autentická atmosféra Sicílie 20. let","Vynikající český dabing","Povedený jízdní model a pocit ze střelby","Silný příběh věrný kořenům série"],
-                cons: ["Umělá inteligence nepřátel občas pokulhává","Pár repetitivních misí","Absence volné jízdy po dokončení příběhu"],
+                cons: ["Umělá inteligence nepřátel občas pokulhává","Pár repetitivních misí"],
                 cz: true,
                 content: `Mafia: The Old Country je přesně ten typ hry, který vám připomene, proč jsme se kdysi do této série vůbec zamilovali.<br><br><b>Rodina nade vše:</b> Příběhově se hra drží klasických pilířů – rodina, loajalita a zrada.<br><br><div class="mt-6 p-6 bg-zinc-900/50 rounded-2xl border border-zinc-800"><span class="text-white font-black text-2xl uppercase block mb-1">VERDIKT:</span><span class="text-white font-black text-lg leading-tight">Není to revoluce, ale poctivý návrat ke kořenům, který série potřebovala.</span></div>`
             },
-            { id: 2001, game: "DOOM Eternal: New Chaos", score: 95, rDate: "2026-04-20", img: "https://picsum.photos/id/201/1200/630", content: "Čistý adrenalin a nejlepší střílečka posledních let." }
-        ],
+            {
+    id: 2002,
+    game: "DOOM Eternal",
+    score: 95,
+    rDate: "2020-03-24T15:45:00",
+    img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/782330/header.jpg?t=1755109910",
+    gallery: [
+        "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/782330/ss_af3b43c4be0029b52ceefaf55ebe1918e2cb3471.1920x1080.jpg?t=1755109910",
+        "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/782330/ss_4f93a7c5003d49cb32f6c0c6e547452b284580a0.1920x1080.jpg?t=1755109910",
+        "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/782330/ss_ebd31ded4723e991446ededa9e65c980f988567d.1920x1080.jpg?t=1755109910"
+    ],
+    pros: [
+        "Neuvěřitelně agresivní a odměňující soubojový systém",
+        "Geniální soundtrack, který vás vybičuje k výkonu",
+        "Perfektní technický stav a plynulost",
+        "Vynikající level design plný tajemství"
+    ],
+    cons: [
+        "Platformingové pasáže mohou občas frustrovat",
+        "Příběhové pozadí je zbytečně překombinované",
+        "Vysoká obtížnost hned od začátku"
+    ],
+    cz: false,
+    content: `DOOM Eternal není jen střílečka, je to krvavý balet, který vás nenechá ani na vteřinu vydechnout. id Software vzali základy z roku 2016 a vybudovali na nich monumentální katedrálu akce. Je to rychlejší, brutálnější a mnohem komplexnější než cokoli, co jsme v žánru FPS za poslední roky viděli. Zapomeňte na schovávání se v koutě – tady jste predátorem vy.<br><br>
+<b>Zabíjej, abys přežil:</b> Hra vás nutí neustále přemýšlet. Došly náboje? Musíš motorovou pilou rozříznout démona. Chybí ti životy? Doraz ho pomocí Glory Kill. Potřebuješ brnění? Zapal ho plamenometem. Tento koloběh zdrojů vytváří neuvěřitelný adrenalinový zážitek, kterému dominuje naprosto fantastický soundtrack od Micka Gordona. Každá bitva je malý rébus, který musíte vyřešit v rychlosti dvě stě kilometrů v hodině.<br><br>
+<b>Technická dokonalost:</b> Vizuálně se jedná o naprostou špičku, přičemž optimalizace je téměř zázračná. Hra běží neuvěřitelně plynule i ve chvílích, kdy se na obrazovce dějí ty největší šílenosti. Design úrovní je vertikální a rozmanitý, i když občasné skákací pasáže mohou působit jako zbytečná brzda jinak zběsilého tempa. Pokud ale hledáte čistou, neředěnou herní radost, nic lepšího momentálně nenajdete.<br><br>
+<div class="mt-6 p-6 bg-zinc-900/50 rounded-2xl border border-zinc-800">
+    <span class="text-white font-black text-2xl uppercase block mb-1">VERDIKT:</span>
+    <span class="text-white font-black text-lg leading-tight">
+        DOOM Eternal je momentálně králem žánru. Je to brutální, chytré, technicky precizní a nekompromisně zábavné. Pokud máte rádi akci, nemáte nad čím váhat. Rip and tear, dokud není hotovo!
+    </span>
+</div>`
+},
         calendar: [
             { id: 3004, game: "BUS BOUND", rDate: "2026-05-02", img: "https://picsum.photos/id/1015/800/450", platforms: ["PC"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/example-busbound" } },
             { id: 3005, game: "MIXTAPE", rDate: "2026-05-07", img: "https://picsum.photos/id/133/800/450", platforms: ["PC", "PS5"], czech: false, earlyAccess: true, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/example-mixtape", playstation: "https://store.playstation.com/cs-cz/product/example-mixtape" } },
@@ -203,7 +253,7 @@
     function getBadgesHTML(item) {
         let html = '';
         if (item.cz || item.czech) {
-            html += `<span class="inline-flex items-center px-3 py-1 bg-emerald-600 rounded-3xl text-xs font-bold gap-1.5"><img src="https://flagcdn.com/w20/cz.png" alt="Česky" class="h-3.5 w-[22px] rounded-sm">ČESKY</span>`;
+            html += `<span class="cz-flag"><img src="https://flagcdn.com/w20/cz.png" alt="Česky" class="h-4 w-6 rounded-sm">ČESKY</span>`;
         }
         if (item.earlyAccess) html += `<span class="px-4 py-1 text-xs font-bold bg-orange-500 rounded-3xl">EARLY ACCESS</span>`;
         if (item.isDLC) html += `<span class="px-4 py-1 text-xs font-bold bg-violet-600 rounded-3xl">DLC</span>`;
@@ -256,12 +306,12 @@
         const current = state.selectedYear;
 
         let yearHTML = `
-        <div class="flex items-center gap-4 md:gap-8 justify-center flex-wrap">
-            <button onclick="changeYear(-1)" class="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center text-3xl text-zinc-400 hover:text-white transition-colors"><i class="fas fa-chevron-left"></i></button>
-            <button onclick="state.selectedYear = ${current-1}; renderCalendar()" class="filter-btn px-6 md:px-8 ${current-1 < minYear ? 'opacity-30 pointer-events-none' : ''}">${current-1}</button>
-            <button onclick="state.selectedYear = ${current}; renderCalendar()" class="filter-btn px-6 md:px-8 bg-red-600 border-red-600 text-white">${current}</button>
-            <button onclick="state.selectedYear = ${current+1}; renderCalendar()" class="filter-btn px-6 md:px-8 ${current+1 > maxYear ? 'opacity-30 pointer-events-none' : ''}">${current+1}</button>
-            <button onclick="changeYear(1)" class="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center text-3xl text-zinc-400 hover:text-white transition-colors"><i class="fas fa-chevron-right"></i></button>
+        <div class="flex items-center justify-center gap-6">
+            <button onclick="changeYear(-1)" class="w-9 h-9 flex items-center justify-center text-3xl text-zinc-400 hover:text-white transition-colors"><i class="fas fa-chevron-left"></i></button>
+            <button onclick="state.selectedYear = ${current-1}; renderCalendar()" class="filter-btn px-6 ${current-1 < minYear ? 'opacity-30 pointer-events-none' : ''}">${current-1}</button>
+            <button onclick="state.selectedYear = ${current}; renderCalendar()" class="filter-btn px-6 bg-red-600 border-red-600 text-white">${current}</button>
+            <button onclick="state.selectedYear = ${current+1}; renderCalendar()" class="filter-btn px-6 ${current+1 > maxYear ? 'opacity-30 pointer-events-none' : ''}">${current+1}</button>
+            <button onclick="changeYear(1)" class="w-9 h-9 flex items-center justify-center text-3xl text-zinc-400 hover:text-white transition-colors"><i class="fas fa-chevron-right"></i></button>
         </div>`;
         document.getElementById('year-nav').innerHTML = yearHTML;
 
@@ -407,25 +457,8 @@
                 </div>
             </div>`).join('');
 
-        document.getElementById('news-full-list').innerHTML = state.news.map(n => `
-            <div onclick="openModal(${n.id})" class="feed-card flex flex-col md:flex-row gap-8 p-8 cursor-pointer">
-                <img src="${n.img}" class="w-full md:w-64 h-48 md:h-36 object-cover rounded-2xl shrink-0">
-                <div class="flex-1">
-                    <div class="text-red-600 font-black text-xs uppercase tracking-widest mb-2">NOVINKA</div>
-                    <h3 class="condensed text-4xl font-black italic uppercase">${n.title}</h3>
-                    <p class="text-zinc-500 mt-4">${n.content}</p>
-                </div>
-            </div>`).join('');
-        
-        document.getElementById('reviews-full-list').innerHTML = state.reviews.map(r => `
-            <div onclick="openModal(${r.id})" class="feed-card flex flex-col md:flex-row gap-8 p-8 cursor-pointer">
-                <img src="${r.img}" class="w-full md:w-64 h-48 md:h-36 object-cover rounded-2xl shrink-0">
-                <div class="flex-1">
-                    <div class="text-red-600 font-black text-xs uppercase tracking-widest mb-2">RECENZE</div>
-                    <div class="text-5xl font-black italic text-red-600">${r.score}%</div>
-                    <h3 class="condensed text-4xl font-black italic uppercase">${r.game}</h3>
-                </div>
-            </div>`).join('');
+        renderNewsPage();
+        renderReviewsPage();
 
         const top5 = [...state.reviews].sort((a,b) => b.score - a.score).slice(0, 5);
         document.getElementById('side-hall').innerHTML = top5.map((r, idx) => `
@@ -445,6 +478,56 @@
 
         renderCalendar();
         renderSideCalendar();
+    }
+
+    function renderNewsPage() {
+        const start = (state.newsPage - 1) * state.itemsPerPage;
+        const pageItems = state.news.slice(start, start + state.itemsPerPage);
+        document.getElementById('news-full-list').innerHTML = pageItems.map(n => `
+            <div onclick="openModal(${n.id})" class="feed-card flex flex-col md:flex-row gap-8 p-8 cursor-pointer">
+                <img src="${n.img}" class="w-full md:w-64 h-48 md:h-36 object-cover rounded-2xl shrink-0">
+                <div class="flex-1">
+                    <div class="text-red-600 font-black text-xs uppercase tracking-widest mb-2">NOVINKA</div>
+                    <h3 class="condensed text-4xl font-black italic uppercase">${n.title}</h3>
+                    <p class="text-zinc-500 mt-4">${n.content}</p>
+                </div>
+            </div>`).join('');
+        renderNewsPagination();
+    }
+
+    function renderNewsPagination() {
+        const totalPages = Math.ceil(state.news.length / state.itemsPerPage);
+        let html = `<div class="flex gap-3">`;
+        if (state.newsPage > 1) html += `<button onclick="state.newsPage--; renderNewsPage()" class="px-5 py-2 bg-zinc-800 hover:bg-red-600 rounded-3xl font-bold">← Předchozí</button>`;
+        html += `<span class="px-5 py-2 bg-zinc-900 rounded-3xl font-bold">${state.newsPage} / ${totalPages}</span>`;
+        if (state.newsPage < totalPages) html += `<button onclick="state.newsPage++; renderNewsPage()" class="px-5 py-2 bg-zinc-800 hover:bg-red-600 rounded-3xl font-bold">Další →</button>`;
+        html += `</div>`;
+        document.getElementById('news-pagination').innerHTML = html;
+    }
+
+    function renderReviewsPage() {
+        const start = (state.reviewsPage - 1) * state.itemsPerPage;
+        const pageItems = state.reviews.slice(start, start + state.itemsPerPage);
+        document.getElementById('reviews-full-list').innerHTML = pageItems.map(r => `
+            <div onclick="openModal(${r.id})" class="feed-card flex flex-col md:flex-row gap-8 p-8 cursor-pointer">
+                <img src="${r.img}" class="w-full md:w-64 h-48 md:h-36 object-cover rounded-2xl shrink-0">
+                <div class="flex-1">
+                    <div class="text-red-600 font-black text-xs uppercase tracking-widest mb-2">RECENZE</div>
+                    <div class="text-5xl font-black italic text-red-600">${r.score}%</div>
+                    <h3 class="condensed text-4xl font-black italic uppercase">${r.game}</h3>
+                </div>
+            </div>`).join('');
+        renderReviewsPagination();
+    }
+
+    function renderReviewsPagination() {
+        const totalPages = Math.ceil(state.reviews.length / state.itemsPerPage);
+        let html = `<div class="flex gap-3">`;
+        if (state.reviewsPage > 1) html += `<button onclick="state.reviewsPage--; renderReviewsPage()" class="px-5 py-2 bg-zinc-800 hover:bg-red-600 rounded-3xl font-bold">← Předchozí</button>`;
+        html += `<span class="px-5 py-2 bg-zinc-900 rounded-3xl font-bold">${state.reviewsPage} / ${totalPages}</span>`;
+        if (state.reviewsPage < totalPages) html += `<button onclick="state.reviewsPage++; renderReviewsPage()" class="px-5 py-2 bg-zinc-800 hover:bg-red-600 rounded-3xl font-bold">Další →</button>`;
+        html += `</div>`;
+        document.getElementById('reviews-pagination').innerHTML = html;
     }
 
     window.openModal = (id) => {
