@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <meta property="og:title" id="og-title" content="YUKKI • Ultimate Edition 2026">
-    <meta property="og:description" id="og-desc" content="Český herní magazín – novinky, recenze, kalendář">
+    <meta property="og:description" id="og-desc" content="Český herní magazín">
     <meta property="og:image" id="og-image" content="https://indian-tv.cz/uploads/ls/09a7b79bb04446a886cff999e3185127/1755725042.jpg">
     <meta property="og:url" id="og-url" content="">
     <meta property="og:type" content="article">
@@ -245,11 +245,12 @@
 
     window.shareToFacebook = function(id) {
         const item = [...state.news, ...state.reviews].find(x => x.id === id);
+        if (!item) return;
         const title = item.title || item.game;
         const url = getShareUrl(id);
-        const quote = encodeURIComponent(title + '\n\nVíce na: ' + url);
-        const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${quote}`;
-        window.open(shareUrl, '_blank');
+        const quote = encodeURIComponent(title + "\n\nVíce na: " + url);
+        const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${quote}`;
+        window.open(fbUrl, '_blank');
     };
 
     window.copyLink = function(id) {
@@ -544,10 +545,9 @@
             ${buyHTML}
             ${item.content ? `<div class="mt-12 text-zinc-300 leading-relaxed prose prose-invert max-w-none">${item.content}</div>` : ''}
             
-            <!-- SDÍLENÍ - přesně jako na tvém screenshotu -->
             <div class="mt-16 pt-8 border-t border-zinc-800">
                 <div class="flex items-center gap-3 mb-6">
-                    <span class="text-red-500 text-3xl">🔴</span>
+                    <span class="text-red-500 text-3xl">●</span>
                     <h3 class="condensed text-2xl font-black">SDÍLET PŘÍSPĚVEK</h3>
                 </div>
                 <div class="flex flex-col gap-4">
