@@ -7,8 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Barlow+Condensed:ital,wght@0,700;0,900;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <!-- Open Graph pro sdílení -->
+
+    <!-- Open Graph pro správné sdílení -->
     <meta property="og:title" id="og-title" content="YUKKI • Ultimate Edition 2026">
     <meta property="og:description" id="og-desc" content="Český herní magazín">
     <meta property="og:image" id="og-image" content="https://picsum.photos/id/1015/1200/630">
@@ -242,7 +242,6 @@
         window.scrollTo({top: 0, behavior: 'smooth'});
     };
 
-    // HEZKÉ ODKAZY + SDÍLENÍ
     function getShareUrl(id) {
         return window.location.origin + window.location.pathname + '?id=' + id;
     }
@@ -279,19 +278,17 @@
         document.getElementById('og-desc').setAttribute('content', (item.content || '').substring(0, 160));
         document.getElementById('og-image').setAttribute('content', item.img);
         document.getElementById('og-url').setAttribute('content', getShareUrl(item.id));
-        document.title = item.title || item.game;
     }
 
-    // Deep link – otevře modal při načtení stránky s ?id=
     function handleDeepLink() {
         const params = new URLSearchParams(window.location.search);
         const id = params.get('id');
         if (id) {
             const numId = parseInt(id);
-            if (numId) {
-                setTimeout(() => {
-                    openModal(numId);
-                }, 800);
+            const item = [...state.news, ...state.reviews, ...state.calendar].find(x => x.id === numId);
+            if (item) {
+                updateOGTags(item);
+                setTimeout(() => openModal(numId), 600);
             }
         }
     }
@@ -435,7 +432,6 @@
     function renderAll() {
         const combined = [...state.news, ...state.reviews].sort((a,b) => new Date(b.rDate) - new Date(a.rDate));
 
-        // Hero s badge a "Právě vyšlo"
         const heroItem = combined[0];
         const heroType = heroItem.score !== undefined ? 'RECENZE' : 'NOVINKA';
         const heroLabel = heroItem.score !== undefined ? 'Právě vyšlo' : 'Nejnovější novinka';
@@ -580,7 +576,6 @@
             ${buyHTML}
             ${item.content ? `<div class="mt-12 text-zinc-300 leading-relaxed prose prose-invert max-w-none">${item.content}</div>` : ''}
             
-            <!-- SDÍLENÍ -->
             <div class="mt-16 pt-8 border-t border-zinc-800">
                 <h3 class="condensed text-2xl font-black mb-6 flex items-center gap-3"><i class="fas fa-share-alt text-red-500"></i> Sdílet tento příspěvek</h3>
                 <div class="flex flex-wrap gap-4">
@@ -617,7 +612,6 @@
         });
         document.getElementById('suggested-items').innerHTML = suggestedHTML;
 
-        // Aktualizace OG tagů při otevření modalu
         updateOGTags(item);
 
         document.getElementById('modal-overlay').style.display = 'block';
