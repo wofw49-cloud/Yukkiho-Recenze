@@ -8,10 +8,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Barlow+Condensed:ital,wght@0,700;0,900;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- Open Graph pro správné sdílení -->
+    <!-- Open Graph pro sdílení -->
     <meta property="og:title" id="og-title" content="YUKKI • Ultimate Edition 2026">
-    <meta property="og:description" id="og-desc" content="Český herní magazín">
-    <meta property="og:image" id="og-image" content="https://picsum.photos/id/1015/1200/630">
+    <meta property="og:description" id="og-desc" content="Český herní magazín – novinky, recenze, kalendář">
+    <meta property="og:image" id="og-image" content="https://indian-tv.cz/uploads/ls/09a7b79bb04446a886cff999e3185127/1755725042.jpg">
     <meta property="og:url" id="og-url" content="">
     <meta property="og:type" content="article">
 
@@ -165,10 +165,10 @@
         reviewsPage: 1,
         itemsPerPage: 6,
         news: [
-            { id: 1006, title: "Microsoft poodhaluje novou generaci Xboxu", img: "https://indian-tv.cz/uploads/ls/97793d98d413346574f269a886cff999/1755725042.jpg?", rDate: "2026-05-08", content: "Microsoft konečně prolomil mlčení..." },
-            { id: 1005, title: "Risk se vyplatil, Pragmata hlásí úžasné výsledky", img: "https://indian-tv.cz/uploads/ls/09a7b79bb04446a886cff999e3185127/1755725042.jpg?", rDate: "2026-05-08T11:00:00", content: "Capcom může slavit..." },
-            { id: 1003, title: "Konec velkých slev na PlayStation Store? Sony zavádí zvláštní změny", img: "https://indian-tv.cz/uploads/ls/69842f4c33956699321f69a886cff999/1755725042.jpg?", rDate: "2026-05-08T06:05:00", content: "Majitelé konzolí PlayStation..." },
-            { id: 1002, title: "Kingdom Come: Deliverance 2 už má i vlastní parfém", img: "https://indian-tv.cz/uploads/ls/9ea82f5c2293446585f169a886cff999/1755725042.jpg?", rDate: "2026-05-08T08:30:00", content: "Marketingová kampaň..." },
+            { id: 1006, title: "Microsoft poodhaluje novou generaci Xboxu", img: "https://indian-tv.cz/uploads/ls/97793d98d413346574f269a886cff999/1755725042.jpg", rDate: "2026-05-08", content: "Microsoft konečně prolomil mlčení..." },
+            { id: 1005, title: "Risk se vyplatil, Pragmata hlásí úžasné výsledky", img: "https://indian-tv.cz/uploads/ls/09a7b79bb04446a886cff999e3185127/1755725042.jpg", rDate: "2026-05-08T11:00:00", content: "Capcom může slavit..." },
+            { id: 1003, title: "Konec velkých slev na PlayStation Store? Sony zavádí zvláštní změny", img: "https://indian-tv.cz/uploads/ls/69842f4c33956699321f69a886cff999/1755725042.jpg", rDate: "2026-05-08T06:05:00", content: "Majitelé konzolí PlayStation..." },
+            { id: 1002, title: "Kingdom Come: Deliverance 2 už má i vlastní parfém", img: "https://indian-tv.cz/uploads/ls/9ea82f5c2293446585f169a886cff999/1755725042.jpg", rDate: "2026-05-08T08:30:00", content: "Marketingová kampaň..." },
             { id: 1001, title: "RISK S PRAGMATOU SE CAPCOMU VYPLÁCÍ", img: "https://picsum.photos/id/1015/1200/630", rDate: "2026-05-07", content: "Dlouho odkládaný sci-fi projekt..." },
             { id: 1004, title: "Nové detaily o 007: First Light", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3768760/77725bbd5a29b4bd0e7b563983a17591dd942233/ss_77725bbd5a29b4bd0e7b563983a17591dd942233.1920x1080.jpg?t=1777992128", rDate: "2026-05-07T09:55:00", content: "Studio IO Interactive..." }
         ],
@@ -251,24 +251,9 @@
         window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
     };
 
-    window.shareToX = function(id) {
-        const item = [...state.news, ...state.reviews].find(x => x.id === id);
-        const text = encodeURIComponent(item.title || item.game);
-        const url = encodeURIComponent(getShareUrl(id));
-        window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
-    };
-
-    window.shareToIGStory = function(id) {
-        const url = getShareUrl(id);
-        navigator.clipboard.writeText(url).then(() => {
-            alert('✅ Odkaz zkopírován!\n\nOtevři Instagram → Nová Story → Swipe nahoru (nebo Sticker „Link“) a vlož odkaz.');
-        });
-    };
-
     window.copyLink = function(id) {
-        const url = getShareUrl(id);
-        navigator.clipboard.writeText(url).then(() => {
-            alert('✅ Hezký odkaz zkopírován do schránky!');
+        navigator.clipboard.writeText(getShareUrl(id)).then(() => {
+            alert('✅ Odkaz zkopírován do schránky!');
         });
     };
 
@@ -363,14 +348,6 @@
         if (newYear > 2030) newYear = 2030;
         state.selectedYear = newYear;
         renderCalendar();
-    };
-
-    window.openModalForCurrent = function(dateKey) {
-        const card = document.querySelector(`[data-date-key="${dateKey}"]`);
-        if (!card) return;
-        const index = parseInt(card.dataset.currentIndex || 0);
-        const group = sameDayData[dateKey];
-        if (group && group[index]) openModal(group[index].id);
     };
 
     window.switchSameDay = function(dateKey, direction) {
@@ -576,20 +553,17 @@
             ${buyHTML}
             ${item.content ? `<div class="mt-12 text-zinc-300 leading-relaxed prose prose-invert max-w-none">${item.content}</div>` : ''}
             
+            <!-- SDÍLENÍ - jen FB + Kopírovat -->
             <div class="mt-16 pt-8 border-t border-zinc-800">
-                <h3 class="condensed text-2xl font-black mb-6 flex items-center gap-3"><i class="fas fa-share-alt text-red-500"></i> Sdílet tento příspěvek</h3>
-                <div class="flex flex-wrap gap-4">
-                    <button onclick="shareToFacebook(${id});" class="flex-1 min-w-[160px] flex items-center justify-center gap-3 bg-[#1877F2] hover:bg-[#1666d4] text-white font-bold py-4 px-6 rounded-3xl transition-colors">
-                        <i class="fab fa-facebook-f text-xl"></i><span>Facebook</span>
+                <h3 class="condensed text-2xl font-black mb-6 flex items-center gap-3"><i class="fas fa-share-alt text-red-500"></i> Sdílet příspěvek</h3>
+                <div class="flex flex-col gap-4">
+                    <button onclick="shareToFacebook(${id});" class="w-full flex items-center justify-center gap-4 bg-[#1877F2] hover:bg-[#1666d4] text-white font-bold py-6 px-8 rounded-3xl text-2xl transition-all shadow-lg">
+                        <i class="fab fa-facebook-f text-4xl"></i>
+                        <span>Sdílet na Facebooku</span>
                     </button>
-                    <button onclick="shareToIGStory(${id});" class="flex-1 min-w-[160px] flex items-center justify-center gap-3 bg-gradient-to-r from-[#f56040] via-[#c13584] to-[#405de6] hover:brightness-110 text-white font-bold py-4 px-6 rounded-3xl transition-colors">
-                        <i class="fab fa-instagram text-xl"></i><span>IG Story</span>
-                    </button>
-                    <button onclick="shareToX(${id});" class="flex-1 min-w-[160px] flex items-center justify-center gap-3 bg-black hover:bg-zinc-900 text-white font-bold py-4 px-6 rounded-3xl transition-colors">
-                        <i class="fab fa-x-twitter text-xl"></i><span>X (Twitter)</span>
-                    </button>
-                    <button onclick="copyLink(${id});" class="flex-1 min-w-[160px] flex items-center justify-center gap-3 bg-zinc-700 hover:bg-zinc-600 text-white font-bold py-4 px-6 rounded-3xl transition-colors">
-                        <i class="fas fa-link text-xl"></i><span>Kopírovat odkaz</span>
+                    <button onclick="copyLink(${id});" class="w-full flex items-center justify-center gap-4 bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-6 px-8 rounded-3xl text-2xl transition-all">
+                        <i class="fas fa-link text-4xl"></i>
+                        <span>Kopírovat odkaz</span>
                     </button>
                 </div>
             </div>
@@ -637,7 +611,6 @@
 
     setInterval(() => {
         renderAll();
-        console.log('%cStránka aktualizována (každou minutu)', 'color: #ff0000; font-weight: bold');
     }, 60000);
 
     window.onload = function() {
