@@ -7,6 +7,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Barlow+Condensed:ital,wght@0,700;0,900;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Open Graph pro sdílení -->
+    <meta property="og:title" id="og-title" content="YUKKI • Ultimate Edition 2026">
+    <meta property="og:description" id="og-desc" content="Český herní magazín">
+    <meta property="og:image" id="og-image" content="https://picsum.photos/id/1015/1200/630">
+    <meta property="og:url" id="og-url" content="">
+    <meta property="og:type" content="article">
+
     <style>
         :root { --red: #ff0000; --bg: #050505; --border: #1a1a1a; }
         body { font-family: 'Inter', sans-serif; background: #050505; color: #fff; margin: 0; overflow-x: hidden; }
@@ -234,9 +242,9 @@
         window.scrollTo({top: 0, behavior: 'smooth'});
     };
 
-    // SDÍLENÍ
+    // HEZKÉ ODKAZY + SDÍLENÍ
     function getShareUrl(id) {
-        return window.location.href.split('?')[0] + '?id=' + id;
+        return window.location.origin + window.location.pathname + '?id=' + id;
     }
 
     window.shareToFacebook = function(id) {
@@ -261,9 +269,32 @@
     window.copyLink = function(id) {
         const url = getShareUrl(id);
         navigator.clipboard.writeText(url).then(() => {
-            alert('✅ Odkaz zkopírován do schránky!');
+            alert('✅ Hezký odkaz zkopírován do schránky!');
         });
     };
+
+    function updateOGTags(item) {
+        if (!item) return;
+        document.getElementById('og-title').setAttribute('content', item.title || item.game);
+        document.getElementById('og-desc').setAttribute('content', (item.content || '').substring(0, 160));
+        document.getElementById('og-image').setAttribute('content', item.img);
+        document.getElementById('og-url').setAttribute('content', getShareUrl(item.id));
+        document.title = item.title || item.game;
+    }
+
+    // Deep link – otevře modal při načtení stránky s ?id=
+    function handleDeepLink() {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        if (id) {
+            const numId = parseInt(id);
+            if (numId) {
+                setTimeout(() => {
+                    openModal(numId);
+                }, 800);
+            }
+        }
+    }
 
     function renderCalendar() {
         const minYear = 2000;
@@ -404,7 +435,7 @@
     function renderAll() {
         const combined = [...state.news, ...state.reviews].sort((a,b) => new Date(b.rDate) - new Date(a.rDate));
 
-        // HERO s badge a "Právě vyšlo"
+        // Hero s badge a "Právě vyšlo"
         const heroItem = combined[0];
         const heroType = heroItem.score !== undefined ? 'RECENZE' : 'NOVINKA';
         const heroLabel = heroItem.score !== undefined ? 'Právě vyšlo' : 'Nejnovější novinka';
@@ -586,6 +617,9 @@
         });
         document.getElementById('suggested-items').innerHTML = suggestedHTML;
 
+        // Aktualizace OG tagů při otevření modalu
+        updateOGTags(item);
+
         document.getElementById('modal-overlay').style.display = 'block';
     };
 
@@ -612,7 +646,10 @@
         console.log('%cStránka aktualizována (každou minutu)', 'color: #ff0000; font-weight: bold');
     }, 60000);
 
-    window.onload = renderAll;
+    window.onload = function() {
+        renderAll();
+        handleDeepLink();
+    };
     </script>
 </body>
 </html>
