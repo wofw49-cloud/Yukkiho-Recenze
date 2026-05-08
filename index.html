@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -13,30 +14,50 @@
         #spotlight { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: -1; background: radial-gradient(circle 450px at var(--x, 50%) var(--y, 50%), rgba(220, 38, 38, 0.12), transparent 100%); }
         .condensed { font-family: 'Barlow Condensed', sans-serif; text-transform: uppercase; }
         
-        nav { background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); position: fixed; width: 100%; top: 0; z-index: 1000; height: 70px; }
-        .nav-link { font-weight: 800; font-size: 12px; text-transform: uppercase; padding: 0 15px; cursor: pointer; opacity: 0.5; transition: 0.3s; line-height: 70px; display: inline-block; letter-spacing: 1px; position: relative; }
+        nav { background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); position: fixed; width: 100%; top: 0; z-index: 1000; }
+        
+        .nav-link { font-weight: 800; font-size: 13px; text-transform: uppercase; padding: 0 16px; cursor: pointer; opacity: 0.6; transition: 0.3s; line-height: 70px; display: inline-block; letter-spacing: 1px; position: relative; }
         .nav-link:hover, .active-nav { opacity: 1; color: var(--red); }
-        .nav-link.active-nav::after { content: ''; position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); width: 20px; height: 2px; background: var(--red); box-shadow: 0 0 10px var(--red); }
+        .nav-link.active-nav::after { content: ''; position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 24px; height: 3px; background: var(--red); }
 
-        .search-container { display: flex; align-items: center; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; padding: 0 12px; height: 38px; }
-        .search-input { background: transparent; border: none; color: white; font-size: 12px; outline: none; width: 120px; transition: 0.3s; }
-        .search-input:focus { width: 180px; }
+        .search-container { display: flex; align-items: center; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 9999px; padding: 0 14px; height: 42px; }
+        .search-input { background: transparent; border: none; color: white; font-size: 14px; outline: none; width: 140px; transition: 0.3s; }
+        .search-input:focus { width: 200px; }
 
-        .filter-btn { padding: 8px 14px; border-radius: 10px; background: #111; border: 1px solid #222; font-weight: 800; font-size: 11px; text-transform: uppercase; color: #555; transition: 0.3s; white-space: nowrap; }
+        .filter-btn { padding: 10px 18px; border-radius: 9999px; background: #111; border: 1px solid #222; font-weight: 800; font-size: 13px; text-transform: uppercase; color: #aaa; transition: 0.3s; white-space: nowrap; }
         .filter-btn.active { background: var(--red); border-color: var(--red); color: #fff; }
 
-        .feed-card { transition: all 0.4s; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; overflow: hidden; }
+        .feed-card { transition: all 0.4s; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; overflow: hidden; }
         .feed-card:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(220, 38, 38, 0.4); transform: translateY(-4px); }
         
         .gold-text { background: linear-gradient(90deg, #bf953f 0%, #fcf6ba 50%, #b38728 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hall-item { background: #080808; border: 1px solid #1a1a1a; border-radius: 60px; padding: 15px 40px; display: flex; align-items: center; }
-        
+
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 2000; overflow-y: auto; }
-        .close-modal { position: fixed; top: 20px; right: 20px; font-size: 30px; cursor: pointer; color: #fff; background: rgba(255,255,255,0.1); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        
-        .prose { color: #d1d5db; }
-        .prose b { color: #fff; }
+        .close-modal { position: fixed; top: 25px; right: 25px; font-size: 42px; cursor: pointer; color: #fff; background: rgba(255,255,255,0.1); width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 2010; }
+
+        /* Platform hover colors */
+        .platform-steam:hover { background-color: #1b2838 !important; }
+        .platform-ps:hover { background-color: #003087 !important; }
+        .platform-xbox:hover { background-color: #107c10 !important; }
+        .platform-switch:hover { background-color: #e60012 !important; }
+
+        /* Mobile - feed ve dvou sloupcích (čtverce) + sidebary pod ním */
+        @media (max-width: 1024px) {
+            .desktop-nav { display: none; }
+            .mobile-menu { display: block; }
+            #home-feed, #news-full-list, #reviews-full-list { 
+                grid-template-columns: repeat(2, 1fr) !important; 
+                gap: 12px; 
+            }
+            #calendar-grid { 
+                grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); 
+                gap: 12px; 
+            }
+            .same-day-card img { height: 130px; }
+            .same-day-name { font-size: 1.05rem; line-height: 1.2; }
+            .same-day-card .p-4 { padding: 10px; }
+            h2 { font-size: 2.1rem; }
+        }
     </style>
 </head>
 <body>
@@ -44,79 +65,117 @@
     <div id="spotlight"></div>
 
     <nav>
-        <div class="max-w-[1600px] mx-auto flex items-center justify-between px-4 md:px-8 h-full">
+        <div class="max-w-[1600px] mx-auto px-4 md:px-8 flex items-center justify-between h-16">
             <div class="flex items-center">
-                <div class="text-2xl md:text-3xl font-black italic tracking-tighter cursor-pointer mr-12" onclick="location.reload()">YUKKI<span class="text-red-600">.</span></div>
-                <div class="hidden lg:flex">
-                    <div class="nav-link active-nav" data-tab="domu">Úvod</div>
-                    <div class="nav-link" data-tab="novinky">Novinky</div>
-                    <div class="nav-link" data-tab="recenze">Recenze</div>
-                    <div class="nav-link" data-tab="kalendar">Kalendář</div>
-                    <div class="nav-link" data-tab="elite">Prestige Hall</div>
-                </div>
+                <div class="text-3xl font-black italic tracking-tighter cursor-pointer" onclick="location.reload()">YUKKI<span class="text-red-600">.</span></div>
             </div>
+
+            <!-- Desktop nav -->
+            <div class="hidden lg:flex items-center gap-8 desktop-nav">
+                <div class="nav-link active-nav" data-tab="domu">ÚVOD</div>
+                <div class="nav-link" data-tab="novinky">NOVINKY</div>
+                <div class="nav-link" data-tab="recenze">RECENZE</div>
+                <div class="nav-link" data-tab="kalendar">KALENDÁŘ</div>
+                <div class="nav-link" data-tab="elite">PRESTIGE HALL</div>
+            </div>
+
             <div class="flex items-center gap-4">
                 <div class="search-container">
-                    <i class="fas fa-search text-zinc-600 text-[10px] mr-2"></i>
+                    <i class="fas fa-search text-zinc-500 mr-3"></i>
                     <input type="text" id="globalSearch" class="search-input" placeholder="Hledat...">
                 </div>
-                <a href="https://www.youtube.com/@YukkiCZE" target="_blank" class="opacity-50 hover:opacity-100 transition"><i class="fab fa-youtube text-xl"></i></a>
-                <a href="https://www.instagram.com/_yukki77_/" target="_blank" class="opacity-50 hover:opacity-100 transition"><i class="fab fa-instagram text-xl"></i></a>
+                <a href="https://www.youtube.com/@YukkiCZE" target="_blank" class="opacity-60 hover:opacity-100"><i class="fab fa-youtube text-2xl"></i></a>
+                <a href="https://www.instagram.com/_yukki77_/" target="_blank" class="opacity-60 hover:opacity-100"><i class="fab fa-instagram text-2xl"></i></a>
+
+                <button onclick="toggleMobileMenu()" class="lg:hidden text-4xl text-red-500 p-2">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobileMenu" class="mobile-menu hidden lg:hidden bg-[#0a0a0a] border-t border-zinc-800 px-6 py-10">
+            <div class="flex flex-col gap-6 text-2xl font-bold">
+                <div onclick="navigateToTab('domu'); toggleMobileMenu()" class="cursor-pointer">Úvod</div>
+                <div onclick="navigateToTab('novinky'); toggleMobileMenu()" class="cursor-pointer">Novinky</div>
+                <div onclick="navigateToTab('recenze'); toggleMobileMenu()" class="cursor-pointer">Recenze</div>
+                <div onclick="navigateToTab('kalendar'); toggleMobileMenu()" class="cursor-pointer">Kalendář</div>
+                <div onclick="navigateToTab('elite'); toggleMobileMenu()" class="cursor-pointer">Prestige Hall</div>
             </div>
         </div>
     </nav>
 
-    <div class="max-w-[1600px] mx-auto px-4 md:px-8 pt-24 md:pt-32 pb-20">
+    <div class="max-w-[1600px] mx-auto px-4 md:px-8 pt-20 md:pt-28 pb-20">
+        
+        <!-- ÚVOD -->
         <div id="tab-domu" class="tab-content">
-            <div id="hero-area" class="mb-16"></div>
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
-                <div id="home-feed" class="lg:col-span-8 space-y-8"></div>
+            <div id="hero-area" class="mb-12 md:mb-16"></div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
+                <!-- Feed ve dvou sloupcích na mobilu -->
+                <div id="home-feed" class="lg:col-span-8 grid grid-cols-2 lg:grid-cols-1 gap-6 lg:gap-8"></div>
+                
+                <!-- Sidebary -->
                 <div class="lg:col-span-4 space-y-12">
+                    <!-- Prestige Hall #TOP5 -->
                     <div class="bg-[#080808] p-6 rounded-3xl border border-zinc-900">
-                        <h3 class="condensed text-xl font-black mb-6 italic">Prestige Hall <span class="text-zinc-700">#Top5</span></h3>
+                        <h3 class="condensed text-xl font-black mb-6 italic">PRESTIGE HALL <span class="text-zinc-700">#TOP5</span></h3>
                         <div id="side-hall" class="space-y-3"></div>
                     </div>
+                    
+                    <!-- Blízké Releasy -->
                     <div class="bg-[#080808] p-6 rounded-3xl border border-zinc-900">
-                        <h3 class="condensed text-xl font-black mb-6 italic uppercase">Blízké Releasy</h3>
+                        <h3 class="condensed text-xl font-black mb-6 italic uppercase">BLÍZKÉ RELEASY</h3>
                         <div id="side-calendar" class="space-y-5"></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="tab-novinky" class="tab-content hidden"><h2 class="condensed text-5xl font-black italic mb-10 text-center">Novinky</h2><div id="news-full-list" class="space-y-6"></div></div>
-        <div id="tab-recenze" class="tab-content hidden"><h2 class="condensed text-5xl font-black italic mb-10 text-center">Recenze</h2><div id="reviews-full-list" class="space-y-6"></div></div>
+        <!-- NOVINKY -->
+        <div id="tab-novinky" class="tab-content hidden">
+            <h2 class="condensed text-5xl font-black italic mb-10 text-center">NOVINKY</h2>
+            <div id="news-full-list" class="grid grid-cols-2 lg:grid-cols-1 gap-6"></div>
+            <div id="news-pagination" class="flex justify-center gap-4 mt-12"></div>
+        </div>
+
+        <!-- RECENZE -->
+        <div id="tab-recenze" class="tab-content hidden">
+            <h2 class="condensed text-5xl font-black italic mb-10 text-center">RECENZE</h2>
+            <div id="reviews-full-list" class="grid grid-cols-2 lg:grid-cols-1 gap-6"></div>
+            <div id="reviews-pagination" class="flex justify-center gap-4 mt-12"></div>
+        </div>
         
+        <!-- PRESTIGE HALL -->
         <div id="tab-elite" class="tab-content hidden">
             <div class="text-center mb-16"><h2 class="condensed text-7xl font-black italic gold-text">PRESTIGE HALL</h2></div>
             <div id="hall-full-list" class="max-w-5xl mx-auto space-y-6"></div>
         </div>
 
+        <!-- KALENDÁŘ -->
         <div id="tab-kalendar" class="tab-content hidden">
-            <h2 class="condensed text-6xl font-black italic mb-8 uppercase text-center">Kalendář Her</h2>
-            
-            <!-- NOVÝ YEAR NAVIGÁTOR S ŠIPKAMI -->
-            <div class="flex items-center justify-center gap-6 mb-4" id="year-nav"></div>
-            
-            <div class="no-scrollbar flex justify-center gap-2 mb-12 overflow-x-auto" id="month-nav"></div>
-            <div id="calendar-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"></div>
+            <h2 class="condensed text-5xl md:text-6xl font-black italic mb-10 text-center">KALENDÁŘ HER</h2>
+            <div class="flex items-center justify-center gap-6 mb-8" id="year-nav"></div>
+            <div class="no-scrollbar flex justify-center gap-3 mb-12 overflow-x-auto" id="month-nav"></div>
+            <div id="calendar-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
         </div>
     </div>
 
-    <div id="modal-overlay" class="modal"><div class="close-modal" onclick="closeModal()">&times;</div><div class="modal-body max-w-4xl mx-auto py-20 px-4" id="modal-content"></div></div>
+    <div id="modal-overlay" class="modal">
+        <div class="close-modal" onclick="closeModal()">×</div>
+        <div class="modal-body max-w-4xl mx-auto py-12 px-4 md:py-20" id="modal-content"></div>
+    </div>
 
     <script>
+    let currentTab = 'domu';
+    let currentNewsPage = 1;
+    let currentReviewsPage = 1;
+    const itemsPerPage = 4;
+
     const state = {
         selectedYear: 2026,
         selectedMonth: 5,
         news: [
-            { 
-    id: 1000, 
-    title: "Risk se vyplatil, Pragmata hlásí úžasné výsledky", 
-    img: "https://indian-tv.cz/uploads/ls/09a7b79bb04446a886cff999e3185127/1755725042.jpg?", 
-    rDate: "2026-05-07T015:33:00", 
-    content: "Capcom může slavit, protože jejich nejnovější sci-fi sázka na nejistotu nese sladké ovoce. Pragmata se po letech v herním očistci nejen úspěšně dostala na pulty obchodů, ale podle aktuálních čísel láme prodejní rekordy v rámci nových značek studia. Hráči i kritici si pochvalují především unikátní vizuální zpracování a netradiční mechaniky doprovázení malé holčičky v měsíčním prostředí. Zdá se, že odvaha investovat do originálních projektů se japonskému gigantovi opět potvrdila jako správná cesta." 
-},
             { id: 1001, title: "Risk s Pragmatou se Capcomu vyplácí", img: "https://indian-tv.cz/uploads/ls/09a7b79bb04446a886cff999e3185127/1755725042.jpg?", rDate: "2026-05-07", content: "Dlouho odkládaný sci-fi projekt od Capcomu konečně ukazuje své kvality." },
             { id: 1002, title: "Novinky o 007 First Light", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3768760/header.jpg", rDate: "2026-05-08", content: "Agent 007 se vrací v nové vizuální podobě, která bere dech." }
         ],
@@ -164,43 +223,14 @@
             }
         ],
         calendar: [
-            { id: 3000, game: "The Elder Scrolls V: Skyrim", rDate: "2011-11-11", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/72850/header.jpg?t=1721923139", platforms: ["PC", "PS3", "X360"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/72850/The_Elder_Scrolls_V_Skyrim/" } },
             { id: 3004, game: "BUS BOUND", rDate: "2026-05-02", img: "https://picsum.photos/id/1015/800/450", platforms: ["PC"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/example-busbound" } },
-            { id: 3005, game: "MIXTAPE", rDate: "2026-05-07", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2582320/95bbf1097b6f66f39b56f6388250c97a2f43b59e/header.jpg?t=1778170796", platforms: ["PC", "PS5"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/2582320/Mixtape/", playstation: "https://www.playstation.com/en-us/games/mixtape/" } },
-            { id: 3006, game: "DIRECTIVE 8020", rDate: "2026-05-12", img: "https://scontent.fprg4-1.fna.fbcdn.net/v/t39.30808-6/690025743_979562758333900_4428228134412487212_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=13d280&_nc_ohc=nB5ORLClYcoQ7kNvwGJrTcZ&_nc_oc=Ado4HcWot4_sZoN2Df9dSxT68B717M33fxv4zA_MumrR66rvEEoR2e8-54rWsQqYMR4&_nc_zt=23&_nc_ht=scontent.fprg4-1.fna&_nc_gid=TaJGEdJv_9kOb_saL8mdtA&_nc_ss=7b2a8&oh=00_Af4RHFtSelK6coPdhN6NDLNp0xM_6bWwsS_rqmAkXdKBTQ&oe=6A033D9B", platforms: ["PC"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/2255370/Directive_8020/" } },
+            { id: 3005, game: "MIXTAPE", rDate: "2026-05-07", img: "https://picsum.photos/id/133/800/450", platforms: ["PC", "PS5"], czech: false, earlyAccess: true, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/example-mixtape", playstation: "https://store.playstation.com/cs-cz/product/example-mixtape" } },
+            { id: 3006, game: "DIRECTIVE 8020", rDate: "2026-05-12", img: "https://picsum.photos/id/201/800/450", platforms: ["PC"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/example-directive" } },
             { id: 3001, game: "007 FIRST LIGHT", rDate: "2026-05-27", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3768760/header.jpg", platforms: ["PC", "PS5", "Xbox"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/3768760", playstation: "https://store.playstation.com/cs-cz/product/007-first-light", xbox: "https://www.xbox.com/cs-CZ/games/store/007-first-light/..." } },
             { id: 3002, game: "GTA VI", rDate: "2025-11-20", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/271590/header.jpg", platforms: ["PC", "PS5", "Xbox"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/271590", playstation: "https://store.playstation.com/cs-cz/product/gta-vi", xbox: "https://www.xbox.com/cs-CZ/games/store/gta-vi/..." } },
             { id: 3003, game: "AC BLACK FLAG: RESYNCED", rDate: "2026-07-09", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3751950/header.jpg", platforms: ["PC"], czech: true, earlyAccess: false, isDLC: true, storeLinks: { steam: "https://store.steampowered.com/app/3751950" } },
-            { 
-                id: 3007, 
-                game: "Kingdom Come: Deliverance II", 
-                rDate: "2025-02-11", 
-                img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1771300/header.jpg?t=1777975568", 
-                platforms: ["PC", "PS5", "XBOX"], 
-                czech: true, 
-                earlyAccess: false, 
-                isDLC: false, 
-                storeLinks: { 
-                    steam: "https://store.steampowered.com/app/1771300/Kingdom_Come_Deliverance_II/", 
-                    playstation: "https://www.playstation.com/en-cz/games/kingdom-come-deliverance-ii/", 
-                    xbox: "https://www.xbox.com/cs-CZ/games/store/kingdom-come-deliverance-ii/9n4w31hsmvvd" 
-                } 
-            },
-            { 
-                id: 3008, 
-                game: "Sid Meier’s Civilization VII", 
-                rDate: "2025-02-11", 
-                img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1295660/header.jpg?t=1777919052", 
-                platforms: ["PC", "PS5", "XBOX", "SWITCH"], 
-                czech: false, 
-                earlyAccess: false, 
-                isDLC: false, 
-                storeLinks: { 
-                    steam: "https://store.steampowered.com/app/1295660/Sid_Meiers_Civilization_VII/", 
-                    playstation: "https://www.playstation.com/en-cz/games/sid-meier-s-civilization-vii/", 
-                    xbox: "https://www.xbox.com/cs-CZ/games/store/sid-meiers-civilization-vii/9NG6VZHN5GQL/0010" 
-                } 
-            }
+            { id: 3007, game: "Kingdom Come: Deliverance II", rDate: "2025-02-11", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1771300/header.jpg?t=1777975568", platforms: ["PC", "PS5", "XBOX"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/1771300/Kingdom_Come_Deliverance_II/", playstation: "https://www.playstation.com/en-cz/games/kingdom-come-deliverance-ii/", xbox: "https://www.xbox.com/cs-CZ/games/store/kingdom-come-deliverance-ii/9n4w31hsmvvd" } },
+            { id: 3008, game: "Sid Meier’s Civilization VII", rDate: "2025-02-11", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1295660/header.jpg?t=1777919052", platforms: ["PC", "PS5", "XBOX", "SWITCH"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/1295660/Sid_Meiers_Civilization_VII/", playstation: "https://www.playstation.com/en-cz/games/sid-meier-s-civilization-vii/", xbox: "https://www.xbox.com/cs-CZ/games/store/sid-meiers-civilization-vii/9NG6VZHN5GQL/0010" } }
         ]
     };
 
@@ -217,23 +247,60 @@
                 ČESKY
             </span>`;
         }
-        if (item.earlyAccess) {
-            html += `<span class="px-4 py-1 text-xs font-bold bg-orange-500 rounded-3xl">EARLY ACCESS</span>`;
-        }
-        if (item.isDLC) {
-            html += `<span class="px-4 py-1 text-xs font-bold bg-violet-600 rounded-3xl">DLC</span>`;
-        }
-        if (item.platforms && item.platforms.length > 0) {
-            item.platforms.forEach(p => {
-                let icon = '';
-                if (p === 'PC') icon = `<i class="fas fa-laptop mr-1"></i>`;
-                else if (p === 'PS5') icon = `<i class="fab fa-playstation mr-1"></i>`;
-                else if (p === 'Xbox' || p === 'XBOX') icon = `<i class="fab fa-xbox mr-1"></i>`;
-                else if (p === 'SWITCH') icon = `<i class="fas fa-gamepad mr-1"></i>`;
-                html += `<span class="inline-flex items-center px-3 py-1 text-xs font-bold bg-zinc-700 rounded-3xl">${icon}${p}</span>`;
+        if (item.earlyAccess) html += `<span class="px-4 py-1 text-xs font-bold bg-orange-500 rounded-3xl">EARLY ACCESS</span>`;
+        if (item.isDLC) html += `<span class="px-4 py-1 text-xs font-bold bg-violet-600 rounded-3xl">DLC</span>`;
+        return html;
+    }
+
+    function getPlatformLinksHTML(item) {
+        if (!item.platforms || !item.storeLinks) return '';
+        let html = '';
+        item.platforms.forEach(p => {
+            const lower = p.toLowerCase();
+            let key = lower === 'ps5' ? 'playstation' : lower === 'xbox' ? 'xbox' : lower;
+            const url = item.storeLinks[key];
+            if (url) {
+                let colorClass = '';
+                if (lower === 'pc' || lower === 'steam') colorClass = 'platform-steam';
+                else if (lower.includes('ps')) colorClass = 'platform-ps';
+                else if (lower.includes('xbox')) colorClass = 'platform-xbox';
+                else if (lower.includes('switch')) colorClass = 'platform-switch';
+
+                const icon = lower === 'pc' || lower === 'steam' ? `<i class="fab fa-steam mr-1"></i>` : 
+                             lower.includes('ps') ? `<i class="fab fa-playstation mr-1"></i>` : 
+                             lower.includes('xbox') ? `<i class="fab fa-xbox mr-1"></i>` : 
+                             `<i class="fas fa-gamepad mr-1"></i>`;
+
+                html += `<a href="${url}" target="_blank" onclick="event.stopImmediatePropagation()" class="inline-flex items-center px-4 py-1 text-xs font-bold bg-zinc-700 hover:bg-zinc-600 ${colorClass} rounded-3xl transition-colors">${icon}${p}</a>`;
+            }
+        });
+        return html;
+    }
+
+    function toggleMobileMenu() {
+        document.getElementById('mobileMenu').classList.toggle('hidden');
+    }
+
+    window.navigateToTab = function(tab) {
+        currentTab = tab;
+        localStorage.setItem('lastTab', tab);
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-nav'));
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+        document.getElementById('tab-' + tab).classList.remove('hidden');
+        window.scrollTo({top: 0, behavior: 'smooth'});
+        toggleMobileMenu();
+    };
+
+    function loadLastTab() {
+        const last = localStorage.getItem('lastTab');
+        if (last && document.getElementById('tab-' + last)) {
+            currentTab = last;
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+            document.getElementById('tab-' + last).classList.remove('hidden');
+            document.querySelectorAll('.nav-link').forEach(l => {
+                if (l.getAttribute('data-tab') === last) l.classList.add('active-nav');
             });
         }
-        return html;
     }
 
     document.getElementById('globalSearch').oninput = (e) => {
@@ -245,45 +312,25 @@
     };
 
     function renderCalendar() {
-        // === NOVÝ YEAR NAVIGÁTOR S ŠIPKAMI ===
         const minYear = 2000;
         const maxYear = 2030;
         const current = state.selectedYear;
 
         let yearHTML = `
-        <div class="flex items-center gap-8">
-            <!-- Levá šipka -->
-            <button onclick="changeYear(-1)" class="w-10 h-10 flex items-center justify-center text-3xl text-zinc-400 hover:text-white transition-colors">
+        <div class="flex items-center gap-4 md:gap-8 justify-center flex-wrap">
+            <button onclick="changeYear(-1)" class="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center text-3xl text-zinc-400 hover:text-white transition-colors">
                 <i class="fas fa-chevron-left"></i>
             </button>
-
-            <!-- Předchozí rok -->
-            <button onclick="state.selectedYear = ${current-1}; renderCalendar()" 
-                    class="filter-btn px-8 ${current-1 < minYear ? 'opacity-30 pointer-events-none' : ''}">
-                ${current-1}
-            </button>
-
-            <!-- Aktuální rok (zvýrazněný) -->
-            <button onclick="state.selectedYear = ${current}; renderCalendar()" 
-                    class="filter-btn px-8 bg-red-600 border-red-600 text-white">
-                ${current}
-            </button>
-
-            <!-- Následující rok -->
-            <button onclick="state.selectedYear = ${current+1}; renderCalendar()" 
-                    class="filter-btn px-8 ${current+1 > maxYear ? 'opacity-30 pointer-events-none' : ''}">
-                ${current+1}
-            </button>
-
-            <!-- Pravá šipka -->
-            <button onclick="changeYear(1)" class="w-10 h-10 flex items-center justify-center text-3xl text-zinc-400 hover:text-white transition-colors">
+            <button onclick="state.selectedYear = ${current-1}; renderCalendar()" class="filter-btn px-6 md:px-8 ${current-1 < minYear ? 'opacity-30 pointer-events-none' : ''}">${current-1}</button>
+            <button onclick="state.selectedYear = ${current}; renderCalendar()" class="filter-btn px-6 md:px-8 bg-red-600 border-red-600 text-white">${current}</button>
+            <button onclick="state.selectedYear = ${current+1}; renderCalendar()" class="filter-btn px-6 md:px-8 ${current+1 > maxYear ? 'opacity-30 pointer-events-none' : ''}">${current+1}</button>
+            <button onclick="changeYear(1)" class="w-9 h-9 md:w-10 md:h-10 flex items-center justify-center text-3xl text-zinc-400 hover:text-white transition-colors">
                 <i class="fas fa-chevron-right"></i>
             </button>
         </div>`;
 
         document.getElementById('year-nav').innerHTML = yearHTML;
 
-        // Měsíce zůstávají stejné
         document.getElementById('month-nav').innerHTML = months.map((m, idx) => 
             `<button class="filter-btn ${state.selectedMonth === idx ? 'active' : ''}" onclick="state.selectedMonth=${idx}; renderCalendar()">${m}</button>`
         ).join('');
@@ -315,22 +362,23 @@
             <div onclick="openModalForCurrent('${key}')" class="same-day-card bg-[#080808] border border-zinc-900 rounded-3xl overflow-hidden group cursor-pointer" data-date-key="${key}" data-current-index="0">
                 <div class="relative">
                     <img src="${first.img}" class="w-full aspect-video object-cover same-day-image transition-all duration-300">
-                    <div class="absolute bottom-4 left-4 bg-black/90 text-white px-4 py-2 rounded-3xl flex flex-col items-center justify-center min-w-[62px] shadow-inner">
-                        <span class="text-4xl leading-none font-black">${day}</span>
-                        <span class="text-[11px] font-black tracking-widest -mt-px">${monthShort}</span>
+                    <div class="absolute top-3 left-3 bg-black/90 text-white px-3 py-1 rounded-3xl flex flex-col items-center justify-center min-w-[54px] shadow-inner">
+                        <span class="text-3xl leading-none font-black">${day}</span>
+                        <span class="text-[10px] font-black tracking-widest -mt-px">${monthShort}</span>
                     </div>
                     ${hasMultiple ? `
-                    <button onclick="switchSameDay('${key}', -1); event.stopImmediatePropagation()" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-black text-white w-9 h-9 rounded-2xl flex items-center justify-center text-xl shadow-lg z-10">
+                    <button onclick="switchSameDay('${key}', -1); event.stopImmediatePropagation()" class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-black text-white w-8 h-8 rounded-2xl flex items-center justify-center text-lg shadow-lg z-10">
                         <i class="fas fa-chevron-left"></i>
                     </button>
-                    <button onclick="switchSameDay('${key}', 1); event.stopImmediatePropagation()" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-black text-white w-9 h-9 rounded-2xl flex items-center justify-center text-xl shadow-lg z-10">
+                    <button onclick="switchSameDay('${key}', 1); event.stopImmediatePropagation()" class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-black text-white w-8 h-8 rounded-2xl flex items-center justify-center text-lg shadow-lg z-10">
                         <i class="fas fa-chevron-right"></i>
                     </button>` : ''}
                 </div>
-                <div class="p-6">
-                    <h4 class="condensed text-2xl font-black uppercase leading-tight same-day-name">${first.game}</h4>
-                    <div class="flex gap-2 mt-4 flex-wrap same-day-badges">
+                <div class="p-4">
+                    <h4 class="condensed text-lg font-black uppercase leading-tight same-day-name">${first.game}</h4>
+                    <div class="flex gap-2 mt-3 flex-wrap">
                         ${getBadgesHTML(first)}
+                        ${getPlatformLinksHTML(first)}
                     </div>
                 </div>
             </div>`;
@@ -352,9 +400,7 @@
         if (!card) return;
         const index = parseInt(card.dataset.currentIndex || 0);
         const group = sameDayData[dateKey];
-        if (group && group[index]) {
-            openModal(group[index].id);
-        }
+        if (group && group[index]) openModal(group[index].id);
     };
 
     window.switchSameDay = function(dateKey, direction) {
@@ -370,14 +416,14 @@
         const game = group[currentIndex];
         const image = card.querySelector('.same-day-image');
         const nameEl = card.querySelector('.same-day-name');
-        const badgesEl = card.querySelector('.same-day-badges');
+        const badgesEl = card.querySelector('.flex.gap-2');
 
         image.style.opacity = '0';
         setTimeout(() => {
             image.src = game.img;
             image.style.opacity = '1';
             nameEl.textContent = game.game;
-            badgesEl.innerHTML = getBadgesHTML(game);
+            badgesEl.innerHTML = `${getBadgesHTML(game)}${getPlatformLinksHTML(game)}`;
         }, 180);
     };
 
@@ -411,47 +457,59 @@
         document.getElementById('side-calendar').innerHTML = html;
     }
 
+    function createFeedCard(item, type) {
+        const label = type === 'news' ? 'NOVINKA' : 'RECENZE';
+        const labelColor = type === 'news' ? 'bg-red-600' : 'bg-emerald-600';
+        return `
+        <div onclick="openModal(${item.id})" class="feed-card flex flex-col md:flex-row gap-6 p-6 cursor-pointer">
+            <img src="${item.img}" class="w-full md:w-48 h-48 md:h-32 object-cover rounded-2xl shrink-0">
+            <div class="flex-1">
+                <div class="flex items-center gap-3 mb-3">
+                    <span class="${labelColor} text-white text-xs font-bold px-4 py-1 rounded-3xl">${label}</span>
+                    ${getBadgesHTML(item)}
+                </div>
+                <h3 class="condensed text-2xl md:text-3xl font-black italic uppercase leading-tight">${item.title || item.game}</h3>
+                ${item.score ? `<div class="text-red-600 font-black text-5xl mt-4">${item.score}%</div>` : ''}
+            </div>
+        </div>`;
+    }
+
     function renderAll() {
         const combined = [...state.news, ...state.reviews].sort((a,b) => new Date(b.rDate) - new Date(a.rDate));
 
+        // Hero zůstává velký
         document.getElementById('hero-area').innerHTML = `
-            <div class="relative h-[500px] rounded-[40px] overflow-hidden cursor-pointer" onclick="openModal(${combined[0].id})">
+            <div class="relative h-[420px] md:h-[500px] rounded-[40px] overflow-hidden cursor-pointer" onclick="openModal(${combined[0].id})">
                 <img src="${combined[0].img}" class="w-full h-full object-cover opacity-40">
                 <div class="absolute inset-0 bg-gradient-to-t from-black"></div>
-                <div class="absolute bottom-12 left-12">
-                    <h1 class="condensed text-7xl font-black italic uppercase">${combined[0].title || combined[0].game}</h1>
+                <div class="absolute bottom-8 left-6 md:bottom-12 md:left-12">
+                    <h1 class="condensed text-5xl md:text-7xl font-black italic uppercase">${combined[0].title || combined[0].game}</h1>
                     <div class="flex gap-2 mt-6 flex-wrap">${getBadgesHTML(combined[0])}</div>
                 </div>
             </div>`;
 
-        document.getElementById('home-feed').innerHTML = combined.slice(1, 5).map(i => `
-            <div class="flex items-center gap-8 p-6 feed-card cursor-pointer" onclick="openModal(${i.id})">
-                <img src="${i.img}" class="w-48 h-28 object-cover rounded-2xl shrink-0">
-                <div class="flex-1">
-                    <div class="text-red-600 font-black condensed text-[11px] mb-2 uppercase">${i.score ? 'Recenze' : 'Novinka'}</div>
-                    <h3 class="condensed text-3xl font-black italic uppercase">${i.title || i.game}</h3>
-                    <div class="flex gap-2 mt-4 flex-wrap">${getBadgesHTML(i)}</div>
-                </div>
-            </div>`).join('');
+        // Home feed - ve dvou sloupcích na mobilu
+        document.getElementById('home-feed').innerHTML = combined.slice(1, 5).map(i => createFeedCard(i, i.score ? 'review' : 'news')).join('');
 
-        document.getElementById('news-full-list').innerHTML = state.news.map(n => `<div class="flex gap-8 p-8 feed-card cursor-pointer" onclick="openModal(${n.id})"><img src="${n.img}" class="w-64 h-36 object-cover rounded-2xl shrink-0"><div class="flex-1"><h3 class="condensed text-4xl font-black italic uppercase">${n.title}</h3><p class="text-zinc-500 mt-2">${n.content}</p></div></div>`).join('');
-        
-        document.getElementById('reviews-full-list').innerHTML = state.reviews.map(r => `
-            <div class="flex gap-8 p-8 feed-card cursor-pointer" onclick="openModal(${r.id})">
-                <img src="${r.img}" class="w-64 h-36 object-cover rounded-2xl shrink-0">
-                <div class="flex-1">
-                    <div class="text-4xl font-black italic text-red-600">${r.score}%</div>
-                    <h3 class="condensed text-4xl font-black italic uppercase">${r.game}</h3>
-                </div>
-            </div>`).join('');
+        // Novinky full list
+        renderNewsPage();
 
+        // Recenze full list
+        renderReviewsPage();
+
+        // Sidebars
         const top5 = [...state.reviews].sort((a,b) => b.score - a.score).slice(0, 5);
-        document.getElementById('side-hall').innerHTML = top5.map((r, idx) => `<div class="flex justify-between items-center bg-white/5 p-4 rounded-2xl border border-zinc-900"><span class="condensed text-2xl font-black italic ${idx===0?'gold-text':'text-zinc-800'}">#${idx+1}</span><span class="text-[11px] font-bold uppercase flex-1 px-4 truncate">${r.game}</span><span class="font-black text-red-600">${r.score}%</span></div>`).join('');
-        
+        document.getElementById('side-hall').innerHTML = top5.map((r, idx) => `
+            <div class="flex justify-between items-center bg-white/5 p-4 rounded-2xl border border-zinc-900">
+                <span class="condensed text-2xl font-black italic ${idx===0?'gold-text':'text-zinc-800'}">#${idx+1}</span>
+                <span class="text-[11px] font-bold uppercase flex-1 px-4 truncate">${r.game}</span>
+                <span class="font-black text-red-600">${r.score}%</span>
+            </div>`).join('');
+
         document.getElementById('hall-full-list').innerHTML = [...state.reviews].sort((a,b) => b.score - a.score).map((r, idx) => `
-            <div class="hall-item mb-4">
+            <div class="hall-item mb-4 flex flex-col md:flex-row items-center gap-6">
                 <div class="condensed text-7xl font-black italic w-32 ${idx===0?'gold-text':'text-zinc-900'}">#${idx+1}</div>
-                <img src="${r.img}" class="w-56 h-32 rounded-3xl object-cover mx-8 flex-shrink-0">
+                <img src="${r.img}" class="w-full md:w-56 h-32 rounded-3xl object-cover flex-shrink-0">
                 <div class="flex-1"><h3 class="condensed text-4xl font-black italic uppercase">${r.game}</h3></div>
                 <div class="text-7xl font-black italic text-red-600">${r.score}%</div>
             </div>`).join('');
@@ -459,6 +517,60 @@
         renderCalendar();
         renderSideCalendar();
     }
+
+    function renderNewsPage() {
+        const start = (currentNewsPage - 1) * itemsPerPage;
+        const pageItems = state.news.slice(start, start + itemsPerPage);
+        document.getElementById('news-full-list').innerHTML = pageItems.map(n => createFeedCard(n, 'news')).join('');
+        renderPagination('news', state.news.length, currentNewsPage, 'news-pagination');
+    }
+
+    function renderReviewsPage() {
+        const start = (currentReviewsPage - 1) * itemsPerPage;
+        const pageItems = state.reviews.slice(start, start + itemsPerPage);
+        document.getElementById('reviews-full-list').innerHTML = pageItems.map(r => createFeedCard(r, 'review')).join('');
+        renderPagination('reviews', state.reviews.length, currentReviewsPage, 'reviews-pagination');
+    }
+
+    function renderPagination(type, totalItems, currentPage, containerId) {
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+        let html = `
+        <button onclick="${type === 'news' ? 'prevNewsPage()' : 'prevReviewsPage()'}" class="px-6 py-3 bg-zinc-800 hover:bg-zinc-700 rounded-3xl text-sm font-bold flex items-center gap-2 ${currentPage === 1 ? 'opacity-30 pointer-events-none' : ''}">
+            <i class="fas fa-chevron-left"></i> Předchozí
+        </button>
+        <span class="px-8 py-3 text-zinc-400 font-medium">Strana ${currentPage} z ${totalPages}</span>
+        <button onclick="${type === 'news' ? 'nextNewsPage()' : 'nextReviewsPage()'}" class="px-6 py-3 bg-zinc-800 hover:bg-zinc-700 rounded-3xl text-sm font-bold flex items-center gap-2 ${currentPage === totalPages ? 'opacity-30 pointer-events-none' : ''}">
+            Další <i class="fas fa-chevron-right"></i>
+        </button>`;
+        document.getElementById(containerId).innerHTML = html;
+    }
+
+    window.prevNewsPage = function() {
+        if (currentNewsPage > 1) {
+            currentNewsPage--;
+            renderNewsPage();
+        }
+    };
+    window.nextNewsPage = function() {
+        const totalPages = Math.ceil(state.news.length / itemsPerPage);
+        if (currentNewsPage < totalPages) {
+            currentNewsPage++;
+            renderNewsPage();
+        }
+    };
+    window.prevReviewsPage = function() {
+        if (currentReviewsPage > 1) {
+            currentReviewsPage--;
+            renderReviewsPage();
+        }
+    };
+    window.nextReviewsPage = function() {
+        const totalPages = Math.ceil(state.reviews.length / itemsPerPage);
+        if (currentReviewsPage < totalPages) {
+            currentReviewsPage++;
+            renderReviewsPage();
+        }
+    };
 
     window.openModal = (id) => {
         const item = [...state.news, ...state.reviews, ...state.calendar].find(x => x.id === id);
@@ -475,20 +587,12 @@
             ${item.pros && item.pros.length ? `
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
                 <div>
-                    <h3 class="flex items-center gap-3 text-emerald-400 uppercase font-black text-2xl mb-6">
-                        <i class="fas fa-check-circle text-3xl"></i> KLADY
-                    </h3>
-                    <ul class="space-y-5">
-                        ${item.pros.map(p => `<li class="flex gap-4 text-zinc-200 text-lg"><span class="text-emerald-400 text-2xl leading-none mt-px">✓</span>${p}</li>`).join('')}
-                    </ul>
+                    <h3 class="flex items-center gap-3 text-emerald-400 uppercase font-black text-2xl mb-6"><i class="fas fa-check-circle text-3xl"></i> KLADY</h3>
+                    <ul class="space-y-5">${item.pros.map(p => `<li class="flex gap-4 text-zinc-200 text-lg"><span class="text-emerald-400 text-2xl leading-none mt-px">✓</span>${p}</li>`).join('')}</ul>
                 </div>
                 <div>
-                    <h3 class="flex items-center gap-3 text-red-400 uppercase font-black text-2xl mb-6">
-                        <i class="fas fa-times-circle text-3xl"></i> ZÁPORY
-                    </h3>
-                    <ul class="space-y-5">
-                        ${item.cons.map(c => `<li class="flex gap-4 text-zinc-200 text-lg"><span class="text-red-400 text-2xl leading-none mt-px">✕</span>${c}</li>`).join('')}
-                    </ul>
+                    <h3 class="flex items-center gap-3 text-red-400 uppercase font-black text-2xl mb-6"><i class="fas fa-times-circle text-3xl"></i> ZÁPORY</h3>
+                    <ul class="space-y-5">${item.cons.map(c => `<li class="flex gap-4 text-zinc-200 text-lg"><span class="text-red-400 text-2xl leading-none mt-px">✕</span>${c}</li>`).join('')}</ul>
                 </div>
             </div>` : ''}
 
@@ -496,9 +600,7 @@
             <div class="mb-12">
                 <h3 class="uppercase text-zinc-400 font-black mb-5 text-lg">Galerie screenshotů</h3>
                 <div class="flex gap-4 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide">
-                    ${item.gallery.map(url => `
-                        <img src="${url}" onclick="this.classList.toggle('scale-125'); this.style.transition='all 0.4s'" class="h-52 rounded-3xl object-cover cursor-zoom-in snap-center shadow-2xl flex-shrink-0 border border-zinc-800">
-                    `).join('')}
+                    ${item.gallery.map(url => `<img src="${url}" onclick="this.classList.toggle('scale-125'); this.style.transition='all 0.4s'" class="h-52 rounded-3xl object-cover cursor-zoom-in snap-center shadow-2xl flex-shrink-0 border border-zinc-800">`).join('')}
                 </div>
             </div>` : ''}
             `;
@@ -521,20 +623,45 @@
         const modalContent = `
             <img src="${item.img}" class="w-full rounded-3xl mb-8 shadow-2xl">
             ${extraHTML}
-            <h2 class="condensed text-6xl font-black italic uppercase">${item.title || item.game}</h2>
+            <h2 class="condensed text-5xl md:text-6xl font-black italic uppercase">${item.title || item.game}</h2>
             <div class="flex gap-2 mt-6 flex-wrap">${getBadgesHTML(item)}</div>
             ${buyHTML}
             ${item.content ? `
             <div class="mt-12 text-zinc-300 leading-relaxed prose prose-invert max-w-none">
                 ${item.content}
             </div>` : ''}
+            
+            <div class="mt-20 pt-12 border-t border-zinc-800">
+                <h3 class="condensed text-3xl font-black mb-8">Mohlo by se vám líbit</h3>
+                <div id="suggested-items" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+            </div>
         `;
 
         document.getElementById('modal-content').innerHTML = modalContent;
+
+        const suggestions = [...state.news, ...state.reviews].filter(i => i.id !== id);
+        const shuffled = suggestions.sort(() => 0.5 - Math.random());
+        const suggested = shuffled.slice(0, 3);
+
+        let suggestedHTML = '';
+        suggested.forEach(s => {
+            suggestedHTML += `
+            <div onclick="closeModal(); setTimeout(() => openModal(${s.id}), 300)" class="feed-card cursor-pointer overflow-hidden">
+                <img src="${s.img}" class="w-full h-40 object-cover">
+                <div class="p-5">
+                    <h4 class="condensed text-xl font-black line-clamp-2">${s.title || s.game}</h4>
+                    ${s.score ? `<div class="text-red-600 font-black text-2xl mt-2">${s.score}%</div>` : ''}
+                </div>
+            </div>`;
+        });
+        document.getElementById('suggested-items').innerHTML = suggestedHTML;
+
         document.getElementById('modal-overlay').style.display = 'block';
     };
 
-    window.closeModal = () => document.getElementById('modal-overlay').style.display = 'none';
+    window.closeModal = () => {
+        document.getElementById('modal-overlay').style.display = 'none';
+    };
 
     document.querySelectorAll('.nav-link').forEach(link => {
         link.onclick = () => {
@@ -552,7 +679,11 @@
         s.style.setProperty('--y', e.clientY + 'px');
     });
 
-    window.onload = renderAll;
+    window.onload = () => {
+        loadLastTab();
+        renderAll();
+    };
     </script>
 </body>
 </html>
+```
