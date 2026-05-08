@@ -35,7 +35,7 @@
         .close-modal { position: fixed; top: 20px; right: 20px; font-size: 30px; cursor: pointer; color: #fff; background: rgba(255,255,255,0.1); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        .prose { color: #d1d5db; line-height: 1.75; }
+        .prose { color: #d1d5db; }
         .prose b { color: #fff; }
     </style>
 </head>
@@ -94,7 +94,10 @@
 
         <div id="tab-kalendar" class="tab-content hidden">
             <h2 class="condensed text-6xl font-black italic mb-8 uppercase text-center">Kalendář Her</h2>
+            
+            <!-- NOVÝ YEAR NAVIGÁTOR S ŠIPKAMI -->
             <div class="flex items-center justify-center gap-6 mb-4" id="year-nav"></div>
+            
             <div class="no-scrollbar flex justify-center gap-2 mb-12 overflow-x-auto" id="month-nav"></div>
             <div id="calendar-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"></div>
         </div>
@@ -195,7 +198,6 @@
 
     const months = ["Leden", "Únor", "Březen", "Duben", "Květen", "Červen", "Červenec", "Srpen", "Září", "Říjen", "Listopad", "Prosinec"];
     const monthsShort = ["LED", "ÚNO", "BŘE", "DUB", "KVĚ", "ČER", "ČVC", "SRP", "ZÁŘ", "ŘÍJ", "LIS", "PRO"];
-    const years = [2024, 2025, 2026];
 
     let sameDayData = {};
 
@@ -207,13 +209,19 @@
                 ČESKY
             </span>`;
         }
-        if (item.earlyAccess) html += `<span class="px-4 py-1 text-xs font-bold bg-orange-500 rounded-3xl">EARLY ACCESS</span>`;
-        if (item.isDLC) html += `<span class="px-4 py-1 text-xs font-bold bg-violet-600 rounded-3xl">DLC</span>`;
+        if (item.earlyAccess) {
+            html += `<span class="px-4 py-1 text-xs font-bold bg-orange-500 rounded-3xl">EARLY ACCESS</span>`;
+        }
+        if (item.isDLC) {
+            html += `<span class="px-4 py-1 text-xs font-bold bg-violet-600 rounded-3xl">DLC</span>`;
+        }
         if (item.platforms && item.platforms.length > 0) {
             item.platforms.forEach(p => {
-                let icon = p === 'PC' ? `<i class="fas fa-laptop mr-1"></i>` : 
-                           p === 'PS5' ? `<i class="fab fa-playstation mr-1"></i>` : 
-                           `<i class="fab fa-xbox mr-1"></i>`;
+                let icon = '';
+                if (p === 'PC') icon = `<i class="fas fa-laptop mr-1"></i>`;
+                else if (p === 'PS5') icon = `<i class="fab fa-playstation mr-1"></i>`;
+                else if (p === 'Xbox' || p === 'XBOX') icon = `<i class="fab fa-xbox mr-1"></i>`;
+                else if (p === 'SWITCH') icon = `<i class="fas fa-gamepad mr-1"></i>`;
                 html += `<span class="inline-flex items-center px-3 py-1 text-xs font-bold bg-zinc-700 rounded-3xl">${icon}${p}</span>`;
             });
         }
@@ -229,22 +237,37 @@
     };
 
     function renderCalendar() {
+        // === NOVÝ YEAR NAVIGÁTOR S ŠIPKAMI ===
         const minYear = 2000;
         const maxYear = 2030;
         const current = state.selectedYear;
 
         let yearHTML = `
         <div class="flex items-center gap-8">
+            <!-- Levá šipka -->
             <button onclick="changeYear(-1)" class="w-10 h-10 flex items-center justify-center text-3xl text-zinc-400 hover:text-white transition-colors">
                 <i class="fas fa-chevron-left"></i>
             </button>
 
-            <button onclick="state.selectedYear = ${current-1}; renderCalendar()" class="filter-btn px-8 ${current-1 < minYear ? 'opacity-30 pointer-events-none' : ''}">${current-1}</button>
+            <!-- Předchozí rok -->
+            <button onclick="state.selectedYear = ${current-1}; renderCalendar()" 
+                    class="filter-btn px-8 ${current-1 < minYear ? 'opacity-30 pointer-events-none' : ''}">
+                ${current-1}
+            </button>
 
-            <button onclick="state.selectedYear = ${current}; renderCalendar()" class="filter-btn px-8 bg-red-600 border-red-600 text-white">${current}</button>
+            <!-- Aktuální rok (zvýrazněný) -->
+            <button onclick="state.selectedYear = ${current}; renderCalendar()" 
+                    class="filter-btn px-8 bg-red-600 border-red-600 text-white">
+                ${current}
+            </button>
 
-            <button onclick="state.selectedYear = ${current+1}; renderCalendar()" class="filter-btn px-8 ${current+1 > maxYear ? 'opacity-30 pointer-events-none' : ''}">${current+1}</button>
+            <!-- Následující rok -->
+            <button onclick="state.selectedYear = ${current+1}; renderCalendar()" 
+                    class="filter-btn px-8 ${current+1 > maxYear ? 'opacity-30 pointer-events-none' : ''}">
+                ${current+1}
+            </button>
 
+            <!-- Pravá šipka -->
             <button onclick="changeYear(1)" class="w-10 h-10 flex items-center justify-center text-3xl text-zinc-400 hover:text-white transition-colors">
                 <i class="fas fa-chevron-right"></i>
             </button>
@@ -252,6 +275,7 @@
 
         document.getElementById('year-nav').innerHTML = yearHTML;
 
+        // Měsíce zůstávají stejné
         document.getElementById('month-nav').innerHTML = months.map((m, idx) => 
             `<button class="filter-btn ${state.selectedMonth === idx ? 'active' : ''}" onclick="state.selectedMonth=${idx}; renderCalendar()">${m}</button>`
         ).join('');
@@ -320,7 +344,9 @@
         if (!card) return;
         const index = parseInt(card.dataset.currentIndex || 0);
         const group = sameDayData[dateKey];
-        if (group && group[index]) openModal(group[index].id);
+        if (group && group[index]) {
+            openModal(group[index].id);
+        }
     };
 
     window.switchSameDay = function(dateKey, direction) {
@@ -351,23 +377,29 @@
         const sortedCalendar = [...state.calendar].sort((a, b) => new Date(a.rDate) - new Date(b.rDate));
         const top5 = sortedCalendar.slice(0, 5);
 
-        let html = top5.length ? top5.map(c => {
-            const d = new Date(c.rDate);
-            const day = d.getDate();
-            const monthShort = monthsShort[d.getMonth()];
-            return `
-            <div onclick="openModal(${c.id})" class="feed-card p-5 cursor-pointer flex flex-col gap-3">
-                <div class="flex items-center gap-5">
-                    <div class="w-[72px] h-[72px] bg-[#ff0000] rounded-3xl flex flex-col items-center justify-center text-white condensed flex-shrink-0 text-center leading-none shadow-md">
-                        <span class="text-[13px] font-black tracking-[1.5px]">${monthShort}</span>
-                        <span class="text-5xl font-black -mt-1">${day}</span>
+        let html = '';
+        if (top5.length === 0) {
+            html = `<div class="text-zinc-700 font-bold uppercase text-center py-12">Žádné blízké releasy v kalendáři</div>`;
+        } else {
+            html = top5.map(c => {
+                const d = new Date(c.rDate);
+                const day = d.getDate();
+                const monthShort = monthsShort[d.getMonth()];
+                return `
+                <div onclick="openModal(${c.id})" class="feed-card p-5 cursor-pointer flex flex-col gap-3">
+                    <div class="flex items-center gap-5">
+                        <div class="w-[72px] h-[72px] bg-[#ff0000] rounded-3xl flex flex-col items-center justify-center text-white condensed flex-shrink-0 text-center leading-none shadow-md">
+                            <span class="text-[13px] font-black tracking-[1.5px]">${monthShort}</span>
+                            <span class="text-5xl font-black -mt-1">${day}</span>
+                        </div>
+                        <div class="flex-1 condensed text-2xl font-black uppercase leading-tight">${c.game}</div>
                     </div>
-                    <div class="flex-1 condensed text-2xl font-black uppercase leading-tight">${c.game}</div>
-                </div>
-                <div class="flex gap-2 flex-wrap pl-[88px]">${getBadgesHTML(c)}</div>
-            </div>`;
-        }).join('') : `<div class="text-zinc-700 font-bold uppercase text-center py-12">Žádné blízké releasy v kalendáři</div>`;
-
+                    <div class="flex gap-2 flex-wrap pl-[88px]">
+                        ${getBadgesHTML(c)}
+                    </div>
+                </div>`;
+            }).join('');
+        }
         document.getElementById('side-calendar').innerHTML = html;
     }
 
@@ -394,27 +426,14 @@
                 </div>
             </div>`).join('');
 
-        document.getElementById('news-full-list').innerHTML = state.news.map(n => `
-            <div onclick="openModal(${n.id})" class="feed-card flex gap-8 p-8 cursor-pointer">
-                <div class="relative flex-shrink-0 w-80 rounded-3xl overflow-hidden">
-                    <img src="${n.img}" class="w-full h-64 object-cover">
-                    <div class="absolute top-4 left-4 bg-red-600 text-white text-xs font-black px-5 py-2 rounded-3xl">NOVINKA</div>
-                </div>
-                <div class="flex-1">
-                    <h3 class="condensed text-5xl font-black uppercase leading-none">${n.title}</h3>
-                    <p class="text-zinc-400 mt-6">${n.content}</p>
-                </div>
-            </div>`).join('');
-
+        document.getElementById('news-full-list').innerHTML = state.news.map(n => `<div class="flex gap-8 p-8 feed-card cursor-pointer" onclick="openModal(${n.id})"><img src="${n.img}" class="w-64 h-36 object-cover rounded-2xl shrink-0"><div class="flex-1"><h3 class="condensed text-4xl font-black italic uppercase">${n.title}</h3><p class="text-zinc-500 mt-2">${n.content}</p></div></div>`).join('');
+        
         document.getElementById('reviews-full-list').innerHTML = state.reviews.map(r => `
-            <div onclick="openModal(${r.id})" class="feed-card flex gap-8 p-8 cursor-pointer">
-                <div class="relative flex-shrink-0 w-80 rounded-3xl overflow-hidden">
-                    <img src="${r.img}" class="w-full h-64 object-cover">
-                    <div class="absolute top-4 left-4 bg-red-600 text-white text-4xl font-black px-5 py-3 rounded-3xl leading-none">${r.score}%</div>
-                </div>
+            <div class="flex gap-8 p-8 feed-card cursor-pointer" onclick="openModal(${r.id})">
+                <img src="${r.img}" class="w-64 h-36 object-cover rounded-2xl shrink-0">
                 <div class="flex-1">
-                    <h3 class="text-red-500 condensed text-5xl font-black uppercase">${r.game}</h3>
-                    <p class="text-zinc-400 mt-6">${r.content ? r.content.substring(0, 280) + '...' : ''}</p>
+                    <div class="text-4xl font-black italic text-red-600">${r.score}%</div>
+                    <h3 class="condensed text-4xl font-black italic uppercase">${r.game}</h3>
                 </div>
             </div>`).join('');
 
@@ -438,58 +457,69 @@
         if (!item) return;
 
         let extraHTML = '';
-
         if (item.score !== undefined) {
             extraHTML = `
-            <div class="flex justify-between items-baseline mb-8">
+            <div class="flex justify-between items-baseline mb-6">
                 <div></div>
-                <div class="text-red-600 text-[110px] leading-none font-black">${item.score}<span class="text-6xl align-bottom">%</span></div>
+                <div class="text-red-600 text-[92px] leading-none font-black">${item.score}<span class="text-5xl align-bottom">%</span></div>
             </div>
 
             ${item.pros && item.pros.length ? `
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
                 <div>
-                    <h3 class="flex items-center gap-3 text-emerald-400 uppercase font-black text-2xl mb-6"><i class="fas fa-check-circle text-3xl"></i> KLADY</h3>
-                    <ul class="space-y-6">${item.pros.map(p => `<li class="flex gap-4 text-zinc-200 text-lg"><span class="text-emerald-400 text-3xl">✓</span>${p}</li>`).join('')}</ul>
+                    <h3 class="flex items-center gap-3 text-emerald-400 uppercase font-black text-2xl mb-6">
+                        <i class="fas fa-check-circle text-3xl"></i> KLADY
+                    </h3>
+                    <ul class="space-y-5">
+                        ${item.pros.map(p => `<li class="flex gap-4 text-zinc-200 text-lg"><span class="text-emerald-400 text-2xl leading-none mt-px">✓</span>${p}</li>`).join('')}
+                    </ul>
                 </div>
                 <div>
-                    <h3 class="flex items-center gap-3 text-red-400 uppercase font-black text-2xl mb-6"><i class="fas fa-times-circle text-3xl"></i> ZÁPORY</h3>
-                    <ul class="space-y-6">${item.cons.map(c => `<li class="flex gap-4 text-zinc-200 text-lg"><span class="text-red-400 text-3xl">✕</span>${c}</li>`).join('')}</ul>
+                    <h3 class="flex items-center gap-3 text-red-400 uppercase font-black text-2xl mb-6">
+                        <i class="fas fa-times-circle text-3xl"></i> ZÁPORY
+                    </h3>
+                    <ul class="space-y-5">
+                        ${item.cons.map(c => `<li class="flex gap-4 text-zinc-200 text-lg"><span class="text-red-400 text-2xl leading-none mt-px">✕</span>${c}</li>`).join('')}
+                    </ul>
                 </div>
             </div>` : ''}
 
             ${item.gallery && item.gallery.length ? `
             <div class="mb-12">
-                <h3 class="uppercase text-zinc-400 font-black mb-6">Galerie</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    ${item.gallery.map(url => `<img src="${url}" class="rounded-3xl cursor-zoom-in" onclick="this.classList.toggle('scale-110')">`).join('')}
+                <h3 class="uppercase text-zinc-400 font-black mb-5 text-lg">Galerie screenshotů</h3>
+                <div class="flex gap-4 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide">
+                    ${item.gallery.map(url => `
+                        <img src="${url}" onclick="this.classList.toggle('scale-125'); this.style.transition='all 0.4s'" class="h-52 rounded-3xl object-cover cursor-zoom-in snap-center shadow-2xl flex-shrink-0 border border-zinc-800">
+                    `).join('')}
                 </div>
-            </div>` : ''}`;
-        } else {
-            extraHTML = `<div class="text-zinc-500 mb-4">${new Date(item.rDate).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' })}</div>`;
+            </div>` : ''}
+            `;
         }
 
         let buyHTML = '';
         if (item.storeLinks) {
             buyHTML = `
-            <div class="mt-10 pt-8 border-t border-zinc-800">
-                <h3 class="uppercase font-black text-zinc-400 mb-5 text-lg">Koupit hru</h3>
-                <div class="flex flex-wrap gap-4">
+            <div class="mt-8 border-t border-zinc-800 pt-8">
+                <h3 class="uppercase font-black text-zinc-400 mb-4 text-lg">Koupit hru</h3>
+                <div class="flex flex-wrap gap-3">
                     ${Object.keys(item.storeLinks).map(key => {
-                        let label = key === 'steam' ? 'Steam' : key === 'playstation' ? 'PlayStation Store' : 'Xbox Store';
-                        return `<a href="${item.storeLinks[key]}" target="_blank" class="px-8 py-4 bg-zinc-800 hover:bg-red-600 rounded-3xl font-bold transition-colors">${label}</a>`;
+                        let label = key === 'steam' ? 'Steam' : key === 'playstation' ? 'PlayStation Store' : key === 'xbox' ? 'Xbox Store' : key;
+                        return `<a href="${item.storeLinks[key]}" target="_blank" class="flex-1 min-w-[140px] text-center px-6 py-4 bg-zinc-800 hover:bg-red-600 rounded-3xl font-bold text-sm transition-colors">${label}</a>`;
                     }).join('')}
                 </div>
             </div>`;
         }
 
         const modalContent = `
-            <img src="${item.img}" class="w-full rounded-3xl mb-10 shadow-2xl">
+            <img src="${item.img}" class="w-full rounded-3xl mb-8 shadow-2xl">
             ${extraHTML}
-            <h2 class="condensed text-6xl font-black italic uppercase leading-tight">${item.title || item.game}</h2>
-            <div class="flex gap-3 mt-6 flex-wrap">${getBadgesHTML(item)}</div>
+            <h2 class="condensed text-6xl font-black italic uppercase">${item.title || item.game}</h2>
+            <div class="flex gap-2 mt-6 flex-wrap">${getBadgesHTML(item)}</div>
             ${buyHTML}
-            ${item.content ? `<div class="prose prose-invert mt-12 text-lg">${item.content}</div>` : ''}
+            ${item.content ? `
+            <div class="mt-12 text-zinc-300 leading-relaxed prose prose-invert max-w-none">
+                ${item.content}
+            </div>` : ''}
         `;
 
         document.getElementById('modal-content').innerHTML = modalContent;
