@@ -1,97 +1,172 @@
+```html
 <!DOCTYPE html>
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="YUKKI • Ultimate Edition 2026">
+    <meta property="og:description" content="Český herní magazín s recenzemi, novinkami a kalendářem her.">
+    <meta property="og:image" content="https://your-neocities-url.com/og-image.jpg">
+    <meta property="og:url" content="https://yukki.neocities.org">
+    <meta property="og:type" content="website">
     <title>YUKKI • Ultimate Edition 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Barlow+Condensed:ital,wght@0,700;0,900;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root { --red: #ff0000; --bg: #050505; --border: #1a1a1a; }
-        body { font-family: 'Inter', sans-serif; background: #050505; color: #fff; margin: 0; overflow-x: hidden; }
-        #spotlight { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: -1; background: radial-gradient(circle 450px at var(--x, 50%) var(--y, 50%), rgba(220, 38, 38, 0.12), transparent 100%); }
+        body { font-family: 'Inter', sans-serif; background: #050505; color: #fff; margin: 0; overflow-x: hidden; scroll-behavior: smooth; }
+        #spotlight { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: -1; background: radial-gradient(circle 650px at var(--x, 50%) var(--y, 50%), rgba(220, 38, 38, 0.25), transparent 65%); }
         .condensed { font-family: 'Barlow Condensed', sans-serif; text-transform: uppercase; }
-        
-        nav { background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); position: fixed; width: 100%; top: 0; z-index: 1000; height: 70px; }
-        
-        .nav-link { font-weight: 800; font-size: 13px; text-transform: uppercase; padding: 0 16px; cursor: pointer; opacity: 0.6; transition: 0.3s; line-height: 70px; display: inline-block; letter-spacing: 1px; position: relative; }
-        .nav-link:hover, .active-nav { opacity: 1; color: var(--red); }
-        .nav-link.active-nav::after { content: ''; position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); width: 24px; height: 3px; background: var(--red); }
+        nav { background: rgba(0,0,0,0.95); backdrop-filter: blur(24px); border-bottom: 1px solid var(--border); position: fixed; width: 100%; top: 0; z-index: 5000; height: 70px; }
+        .nav-link { font-weight: 800; font-size: 13px; text-transform: uppercase; padding: 0 18px; cursor: pointer; opacity: 0.6; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); line-height: 70px; display: inline-block; letter-spacing: 1.5px; position: relative; z-index: 5001; }
+        .nav-link:hover, .active-nav { opacity: 1; color: var(--red); transform: translateY(-2px); text-shadow: 0 0 15px rgba(255,0,0,0.7); }
+        .nav-link.active-nav::after { content: ''; position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); width: 28px; height: 3px; background: var(--red); box-shadow: 0 0 12px var(--red); }
+        .search-container { display: flex; align-items: center; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 9999px; padding: 0 18px; height: 46px; width: 260px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .search-container:focus-within { width: 320px; box-shadow: 0 0 0 4px rgba(255,0,0,0.3); }
+        .search-input { background: transparent; border: none; outline: none; color: #fff; width: 100%; font-size: 15px; margin-left: 10px; }
+        .search-input::placeholder { color: #888; }
+        .fade-in { animation: fadeInPop 0.75s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+        @keyframes fadeInPop { 0% { opacity: 0; transform: translateY(35px) scale(0.9); filter: blur(12px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
+        .stagger-item { animation: fadeInPop 0.75s cubic-bezier(0.23, 1, 0.32, 1) backwards; }
+        .feed-card { transition: all 0.55s cubic-bezier(0.34, 1.56, 0.64, 1); background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; overflow: hidden; }
+        .feed-card:hover { background: rgba(255,255,255,0.09); border-color: rgba(220,38,38,0.75); transform: translateY(-12px) scale(1.045); box-shadow: 0 35px 45px -15px rgb(220 38 38 / 0.45); }
+        .hero-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.35); cursor: pointer; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .hero-dot.active { background: var(--red); width: 38px; border-radius: 9999px; box-shadow: 0 0 22px 6px var(--red); }
+        .gold-text { background: linear-gradient(90deg, #bf953f 0%, #fcf6ba 50%, #b38728 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 18px #facc15); }
+        .neon-red { text-shadow: 0 0 10px var(--red), 0 0 20px var(--red), 0 0 30px var(--red); }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 6000; overflow-y: auto; animation: modalPop 0.45s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+        @keyframes modalPop { 0% { opacity: 0; transform: scale(0.94) translateY(30px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+        .close-modal { position: fixed; top: 25px; right: 25px; font-size: 42px; cursor: pointer; color: #fff; background: rgba(255,255,255,0.1); width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 6010; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .close-modal:hover { transform: rotate(90deg) scale(1.25); background: var(--red); box-shadow: 0 0 35px var(--red); }
+        .score-container { position: relative; display: flex; align-items: center; justify-content: center; }
+        .score-ring { transform: rotate(-90deg); }
+        .score-ring circle { fill: transparent; stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 2.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .ring-bg { stroke: rgba(255,255,255,0.05); }
+        .ring-progress { stroke: var(--red); filter: drop-shadow(0 0 15px rgba(220,38,38,0.7)); }
+        .cz-flag { display: inline-flex; align-items: center; background: #0b9e3d; color: white; padding: 4px 12px 4px 6px; border-radius: 9999px; font-size: 11px; font-weight: 900; gap: 6px; box-shadow: 0 2px 12px rgba(11, 158, 61, 0.4); }
+        .store-btn { display: flex; align-items: center; justify-content: center; gap: 10px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 14px 26px; border-radius: 16px; font-weight: 800; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); font-size: 13px; text-transform: uppercase; }
+        .store-btn:hover { color: #fff; transform: translateY(-4px) scale(1.05); box-shadow: 0 15px 25px -5px rgb(220 38 38); }
+        .btn-steam { border-color: #444; color: #aaa; }
+        .btn-steam:hover { background: #2a475e; border-color: #66c0f4; }
+        .btn-playstation { border-color: rgba(0,112,209,0.3); color: #0070d1; }
+        .btn-playstation:hover { background: #0070d1; border-color: #0070d1; }
+        .btn-xbox { border-color: rgba(16,124,16,0.3); color: #107c10; }
+        .btn-xbox:hover { background: #107c10; border-color: #107c10; }
+        .btn-switch { border-color: rgba(230,0,18,0.3); color: #e60012; }
+        .btn-switch:hover { background: #e60012; border-color: #e60012; }
+        .hw-table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
+        .hw-table td { padding: 14px 16px; background: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .hw-table td:first-child { border-left: 1px solid rgba(255,255,255,0.05); border-radius: 16px 0 0 16px; color: #888; font-weight: 700; width: 30%; }
+        .hw-table td:last-child { border-right: 1px solid rgba(255,255,255,0.05); border-radius: 0 16px 16px 0; color: #fff; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; }
+        .gallery-item { border-radius: 16px; overflow: hidden; cursor: pointer; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); border: 1px solid rgba(255,255,255,0.1); }
+        .gallery-item:hover { transform: scale(1.06); border-color: var(--red); box-shadow: 0 15px 25px -5px rgb(220 38 38); }
+        .top-card { background: linear-gradient(145deg, #111, #1a1a1a); border: 3px solid var(--red); box-shadow: 0 0 40px rgba(255,0,0,0.6); }
+        .top-card:hover { transform: scale(1.03); box-shadow: 0 0 50px rgba(255,0,0,0.8); }
+        .platform-filter { font-size: 22px; color: #444; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+        .platform-filter:hover { opacity: 0.9; transform: scale(1.25) rotate(15deg); }
+        .platform-filter.active[data-p="PC"], .icon-pc { color: #888; filter: drop-shadow(0 0 12px rgba(136,136,136,0.8)); }
+        .platform-filter.active[data-p="PS5"], .icon-ps5 { color: #0070d1; filter: drop-shadow(0 0 12px rgba(0,112,209,0.8)); }
+        .platform-filter.active[data-p="XBOX"], .icon-xbox { color: #107c10; filter: drop-shadow(0 0 12px rgba(16,124,16,0.8)); }
+        .platform-filter.active[data-p="SWITCH"], .icon-switch { color: #e60012; filter: drop-shadow(0 0 12px rgba(230,0,18,0.8)); }
+        .platform-filter.active[data-p="ALL"] { color: var(--red); filter: drop-shadow(0 0 15px rgba(255,0,0,0.9)); }
+        .review-filter-btn { padding: 10px 24px; border-radius: 9999px; font-weight: 900; font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 2px solid transparent; background: rgba(255,255,255,0.08); }
+        .review-filter-btn.active { background: var(--red); color: white; box-shadow: 0 0 25px rgba(255,0,0,0.5); }
+        .review-filter-btn:hover:not(.active) { border-color: rgba(255,255,255,0.3); }
+        @media (max-width: 1024px) { .desktop-nav { display: none; } }
+        @media (min-width: 1280px) { .main-grid { grid-template-columns: 1fr 380px; gap: 40px; } #home-feed { gap: 40px; } }
 
-        .search-container { display: flex; align-items: center; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 9999px; padding: 0 14px; height: 42px; }
-        .search-input { background: transparent; border: none; color: white; font-size: 14px; outline: none; width: 140px; transition: 0.3s; }
-        .search-input:focus { width: 200px; }
-
-        .feed-card { transition: all 0.4s; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; overflow: hidden; }
-        .feed-card:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(220, 38, 38, 0.4); transform: translateY(-4px); }
-        
-        .gold-text { background: linear-gradient(90deg, #bf953f 0%, #fcf6ba 50%, #b38728 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 2000; overflow-y: auto; }
-        .close-modal { position: fixed; top: 25px; right: 25px; font-size: 42px; cursor: pointer; color: #fff; background: rgba(255,255,255,0.1); width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 2010; }
-
-        .platform-steam:hover { background-color: #1b2838 !important; }
-        .platform-ps:hover { background-color: #003087 !important; }
-        .platform-xbox:hover { background-color: #107c10 !important; }
-        .platform-switch:hover { background-color: #e60012 !important; }
-
-        .filter-btn { padding: 8px 18px; border-radius: 9999px; background: #111; border: 1px solid #222; font-weight: 800; font-size: 13px; text-transform: uppercase; color: #aaa; transition: 0.3s; white-space: nowrap; }
-        .filter-btn.active { background: var(--red); border-color: var(--red); color: #fff; }
-
-        .main-grid { display: grid; grid-template-columns: 1fr 320px; gap: 28px; }
-        @media (max-width: 1024px) {
-            .desktop-nav { display: none; }
-            #mobileMenu { display: none; position: fixed; top: 70px; left: 0; right: 0; background: #0a0a0a; border-top: 1px solid #222; z-index: 9999; padding: 20px 0; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3); }
-            #mobileMenu.show { display: block; }
-            .main-grid { grid-template-columns: 1fr 300px; gap: 16px; }
-            .sidebar-wrapper { position: sticky; top: 90px; align-self: start; z-index: 10; }
-            .prestige-box { position: sticky; top: 90px; z-index: 20; background: #050505; }
-            .releasy-box { position: sticky; top: 380px; z-index: 30; background: #050505; }
+        .filter-btn {
+            padding: 10px 20px;
+            border-radius: 9999px;
+            font-weight: 900;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            background: rgba(255,255,255,0.08);
+            white-space: nowrap;
         }
-        @media (max-width: 640px) {
-            .main-grid { grid-template-columns: 1fr; }
-            .sidebar-wrapper, .prestige-box, .releasy-box { position: static; }
+        .filter-btn.active {
+            background: var(--red);
+            color: white;
+            box-shadow: 0 0 25px rgba(255,0,0,0.5);
+        }
+        .filter-btn:hover:not(.active) {
+            border-color: rgba(255,255,255,0.3);
         }
 
-        .cz-flag { 
-            display: inline-flex; align-items: center; background: #0b9e3d; color: white; padding: 4px 12px 4px 6px; 
-            border-radius: 9999px; font-size: 11px; font-weight: 900; gap: 6px; box-shadow: 0 2px 8px rgba(11, 158, 61, 0.3);
+        .video-container {
+            position: relative;
+            aspect-ratio: 16/9;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .video-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.75);
+            color: white;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            cursor: pointer;
+            z-index: 10;
+            opacity: 0.85;
+            transition: all 0.3s;
+            border-radius: 50%;
+        }
+        .video-nav:hover {
+            opacity: 1;
+            background: var(--red);
+            transform: translateY(-50%) scale(1.1);
+        }
+        .video-nav-left { left: 12px; }
+        .video-nav-right { right: 12px; }
+
+        @media (max-width: 768px) {
+            .feed-card:hover { transform: none; box-shadow: none; }
+            .stagger-item { animation: none; }
+            #spotlight { display: none; }
+            .hero-dot { width: 8px; height: 8px; }
+            .hero-dot.active { width: 28px; }
+        }
+
+        #mobileMenu.show {
+            display: block !important;
         }
     </style>
 </head>
 <body>
-
     <div id="spotlight"></div>
-
     <nav>
         <div class="max-w-[1600px] mx-auto px-4 md:px-8 flex items-center justify-between h-[70px]">
             <div class="flex items-center gap-8">
-                <div class="text-3xl font-black italic tracking-tighter cursor-pointer" onclick="location.reload()">YUKKI<span class="text-red-600">.</span></div>
-                
+                <div class="text-3xl font-black italic tracking-tighter cursor-pointer neon-red" onclick="location.reload()">YUK<span class="text-red-600">KI</span></div>
                 <div class="hidden lg:flex items-center gap-8 desktop-nav">
-                    <div class="nav-link active-nav" data-tab="domu">ÚVOD</div>
-                    <div class="nav-link" data-tab="novinky">NOVINKY</div>
-                    <div class="nav-link" data-tab="recenze">RECENZE</div>
-                    <div class="nav-link" data-tab="kalendar">KALENDÁŘ</div>
-                    <div class="nav-link" data-tab="elite">PRESTIGE HALL</div>
+                    <div class="nav-link active-nav" data-tab="domu" onclick="navigateToTab('domu')">ÚVOD</div>
+                    <div class="nav-link" data-tab="novinky" onclick="navigateToTab('novinky')">NOVINKY</div>
+                    <div class="nav-link" data-tab="recenze" onclick="navigateToTab('recenze')">RECENZE</div>
+                    <div class="nav-link" data-tab="kalendar" onclick="navigateToTab('kalendar')">KALENDÁŘ</div>
+                    <div class="nav-link" data-tab="elite" onclick="navigateToTab('elite')">PRESTIGE HALL</div>
                 </div>
             </div>
-
             <div class="flex items-center gap-5">
                 <div class="search-container hidden md:flex">
-                    <i class="fas fa-search text-zinc-500 mr-3"></i>
-                    <input type="text" id="globalSearch" class="search-input" placeholder="Hledat...">
+                    <i class="fas fa-search text-zinc-400"></i>
+                    <input type="text" id="globalSearch" class="search-input" placeholder="Hledat..." oninput="handleSearch(this.value)">
                 </div>
                 <a href="https://www.youtube.com/@YukkiCZE" target="_blank" class="opacity-70 hover:opacity-100 text-2xl"><i class="fab fa-youtube"></i></a>
                 <a href="https://www.instagram.com/_yukki77_/" target="_blank" class="opacity-70 hover:opacity-100 text-2xl"><i class="fab fa-instagram"></i></a>
-
-                <button onclick="toggleMobileMenu()" class="lg:hidden text-4xl text-red-500 p-1">
-                    <i class="fas fa-bars"></i>
-                </button>
+                <button onclick="toggleMobileMenu()" class="lg:hidden text-4xl text-red-500 p-1"><i class="fas fa-bars"></i></button>
             </div>
         </div>
-
         <div id="mobileMenu" class="hidden lg:hidden bg-[#0a0a0a] border-t border-zinc-800 px-6 py-8 text-xl font-bold">
             <div onclick="navigateToTab('domu')" class="py-4 border-b border-zinc-800">Úvod</div>
             <div onclick="navigateToTab('novinky')" class="py-4 border-b border-zinc-800">Novinky</div>
@@ -103,12 +178,15 @@
 
     <div class="max-w-[1600px] mx-auto px-4 md:px-8 pt-20 pb-20">
         <div id="tab-domu" class="tab-content">
-            <div id="hero-area" class="mb-12"></div>
-            <div class="main-grid">
+            <div id="hero-slider" class="relative mb-12">
+                <div id="hero-content"></div>
+                <div id="hero-dots" class="absolute bottom-8 right-12 flex gap-3 z-10"></div>
+            </div>
+            <div class="grid grid-cols-1 xl:grid-cols-[1fr_380px] gap-8 main-grid">
                 <div id="home-feed"></div>
                 <div class="sidebar-wrapper space-y-12">
                     <div class="prestige-box bg-[#080808] p-6 rounded-3xl border border-zinc-900">
-                        <h3 class="condensed text-xl font-black mb-6 italic">PRESTIGE HALL <span class="text-zinc-700">#TOP5</span></h3>
+                        <h3 class="condensed text-xl font-black mb-6 italic neon-red">PRESTIGE HALL <span class="text-zinc-700">#TOP5</span></h3>
                         <div id="side-hall" class="space-y-3"></div>
                     </div>
                     <div class="releasy-box bg-[#080808] p-6 rounded-3xl border border-zinc-900">
@@ -118,15 +196,21 @@
                 </div>
             </div>
         </div>
-
+        
         <div id="tab-novinky" class="tab-content hidden">
-            <h2 class="condensed text-5xl font-black italic mb-10 text-center">NOVINKY</h2>
+            <h2 class="condensed text-5xl font-black italic mb-10 text-center neon-red">NOVINKY</h2>
             <div id="news-full-list" class="space-y-6"></div>
             <div id="news-pagination" class="flex justify-center gap-4 mt-12"></div>
         </div>
 
         <div id="tab-recenze" class="tab-content hidden">
-            <h2 class="condensed text-5xl font-black italic mb-10 text-center">RECENZE</h2>
+            <h2 class="condensed text-5xl font-black italic mb-10 text-center neon-red">RECENZE</h2>
+            <div id="review-filters" class="flex flex-wrap gap-3 mb-8 justify-center">
+                <button onclick="setReviewFilter('all')" class="review-filter-btn active">VŠE</button>
+                <button onclick="setReviewFilter('90plus')" class="review-filter-btn">NAD 90 %</button>
+                <button onclick="setReviewFilter('czech')" class="review-filter-btn">ČESKÉ HRY</button>
+                <button onclick="setReviewFilter('mustbuy')" class="review-filter-btn">MUST BUY</button>
+            </div>
             <div id="reviews-full-list" class="space-y-6"></div>
             <div id="reviews-pagination" class="flex justify-center gap-4 mt-12"></div>
         </div>
@@ -137,8 +221,15 @@
         </div>
 
         <div id="tab-kalendar" class="tab-content hidden">
-            <h2 class="condensed text-5xl md:text-6xl font-black italic mb-10 text-center">KALENDÁŘ HER</h2>
-            <div class="flex items-center justify-center gap-6 mb-8" id="year-nav"></div>
+            <h2 class="condensed text-5xl md:text-6xl font-black italic mb-10 text-center neon-red">KALENDÁŘ HER</h2>
+            <div class="flex items-center justify-center gap-6 mb-4" id="year-nav"></div>
+            <div class="flex justify-center gap-8 mb-8 border-b border-zinc-900 pb-6" id="platform-nav">
+                <button onclick="setPlatform('ALL')" class="platform-filter active" data-p="ALL"><i class="fas fa-layer-group"></i></button>
+                <button onclick="setPlatform('PC')" class="platform-filter active" data-p="PC"><i class="fab fa-steam"></i></button>
+                <button onclick="setPlatform('PS5')" class="platform-filter active" data-p="PS5"><i class="fab fa-playstation"></i></button>
+                <button onclick="setPlatform('XBOX')" class="platform-filter active" data-p="XBOX"><i class="fab fa-xbox"></i></button>
+                <button onclick="setPlatform('SWITCH')" class="platform-filter active" data-p="SWITCH"><i class="fas fa-gamepad"></i></button>
+            </div>
             <div class="no-scrollbar flex gap-3 mb-12 overflow-x-auto pb-4 px-4" id="month-nav"></div>
             <div id="calendar-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
         </div>
@@ -153,292 +244,393 @@
     const state = {
         selectedYear: 2026,
         selectedMonth: 4,
+        selectedPlatform: "ALL",
         newsPage: 1,
         reviewsPage: 1,
         itemsPerPage: 6,
+        searchQuery: "",
+        heroIndex: 0,
+        heroInterval: null,
+        sideCountdownIntervals: [],
+        reviewFilter: "all",
+        featuredTop: {
+            id: 9999,
+            type: "top5",
+            title: "TOP 5 HER TENTO TÝDEN",
+            subtitle: "Podle redakce YUKKI",
+            items: [
+                { rank: 1, game: "Hollow Knight: Silksong", score: 96, img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1030300/header.jpg" },
+                { rank: 2, game: "Kingdom Come: Deliverance II", score: 93, img: "https://cdn.akamai.steamstatic.com/steam/apps/1771300/header.jpg" },
+                { rank: 3, game: "Balatro", score: 98, img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2379780/header.jpg" },
+                { rank: 4, game: "The Witcher 4 (Polaris)", score: 95, img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/292030/header.jpg" },
+                { rank: 5, game: "007 FIRST LIGHT", score: 92, img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3768760/dbe86ebd2edb4c77d113e9e2feefeb90189fabc9/header_alt_assets_1.jpg?t=1778255557" }
+            ]
+        },
         news: [
-            { id: 1006, title: "Microsoft poodhaluje novou generaci Xboxu", img: "https://indian-tv.cz/uploads/ls/97793d98d413346574f269a886cff999/1755725042.jpg?", rDate: "2026-05-08", content: "Microsoft konečně prolomil mlčení..." },
-            { id: 1005, title: "Risk se vyplatil, Pragmata hlásí úžasné výsledky", img: "https://indian-tv.cz/uploads/ls/09a7b79bb04446a886cff999e3185127/1755725042.jpg?", rDate: "2026-05-08T11:00:00", content: "Capcom může slavit..." },
-            { id: 1003, title: "Konec velkých slev na PlayStation Store? Sony zavádí zvláštní změny", img: "https://indian-tv.cz/uploads/ls/69842f4c33956699321f69a886cff999/1755725042.jpg?", rDate: "2026-05-08T06:05:00", content: "Majitelé konzolí PlayStation..." },
-            { id: 1002, title: "Kingdom Come: Deliverance 2 už má i vlastní parfém", img: "https://indian-tv.cz/uploads/ls/9ea82f5c2293446585f169a886cff999/1755725042.jpg?", rDate: "2026-05-08T08:30:00", content: "Marketingová kampaň..." },
-            { id: 1001, title: "RISK S PRAGMATOU SE CAPCOMU VYPLÁCÍ", img: "https://picsum.photos/id/1015/1200/630", rDate: "2026-05-07", content: "Dlouho odkládaný sci-fi projekt..." },
-            { id: 1004, title: "Nové detaily o 007: First Light", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3768760/77725bbd5a29b4bd0e7b563983a17591dd942233/ss_77725bbd5a29b4bd0e7b563983a17591dd942233.1920x1080.jpg?t=1777992128", rDate: "2026-05-07T09:55:00", content: "Studio IO Interactive..." }
+            { 
+                id: 1005, 
+                title: "Remake Assassin's Creed Black Flag odhalen: Tohle jsou hlavní změny", 
+                img: "https://indian-tv.cz/uploads/ls/31faf23dace841a2bac8871aed122c1b/1778055135.jpg?", 
+                rDate: "2026-05-06T10:00", 
+                content: "Dlouho spekulovaný remake pirátského dobrodružství Assassin's Creed IV: Black Flag konečně dostává jasnější obrysy...", 
+                gallery: [],
+                videos: ["https://www.youtube.com/watch?v=7nbsOLWFRAg", "https://www.youtube.com/watch?v=xkGc-3bhG1E"], 
+                tags: ["assassins-creed", "remake", "black-flag", "piráti"]
+            },
+            { 
+                id: 1003, 
+                title: "Konec velkých slev na PlayStation Store? Sony zavádí zvláštní změny", 
+                img: "https://indian-tv.cz/uploads/ls/4a68a7e10ee74b16b68272d250b309af/1691792512.jpg?", 
+                rDate: "2026-05-07T23:03:00", 
+                content: "Majitelé konzolí PlayStation si v posledních dnech všimli znepokojivého trendu...", 
+                gallery: [
+                    "https://indian-tv.cz/uploads/ls/4a68a7e10ee74b16b68272d250b309af/1691792512.jpg?",
+                    "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1623730/header.jpg"
+                ], 
+                videos: [], 
+                trailer: "" 
+            },
+            { 
+                id: 1004, 
+                title: "Kingdom Come: Deliverance 2 má vlastní parfém, voní po kůži a dobrodružství", 
+                img: "https://indian-tv.cz/uploads/lb/695be8121bc4439ea74a48b7e5c04b13", 
+                rDate: "2026-05-07T09:04:00", 
+                content: "Marketingová kampaň na očekávané české RPG...", 
+                gallery: [
+                    "https://indian-tv.cz/uploads/lb/695be8121bc4439ea74a48b7e5c04b13",
+                    "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1771300/header.jpg"
+                ], 
+                videos: ["https://www.youtube.com/watch?v=zjXnLpnksHI","https://www.youtube.com/watch?v=xkGc-3bhG1E"], 
+                trailer: "" 
+            }
         ],
-        reviews: [
-            { id: 2010, game: "Black Myth: Wukong", score: 88, rDate: "2024-08-20T12:00:00", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2358720/ss_415397426d4c939ebb8a93ac66831f28ee7199be.1920x1080.jpg?t=1760601605", gallery: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2358720/ss_968bbc9caceb7d798bd0c393e1e9b4c44ed6d835.1920x1080.jpg?t=1760601605","https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2358720/ss_86c4b7462bba219a0d0b89931a35812b9f188976.1920x1080.jpg?t=1760601605","https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2358720/ss_d9391ab31a4d15dddf7ba4949bfa44f5d9170580.1920x1080.jpg?t=1760601605"], pros: ["Naprosto dechberoucí grafické zpracování"], cons: ["Frustrující neviditelné zdi"], cz: false, content: `Cesta na západ...` },
-            { id: 2008, game: "Mafia: The Old Country", score: 80, rDate: "2025-09-29T10:30:00", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1941540/ss_44047e62744c4a7201a0238994d23f3ca72649cb.1920x1080.jpg?t=1764177372", gallery: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1941540/ss_b0790cd935e11df0aca08f947c6e90ddce39e683.1920x1080.jpg?t=1764177372","https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1941540/ss_19e3bf0b15bd64f10a8d2702758d82d5291220af.1920x1080.jpg?t=1764177372","https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1941540/ss_ecfbf9a220417bb61285a981a8a6630d98d56d27.1920x1080.jpg?t=1764177372"], pros: ["Nádherná a autentická atmosféra"], cons: ["Umělá inteligence"], cz: true, content: `Mafia: The Old Country...` },
-            { id: 2002, game: "DOOM Eternal", score: 95, rDate: "2020-03-24T15:45:00", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/782330/header.jpg?t=1755109910", gallery: ["https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/782330/ss_af3b43c4be0029b52ceefaf55ebe1918e2cb3471.1920x1080.jpg?t=1755109910"], pros: ["Agresivní soubojový systém"], cons: ["Platforming"], cz: false, content: `DOOM Eternal...` }
+                reviews: [
+            {id:2001,game:"Hollow Knight: Silksong",score:96,rDate:"2025-06-12T14:00:00",img:"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1030300/header.jpg",verdict:"MUST BUY",playtimeStory:35,playtimeCompletion:85,pros:["Mistrovský level design","Nádherná animace","Precizní soubojový systém"],cons:["Pro někoho až frustrující obtížnost"],cz:false,earlyAccess:false,isDLC:false,storeLinks:{steam:"#",switch:"#"},content:"Dlouhé čekání skončilo...",proTips:["Využívejte Hornetinu agilitu..."],hw:{min:{os:"Windows 10",cpu:"Intel Core i3",ram:"8 GB",gpu:"GTX 960",storage:"20 GB SSD"},rec:{os:"Windows 11",cpu:"Intel Core i5",ram:"16 GB",gpu:"RTX 2060",storage:"20 GB SSD"}},gallery:["","","",""],trailer:"https://www.youtube.com/embed/0z8fJ8z8z8z", videos: [] },
+            {id:2002,game:"Kingdom Come: Deliverance II",score:93,rDate:"2025-02-11T18:00:00",img:"https://cdn.akamai.steamstatic.com/steam/apps/1771300/header.jpg",verdict:"MUST BUY",playtimeStory:50,playtimeCompletion:130,pros:["Neuvěřitelná atmosféra Kutné Hory","Špičkový český dabing","Komplexní RPG systémy"],cons:["Hardwarová náročnost","Občasné glitche v AI"],cz:true,earlyAccess:false,isDLC:false,storeLinks:{steam:"#",playstation:"#",xbox:"#"},content:"Warhorse doručili pokračování...",proTips:["Kutná Hora je nebezpečná..."],hw:{min:{os:"Windows 10",cpu:"i5-6600K",ram:"16 GB",gpu:"RTX 2060",storage:"100 GB SSD"},rec:{os:"Windows 11",cpu:"i7-12700",ram:"32 GB",gpu:"RTX 4070",storage:"100 GB SSD"}},gallery:["","","",""],trailer:"", videos: [] },
+            {id:2003,game:"Black Myth: Wukong",score:89,rDate:"2024-08-20T10:00:00",img:"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2358720/header.jpg",verdict:"MUST BUY",playtimeStory:30,playtimeCompletion:65,pros:["Vizuální orgie","Unikátní bossové","Plynulý souboj"],cons:["Neviditelné stěny","Absence mapy"],cz:false,earlyAccess:false,isDLC:false,storeLinks:{steam:"#",playstation:"#"},content:"Čínská mytologie...",proTips:["Nepodceňujte kouzlo..."],hw:{min:{os:"Windows 10",cpu:"i5-8400",ram:"16 GB",gpu:"GTX 1060",storage:"130 GB"},rec:{os:"Windows 11",cpu:"i7-9700",ram:"32 GB",gpu:"RTX 3070",storage:"130 GB SSD"}},gallery:["","","",""],trailer:"", videos: [] },
+            {id:2004,game:"S.T.A.L.K.E.R. 2: Heart of Chornobyl",score:91,rDate:"2024-11-20T16:00:00",img:"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1643320/header.jpg",verdict:"MUST BUY",playtimeStory:40,playtimeCompletion:100,pros:["Atmosféra Zóny","Nekompromisní survival","A-Life 2.0"],cons:["Technické bugy při launchu","Náročné na HW"],cz:false,earlyAccess:false,isDLC:false,storeLinks:{steam:"#",xbox:"#"},content:"Zóna je zpět...",proTips:["Nikdy nevycházejte..."],hw:{min:{os:"Windows 10",cpu:"Ryzen 5 1600X",ram:"16 GB",gpu:"GTX 1060",storage:"150 GB SSD"},rec:{os:"Windows 11",cpu:"Ryzen 7 3700X",ram:"32 GB",gpu:"RTX 3070 Ti",storage:"150 GB SSD"}},gallery:["","","",""],trailer:"", videos: [] },
+            {id:2005,game:"Balatro",score:98,rDate:"2024-02-20T12:00:00",img:"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2379780/header.jpg",verdict:"MUST BUY",playtimeStory:5,playtimeCompletion:300,pros:["Extrémní návykovost","Geniální design","Synergie jokerů"],cons:["Zničí vám veškerý volný čas"],cz:false,earlyAccess:false,isDLC:false,storeLinks:{steam:"#",switch:"#",playstation:"#"},content:"Pokerový roguelike...",proTips:["Prioritizujte Jokery..."],hw:{min:{os:"Windows 10",cpu:"i3-2100",ram:"4 GB",gpu:"Integrated",storage:"1 GB"},rec:{os:"Windows 11",cpu:"i5-4460",ram:"8 GB",gpu:"Integrated",storage:"1 GB"}},gallery:["","","",""],trailer:"", videos: [] },
+            {id:2006,game:"Baldur's Gate 3",score:98,rDate:"2023-08-03T17:00:00",img:"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1086940/header.jpg",verdict:"MUST BUY",playtimeStory:80,playtimeCompletion:200,pros:["Absolutní svoboda","Postavy a dialogy","Znovuhratelnost"],cons:["Náročnost 3. aktu na výkon"],cz:true,earlyAccess:false,isDLC:false,storeLinks:{steam:"#",playstation:"#",xbox:"#"},content:"Larian Studios stvořili RPG...",proTips:["Mluvte se zvířaty..."],hw:{min:{os:"Windows 10",cpu:"i5-4690",ram:"8 GB",gpu:"GTX 970",storage:"150 GB SSD"},rec:{os:"Windows 11",cpu:"i7-8700K",ram:"16 GB",gpu:"RTX 2060 Super",storage:"150 GB SSD"}},gallery:["","","",""],trailer:"", videos: [] },
+            {id:2007,game:"Mafia: Definitive Edition",score:90,rDate:"2020-09-25T10:00:00",img:"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1030840/header.jpg",verdict:"MUST BUY",playtimeStory:12,playtimeCompletion:30,pros:["Kultovní český dabing","Atmosféra Lost Heaven","Tommyho příběh"],cons:["Lineárnější otevřený svět"],cz:true,earlyAccess:false,isDLC:false,storeLinks:{steam:"#",playstation:"#",xbox:"#"},content:"Remake, který ukázal...",proTips:["Hrajte na klasickou..."],hw:{min:{os:"Windows 10",cpu:"i5-2550K",ram:"8 GB",gpu:"GTX 660",storage:"50 GB"},rec:{os:"Windows 11",cpu:"i7-3770",ram:"16 GB",gpu:"GTX 1080",storage:"50 GB"}},gallery:["","","",""],trailer:"", videos: [] },
+            {id:2008,game:"Cyberpunk 2077: Phantom Liberty",score:95,rDate:"2023-09-26T09:00:00",img:"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2138330/header.jpg",verdict:"MUST BUY",playtimeStory:20,playtimeCompletion:55,pros:["Dogtown","Idris Elba jako Solomon Reed","Vylepšený gameplay"],cons:["Příliš drsné konce"],cz:true,earlyAccess:false,isDLC:true,storeLinks:{steam:"#",playstation:"#",xbox:"#"},content:"DLC, které dokončilo...",proTips:["Relic strom..."],hw:{min:{os:"Windows 10",cpu:"i7-6700",ram:"12 GB",gpu:"GTX 1060",storage:"70 GB SSD"},rec:{os:"Windows 11",cpu:"i7-12700K",ram:"16 GB",gpu:"RTX 3080",storage:"70 GB SSD"}},gallery:["","","",""],trailer:"", videos: [] },
+            {id:2009,game:"Manor Lords",score:88,rDate:"2024-04-26T15:00:00",img:"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1363080/header.jpg",verdict:"RECOMMENDED",playtimeStory:25,playtimeCompletion:80,pros:["Realistický vizuál","Kombinace budování a RTS","Organický růst"],cons:["Zatím Early Access obsah"],cz:true,earlyAccess:true,isDLC:false,storeLinks:{steam:"#"},content:"Středověká strategie...",proTips:["Sledujte úrodnost..."],hw:{min:{os:"Windows 10",cpu:"i5-4670",ram:"8 GB",gpu:"GTX 1050",storage:"15 GB SSD"},rec:{os:"Windows 11",cpu:"i5-7600",ram:"16 GB",gpu:"GTX 1060",storage:"15 GB SSD"}},gallery:["","","",""],trailer:"", videos: [] },
+            {id:2010,game:"Ghost of Tsushima",score:93,rDate:"2024-05-16T10:00:00",img:"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2215430/header.jpg",verdict:"MUST BUY",playtimeStory:25,playtimeCompletion:65,pros:["Artstyle","Soubojový systém","Skvělý PC port"],cons:["Repetitivní vedlejší aktivity"],cz:true,earlyAccess:false,isDLC:false,storeLinks:{steam:"#",playstation:"#"},content:"Jin Sakai se konečně...",proTips:["Vítr vás dovede..."],hw:{min:{os:"Windows 10",cpu:"i3-7100",ram:"8 GB",gpu:"GTX 960",storage:"75 GB SSD"},rec:{os:"Windows 11",cpu:"i5-8600",ram:"16 GB",gpu:"RTX 2060",storage:"75 GB SSD"}},gallery:["","","",""],trailer:"", videos: [] },
+            {id:2011,game:"Alan Wake 2",score:95,rDate:"2023-10-27T00:00:00",img:"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/292030/header.jpg",verdict:"MUST BUY",playtimeStory:20,playtimeCompletion:40,pros:["Audio-vizuální mistrovství","Saga a Alan","Hororová atmosféra"],cons:["Vysoké nároky na GPU"],cz:false,earlyAccess:false,isDLC:false,storeLinks:{playstation:"#",xbox:"#"},content:"Remedy se utrhlo...",proTips:["Hrajte se sluchátky..."],hw:{min:{os:"Windows 10",cpu:"Ryzen 7 3700X",ram:"16 GB",gpu:"RTX 2060",storage:"90 GB SSD"},rec:{os:"Windows 11",cpu:"Ryzen 7 3700X",ram:"16 GB",gpu:"RTX 3070",storage:"90 GB SSD"}},gallery:["","","",""],trailer:"", videos: [] },
+            {id:2012,game:"Helldivers 2",score:87,rDate:"2024-02-08T09:00:00",img:"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/553850/header.jpg",verdict:"MUST BUY",playtimeStory:0,playtimeCompletion:200,pros:["Kooperativní zábava","Satira","Epické bitvy"],cons:["Servery při startu","Friendly fire"],cz:false,earlyAccess:false,isDLC:false,storeLinks:{steam:"#",playstation:"#"},content:"Hra, která spojila...",proTips:["Sledujte, kam házíte..."],hw:{min:{os:"Windows 10",cpu:"i7-4790K",ram:"8 GB",gpu:"GTX 1050 Ti",storage:"100 GB"},rec:{os:"Windows 11",cpu:"i7-9700K",ram:"16 GB",gpu:"RTX 2060",storage:"100 GB SSD"}},gallery:["","","",""],trailer:"", videos: [] },
+            {id:2013,game:"Silent Hill 2 Remake",score:86,rDate:"2024-10-08T00:00:00",img:"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2124490/header.jpg",verdict:"RECOMMENDED",playtimeStory:15,playtimeCompletion:35,pros:["Atmosféra mlhy","Věrnost předloze","Moderní James"],cons:["Zdlouhavé pasáže v nemocnici"],cz:false,earlyAccess:false,isDLC:false,storeLinks:{steam:"#",playstation:"#"},content:"Bloober Team to zvládl...",proTips:["Rádio je tvůj radar..."],hw:{min:{os:"Windows 10",cpu:"i5-8400",ram:"16 GB",gpu:"GTX 1080",storage:"50 GB SSD"},rec:{os:"Windows 11",cpu:"i7-8700",ram:"16 GB",gpu:"RTX 2080",storage:"50 GB SSD"}},gallery:["","","",""],trailer:"", videos: [] },
+            {id:2014,game:"Frostpunk 2",score:89,rDate:"2024-09-20T10:00:00",img:"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1601580/header.jpg",verdict:"MUST BUY",playtimeStory:20,playtimeCompletion:75,pros:["Politický systém","Měřítko města","Morální volby"],cons:["Odklon od mikromanagementu"],cz:false,earlyAccess:false,isDLC:false,storeLinks:{steam:"#"},content:"Přežití už není jen o teple...",proTips:["Balancujte mezi frakcemi..."],hw:{min:{os:"Windows 10",cpu:"i5-6600",ram:"8 GB",gpu:"GTX 1060",storage:"30 GB SSD"},rec:{os:"Windows 11",cpu:"i7-9700",ram:"16 GB",gpu:"RTX 2060",storage:"30 GB SSD"}},gallery:["","","",""],trailer:"", videos: [] },
+            {id:2015,game:"The Last of Us Part I",score:97,rDate:"2023-03-28T10:00:00",img:"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1888590/header.jpg",verdict:"MUST BUY",playtimeStory:15,playtimeCompletion:30,pros:["Emoční dopad","Detailní svět","Špičková animace"],cons:["PC port při launchu"],cz:true,earlyAccess:false,isDLC:false,storeLinks:{steam:"#",playstation:"#"},content:"Joel a Ellie v nejlepší...",proTips:["Stealth šetří..."],hw:{min:{os:"Windows 10",cpu:"i7-4770K",ram:"16 GB",gpu:"GTX 1050 Ti",storage:"100 GB SSD"},rec:{os:"Windows 11",cpu:"i7-8700",ram:"16 GB",gpu:"RTX 3060",storage:"100 GB SSD"}},gallery:["","","",""],trailer:"", videos: [] },
+            {id:2016,game:"Stardew Valley (1.6)",score:99,rDate:"2024-03-19T00:00:00",img:"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/413150/header.jpg",verdict:"MUST BUY",playtimeStory:50,playtimeCompletion:500,pros:["Relaxace","Nekonečný obsah","Update zdarma"],cons:["Žádné"],cz:true,earlyAccess:false,isDLC:false,storeLinks:{steam:"#",switch:"#",playstation:"#",xbox:"#"},content:"Mistrovské dílo...",proTips:["Meadowlands farm..."],hw:{min:{os:"Windows 10",cpu:"2 GHz",ram:"2 GB",gpu:"256 MB VRAM",storage:"500 MB"},rec:{os:"Windows 11",cpu:"3 GHz",ram:"4 GB",gpu:"Integrated",storage:"500 MB"}},gallery:["","","",""],trailer:"", videos: [] },
+            {id:2017,game:"Factorio: Space Age",score:98,rDate:"2024-10-21T12:00:00",img:"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/427520/header.jpg",verdict:"MUST BUY",playtimeStory:60,playtimeCompletion:1000,pros:["Geniální automatizace","Nové planety","Logistika"],cons:["Spánková deprivace"],cz:true,earlyAccess:false,isDLC:true,storeLinks:{steam:"#"},content:"Továrna musí růst...",proTips:["Automatizujte vše..."],hw:{min:{os:"Windows 10",cpu:"Dual Core 3 GHz",ram:"4 GB",gpu:"512 MB VRAM",storage:"3 GB"},rec:{os:"Windows 11",cpu:"Quad Core 3 GHz",ram:"8 GB",gpu:"2 GB VRAM",storage:"3 GB"}},gallery:["","","",""],trailer:"", videos: [] },
+            {id:2018,game:"Elden Ring: Shadow of the Erdtree",score:97,rDate:"2024-06-21T00:00:00",img:"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2778580/header.jpg",verdict:"MUST BUY",playtimeStory:45,playtimeCompletion:90,pros:["Vertikalita","Nové zbraně","Epické finále"],cons:["Extrémní obtížnost"],cz:false,earlyAccess:false,isDLC:true,storeLinks:{steam:"#",playstation:"#",xbox:"#"},content:"Mistrovské rozšíření...",proTips:["Scadutree fragmenty..."],hw:{min:{os:"Windows 10",cpu:"i5-8400",ram:"12 GB",gpu:"GTX 1060",storage:"60 GB"},rec:{os:"Windows 11",cpu:"i7-8700K",ram:"16 GB",gpu:"RTX 3070",storage:"60 GB"}},gallery:["","","",""],trailer:"", videos: [] },
+            {id:2019,game:"Hades II",score:94,rDate:"2024-05-06T18:00:00",img:"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1145350/header.jpg",verdict:"MUST BUY",playtimeStory:25,playtimeCompletion:120,pros:["Návykovost","Melinoë","Synergie"],cons:["Zatím Early Access"],cz:false,earlyAccess:true,isDLC:false,storeLinks:{steam:"#"},content:"Melinoë přináší...",proTips:["Kombinujte magické..."],hw:{min:{os:"Windows 10",cpu:"Dual Core 2.4 GHz",ram:"8 GB",gpu:"GTX 950",storage:"10 GB"},rec:{os:"Windows 11",cpu:"Quad Core 3.0 GHz",ram:"16 GB",gpu:"RTX 2060",storage:"10 GB"}},gallery:["","","",""],trailer:"", videos: [] },
+            {id:2020,game:"Doom Eternal",score:91,rDate:"2020-03-20T00:00:00",img:"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/782330/header.jpg",verdict:"MUST BUY",playtimeStory:15,playtimeCompletion:35,pros:["Rychlost","Soundtrack","Design úrovní"],cons:["Plošinovkové pasáže"],cz:false,earlyAccess:false,isDLC:false,storeLinks:{steam:"#",playstation:"#",xbox:"#"},content:"Doom Slayer se vrací...",proTips:["Hýbejte se..."],hw:{min:{os:"Windows 10",cpu:"i5-3570",ram:"8 GB",gpu:"GTX 1050 Ti",storage:"50 GB"},rec:{os:"Windows 11",cpu:"i7-6700K",ram:"8 GB",gpu:"GTX 1080",storage:"50 GB"}},gallery:["","","",""],trailer:"", videos: [] }
         ],
         calendar: [
-            { id: 3004, game: "BUS BOUND", rDate: "2026-05-02", img: "https://picsum.photos/id/1015/800/450", platforms: ["PC"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/example-busbound" } },
-            { id: 3005, game: "MIXTAPE", rDate: "2026-05-07", img: "https://picsum.photos/id/133/800/450", platforms: ["PC", "PS5"], czech: false, earlyAccess: true, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/example-mixtape", playstation: "https://store.playstation.com/cs-cz/product/example-mixtape" } },
-            { id: 3006, game: "DIRECTIVE 8020", rDate: "2026-05-12", img: "https://picsum.photos/id/201/800/450", platforms: ["PC"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/example-directive" } },
-            { id: 3001, game: "007 FIRST LIGHT", rDate: "2026-05-27", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3768760/header.jpg", platforms: ["PC", "PS5", "Xbox"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/3768760", playstation: "https://store.playstation.com/cs-cz/product/007-first-light", xbox: "https://www.xbox.com/cs-CZ/games/store/007-first-light/..." } },
-            { id: 3002, game: "GTA VI", rDate: "2025-11-20", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/271590/header.jpg", platforms: ["PC", "PS5", "Xbox"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/271590", playstation: "https://store.playstation.com/cs-cz/product/gta-vi", xbox: "https://www.xbox.com/cs-CZ/games/store/gta-vi/..." } },
-            { id: 3003, game: "AC BLACK FLAG: RESYNCED", rDate: "2026-07-09", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3751950/header.jpg", platforms: ["PC"], czech: true, earlyAccess: false, isDLC: true, storeLinks: { steam: "https://store.steampowered.com/app/3751950" } },
-            { id: 3007, game: "Kingdom Come: Deliverance II", rDate: "2025-02-11", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1771300/header.jpg?t=1777975568", platforms: ["PC", "PS5", "XBOX"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/1771300/Kingdom_Come_Deliverance_II/", playstation: "https://www.playstation.com/en-cz/games/kingdom-come-deliverance-ii/", xbox: "https://www.xbox.com/cs-CZ/games/store/kingdom-come-deliverance-ii/9n4w31hsmvvd" } },
-            { id: 3009, game: "Forza Horizon 6", rDate: "2026-05-19", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1551360/header.jpg", platforms: ["Steam", "Xbox", "PS5"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/2483190/Forza_Horizon_6/", xbox: "https://www.xbox.com/en-gb/games/store/forza-horizon-6/9nr1r1xwlcnb", playstation: "https://www.playstation.com/en-cz/games/forza-horizon-6/" } },
-            { id: 3008, game: "Sid Meier’s Civilization VII", rDate: "2025-02-11", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1295660/header.jpg?t=1777919052", platforms: ["PC", "PS5", "XBOX", "SWITCH"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/1295660/Sid_Meiers_Civilization_VII/", playstation: "https://www.playstation.com/en-cz/games/sid-meier-s-civilization-vii/", xbox: "https://www.xbox.com/cs-CZ/games/store/sid-meiers-civilization-vii/9NG6VZHN5GQL/0010" } }
+            { id: 1001, game: "Deus Ex: Game of the Year Edition", rDate: "2000-07-22", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/6910/header.jpg?t=1726596757", platforms: ["PC"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/6910/Deus_Ex_Game_of_the_Year_Edition/" } },
+            { id: 1002, game: "Hitman: Codename 47", rDate: "2000-11-23", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/6900/header.jpg?t=1732283914", platforms: ["PC"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/6900/Hitman_Codename_47/" } },
+            { id: 1003, game: "Counter-Strike", rDate: "2000-11-01", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/10/header.jpg?t=1745368572", platforms: ["PC"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/10/CounterStrike/" } },
+            { id: 1004, game: "Diablo II: Resurrected – Infernal Edition", rDate: "2026-02-11", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2536520/8cfd8f0d73075b10b3b58d9eccfee799baffab79/header.jpg?t=1774399170", platforms: ["PC"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/2536520/Diablo_II_Resurrected__Infernal_Edition/" } },
+            { id: 1005, game: "Operation Flashpoint: Cold War Crisis", rDate: "2001-06-22", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/65790/header.jpg", platforms: ["PC"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1006, game: "Max Payne", rDate: "2001-07-23", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/12140/header.jpg", platforms: ["PC", "PS2", "XBOX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1007, game: "Gothic 1", rDate: "2001-03-15", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/39510/header.jpg", platforms: ["PC"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/65540/Gothic_1/" } },
+            { id: 1008, game: "Halo: Combat Evolved", rDate: "2001-03-15", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/65540/header.jpg?t=1776958440", platforms: ["XBOX", "PC"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1009, game: "Silent Hill 2", rDate: "2001-09-24", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2124490/header.jpg", platforms: ["PS2", "PC"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1010, game: "Mafia: The City of Lost Heaven", rDate: "2002-08-28", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/40990/header.jpg", platforms: ["PC"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1011, game: "Warcraft III: Reign of Chaos", rDate: "2002-07-03", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1104330/header.jpg", platforms: ["PC"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1012, game: "The Elder Scrolls III: Morrowind", rDate: "2002-05-01", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/22320/header.jpg", platforms: ["PC", "XBOX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1013, game: "GTA: Vice City", rDate: "2002-10-29", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1546990/header.jpg", platforms: ["PC", "PS2"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1014, game: "Call of Duty", rDate: "2003-10-29", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2620/header.jpg", platforms: ["PC"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1015, game: "Star Wars: KOTOR", rDate: "2003-07-15", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/32370/header.jpg", platforms: ["PC", "XBOX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1016, game: "Need for Speed: Underground", rDate: "2003-11-17", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1234/header.jpg", platforms: ["PC", "PS2"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1017, game: "Far Cry", rDate: "2004-03-23", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/13520/header.jpg", platforms: ["PC"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1018, game: "Half-Life 2", rDate: "2004-11-16", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/220/header.jpg", platforms: ["PC"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1019, game: "GTA: San Andreas", rDate: "2004-10-26", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1547000/header.jpg", platforms: ["PC", "PS2"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1020, game: "Doom 3", rDate: "2004-08-03", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/208200/header.jpg", platforms: ["PC"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1021, game: "Metal Gear Solid 3: Snake Eater", rDate: "2004-11-17", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2131630/header.jpg", platforms: ["PS2"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1022, game: "World of Warcraft", rDate: "2004-11-23", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1235/header.jpg", platforms: ["PC"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { bnet: "#" } },
+            { id: 1023, game: "F.E.A.R.", rDate: "2005-10-18", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/21090/header.jpg", platforms: ["PC"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1024, game: "Resident Evil 4", rDate: "2005-01-11", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2050650/header.jpg", platforms: ["GC", "PS2", "PC"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1025, game: "God of War", rDate: "2005-03-22", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1593500/header.jpg", platforms: ["PS2"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { playstation: "#" } },
+            { id: 1026, game: "The Elder Scrolls IV: Oblivion", rDate: "2006-03-20", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/22330/header.jpg", platforms: ["PC", "X360"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1027, game: "Company of Heroes", rDate: "2006-09-12", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/228200/header.jpg", platforms: ["PC"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1028, game: "BioShock", rDate: "2007-08-21", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/7670/header.jpg", platforms: ["PC", "X360"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1029, game: "Crysis", rDate: "2007-11-13", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1715130/header.jpg", platforms: ["PC"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1030, game: "Call of Duty 4: Modern Warfare", rDate: "2007-11-06", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/7940/header.jpg", platforms: ["PC", "PS3", "X360"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1031, game: "The Witcher", rDate: "2007-10-30", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/20900/header.jpg", platforms: ["PC"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1032, game: "Portal", rDate: "2007-10-10", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/400/header.jpg", platforms: ["PC"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1033, game: "Assassin's Creed", rDate: "2007-11-13", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/15100/header.jpg", platforms: ["PC", "PS3", "X360"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1034, game: "S.T.A.L.K.E.R.: Shadow of Chernobyl", rDate: "2007-03-20", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4500/header.jpg", platforms: ["PC"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1035, game: "Dead Space", rDate: "2008-10-13", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1693980/header.jpg", platforms: ["PC", "PS3", "X360"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1036, game: "GTA IV", rDate: "2008-04-29", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/12210/header.jpg", platforms: ["PC", "PS3", "X360"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1037, game: "Fallout 3", rDate: "2008-10-28", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/22300/header.jpg", platforms: ["PC", "PS3", "X360"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1038, game: "Mirror's Edge", rDate: "2008-11-11", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/17410/header.jpg", platforms: ["PC", "PS3", "X360"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1039, game: "Dragon Age: Origins", rDate: "2009-11-03", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/17450/header.jpg", platforms: ["PC", "PS3", "X360"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1040, game: "Batman: Arkham Asylum", rDate: "2009-08-25", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/35140/header.jpg", platforms: ["PC", "PS3", "X360"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1041, game: "Minecraft (Alpha)", rDate: "2009-05-17", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1236/header.jpg", platforms: ["PC"], czech: true, earlyAccess: true, isDLC: false, storeLinks: { official: "#" } },
+            { id: 1042, game: "Mass Effect 2", rDate: "2010-01-26", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/249990/header.jpg", platforms: ["PC", "X360"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1043, game: "Mafia II", rDate: "2010-08-24", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1030830/header.jpg", platforms: ["PC", "PS3", "X360"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1044, game: "Alan Wake", rDate: "2010-05-14", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/108710/header.jpg", platforms: ["PC", "X360"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1045, game: "Red Dead Redemption", rDate: "2010-05-18", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2668510/header.jpg", platforms: ["PS3", "X360", "PC"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1046, game: "The Elder Scrolls V: Skyrim", rDate: "2011-11-11", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/489830/header.jpg", platforms: ["PC", "PS3", "X360"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1047, game: "Dark Souls", rDate: "2011-09-22", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/570940/header.jpg", platforms: ["PC", "PS3", "X360"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1048, game: "Deus Ex: Human Revolution", rDate: "2011-08-23", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/238010/header.jpg", platforms: ["PC", "PS3", "X360"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1049, game: "Portal 2", rDate: "2011-04-18", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/620/header.jpg", platforms: ["PC"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1050, game: "Far Cry 3", rDate: "2012-11-29", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/220240/header.jpg", platforms: ["PC", "PS3", "X360"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1051, game: "Dishonored", rDate: "2012-10-09", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/205100/header.jpg", platforms: ["PC", "PS3", "X360"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1052, game: "The Walking Dead (Season 1)", rDate: "2012-04-24", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/207610/header.jpg", platforms: ["PC", "PS3", "X360"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1053, game: "GTA V", rDate: "2013-09-17", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/271590/header.jpg", platforms: ["PC", "PS3", "X360", "PS4", "XONE"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1054, game: "The Last of Us", rDate: "2013-06-14", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1888590/header.jpg", platforms: ["PS3", "PS4", "PC"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1055, game: "BioShock Infinite", rDate: "2013-03-26", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/8870/header.jpg", platforms: ["PC", "PS3", "X360"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1056, game: "Tomb Raider", rDate: "2013-03-05", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/203160/header.jpg", platforms: ["PC", "PS3", "X360"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1057, game: "The Witcher 3: Wild Hunt", rDate: "2015-05-19", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/292030/header.jpg", platforms: ["PC", "PS4", "XONE"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1058, game: "Bloodborne", rDate: "2015-03-24", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1237/header.jpg", platforms: ["PS4"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { playstation: "#" } },
+            { id: 1059, game: "Fallout 4", rDate: "2015-11-10", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/377160/header.jpg", platforms: ["PC", "PS4", "XONE"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1060, game: "Metal Gear Solid V: The Phantom Pain", rDate: "2015-09-01", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/287700/header.jpg", platforms: ["PC", "PS4", "XONE"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1061, game: "DOOM", rDate: "2016-05-13", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/379720/header.jpg", platforms: ["PC", "PS4", "XONE"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1062, game: "Uncharted 4: A Thief's End", rDate: "2016-05-10", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1659420/header.jpg", platforms: ["PS4", "PC"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1063, game: "Dark Souls III", rDate: "2016-04-12", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/374320/header.jpg", platforms: ["PC", "PS4", "XONE"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1064, game: "Horizon Zero Dawn", rDate: "2017-02-28", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1151640/header.jpg", platforms: ["PS4", "PC"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1065, game: "The Legend of Zelda: Breath of the Wild", rDate: "2017-03-03", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1238/header.jpg", platforms: ["SWITCH"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { nintendo: "#" } },
+            { id: 1066, game: "NieR:Automata", rDate: "2017-02-23", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/524220/header.jpg", platforms: ["PC", "PS4"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1067, game: "God of War", rDate: "2018-04-20", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1593500/header.jpg", platforms: ["PS4", "PC"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1068, game: "Red Dead Redemption 2", rDate: "2018-10-26", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1174180/header.jpg", platforms: ["PS4", "XONE", "PC"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1069, game: "Kingdom Come: Deliverance", rDate: "2018-02-13", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/379430/header.jpg", platforms: ["PC", "PS4", "XONE"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1070, game: "Spider-Man", rDate: "2018-09-07", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1817070/header.jpg", platforms: ["PS4", "PS5", "PC"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1071, game: "Sekiro: Shadows Die Twice", rDate: "2019-03-22", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/814380/header.jpg", platforms: ["PC", "PS4", "XONE"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1072, game: "Death Stranding", rDate: "2019-11-08", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1850570/header.jpg", platforms: ["PS4", "PC"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1073, game: "Cyberpunk 2077", rDate: "2020-12-10", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1091500/header.jpg", platforms: ["PC", "PS4", "XONE", "PS5", "XBSX"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1074, game: "Ghost of Tsushima", rDate: "2020-07-17", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2215430/header.jpg", platforms: ["PS4", "PS5", "PC"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1075, game: "Hades", rDate: "2020-09-17", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1145360/header.jpg", platforms: ["PC", "NSW"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1076, game: "It Takes Two", rDate: "2021-03-26", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1426210/header.jpg", platforms: ["PC", "PS4", "PS5", "XONE", "XBSX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1077, game: "Elden Ring", rDate: "2022-02-25", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1245620/header.jpg", platforms: ["PC", "PS4", "PS5", "XONE", "XBSX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1078, game: "God of War Ragnarök", rDate: "2022-11-09", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2322010/header.jpg", platforms: ["PS4", "PS5", "PC"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1079, game: "Baldur's Gate 3", rDate: "2023-08-03", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1086940/header.jpg", platforms: ["PC", "PS5", "XBSX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 1080, game: "Alan Wake II", rDate: "2023-10-27", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1239/header.jpg", platforms: ["PC", "PS5", "XBSX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { epic: "#" } },
+            { id: 3024, game: "Life is Strange: Double Exposure", rDate: "2024-10-29", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2140880/header.jpg", platforms: ["PC", "PS5", "XBOX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 3025, game: "Indiana Jones and the Great Circle", rDate: "2024-12-09", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1893010/header.jpg", platforms: ["PC", "XBOX", "PS5"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#", xbox: "#" } },
+            { id: 3017, game: "Bus Bound", rDate: "2026-01-15", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3768700/header.jpg", platforms: ["PC"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 3029, game: "Hades II (Full Release)", rDate: "2026-01-20", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1145350/header.jpg", platforms: ["PC", "PS5", "SWITCH"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 3012, game: "Directive 8020", rDate: "2026-02-10", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2324340/header.jpg", platforms: ["PC", "PS5", "XBOX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 3007, game: "Kingdom Come: Deliverance II", rDate: "2026-02-11", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1771300/header.jpg", platforms: ["PC", "PS5", "XBOX"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 3010, game: "Sid Meier’s Civilization VII", rDate: "2026-02-11", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1295660/header.jpg", platforms: ["PC", "PS5", "XBOX", "SWITCH"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 3011, game: "Assassin's Creed Shadows", rDate: "2026-02-14", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3066300/header.jpg", platforms: ["PC", "PS5", "XBOX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 3016, game: "Avowed", rDate: "2026-02-18", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2457100/header.jpg", platforms: ["PC", "XBOX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 3026, game: "Vampire: The Masquerade - Bloodlines 2", rDate: "2026-02-25", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/532790/header.jpg", platforms: ["PC", "PS5", "XBOX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 3009, game: "Monster Hunter Wilds", rDate: "2026-02-28", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2246340/header.jpg", platforms: ["PC", "PS5", "XBOX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 3002, game: "Metroid Prime 4: Beyond", rDate: "2026-03-15", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2130/header.jpg", platforms: ["SWITCH"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { switch: "#" } },
+            { id: 3014, game: "South of Midnight", rDate: "2026-03-20", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1378160/header.jpg", platforms: ["PC", "XBOX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 3005, game: "Death Stranding 2: On The Beach", rDate: "2026-04-12", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1145360/header.jpg", platforms: ["PS5"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { playstation: "#" } },
+            { id: 3018, game: "Mixtape", rDate: "2026-04-22", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1234567/header.jpg", platforms: ["PC", "PS5", "XBOX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 3030, game: "Subnautica 2", rDate: "2026-05-01", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1948280/header.jpg", platforms: ["PC", "PS5", "XBOX"], czech: false, earlyAccess: true, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 3021, game: "Wuchang: Fallen Feathers", rDate: "2026-05-15", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1645110/header.jpg", platforms: ["PC", "PS5", "XBOX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 3001, game: "007 FIRST LIGHT", rDate: "2026-05-27", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3768760/dbe86ebd2edb4c77d113e9e2feefeb90189fabc9/header_alt_assets_1.jpg?t=1778255557", platforms: ["PC", "PS5"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/3768760/007_First_Light/" } },
+            { id: 3006, game: "Doom: The Dark Ages", rDate: "2026-06-05", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/782330/header.jpg", platforms: ["PC", "PS5", "XBOX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 3022, game: "Marvel's 1943: Rise of Hydra", rDate: "2026-07-04", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/123123/header.jpg", platforms: ["PC", "PS5", "XBOX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { playstation: "#" } },
+            { id: 3004, game: "Ghost of Yotei", rDate: "2026-08-20", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2215430/header.jpg", platforms: ["PS5"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { playstation: "#" } },
+            { id: 3008, game: "Borderlands 4", rDate: "2026-09-15", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1281590/header.jpg", platforms: ["PC", "PS5", "XBOX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 3023, game: "Pragmata", rDate: "2026-09-30", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1386930/header.jpg", platforms: ["PC", "PS5", "XBOX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 3013, game: "Fable", rDate: "2026-10-12", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/123456/header.jpg", platforms: ["PC", "XBOX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 3015, game: "Little Nightmares III", rDate: "2026-11-05", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1623730/header.jpg", platforms: ["PC", "PS5", "XBOX", "SWITCH"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 3028, game: "Control 2", rDate: "2026-11-10", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/870780/header.jpg", platforms: ["PC", "PS5", "XBOX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 3019, game: "Exodus", rDate: "2026-11-14", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/213456/header.jpg", platforms: ["PC", "PS5", "XBOX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { playstation: "#" } },
+            { id: 3020, game: "The Witcher 4 (Polaris)", rDate: "2026-12-01", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/292030/header.jpg", platforms: ["PC", "PS5", "XBOX"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 3998, game: "Gothic 1 Remake", rDate: "2026-06-05", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1297900/ec2e1d9806c3585c98585c74e9f1df41d5db3305/header_alt_assets_0.jpg?t=1778219871", platforms: ["PC", "PS5", "XBOX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "https://store.steampowered.com/app/1297900/Gothic_1_Remake/" } },
+            { id: 3003, game: "Mafia: The Old Country", rDate: "2026-12-10", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1324040/header.jpg", platforms: ["PC", "PS5", "XBOX"], czech: true, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } },
+            { id: 3027, game: "Beyond Good & Evil 2", rDate: "2026-12-20", img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/23456/header.jpg", platforms: ["PC", "PS5", "XBOX"], czech: false, earlyAccess: false, isDLC: false, storeLinks: { steam: "#" } }
         ]
     };
 
     const monthsShort = ["LED", "ÚNO", "BŘE", "DUB", "KVĚ", "ČER", "ČVC", "SRP", "ZÁŘ", "ŘÍJ", "LIS", "PRO"];
 
-    let sameDayData = {};
+    function getYouTubeEmbedUrl(input) {
+        if (!input) return null;
+        let url = input.trim();
+        if (url.includes('/embed/')) return url.includes('?') ? url : url + '?autoplay=1&rel=0';
+        let match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/);
+        if (match && match[1]) {
+            const videoId = match[1].split('&')[0];
+            return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+        }
+        const cleanId = url.split('&')[0];
+        if (/^[a-zA-Z0-9_-]{11}$/.test(cleanId)) return `https://www.youtube.com/embed/${cleanId}?autoplay=1&rel=0`;
+        return null;
+    }
+
+    function applyFade(elementId) {
+        const el = document.getElementById(elementId);
+        if (el) {
+            el.classList.remove('fade-in');
+            void el.offsetWidth;
+            el.classList.add('fade-in');
+        }
+    }
+
+    function handleSearch(val) {
+        state.searchQuery = val.toLowerCase().trim();
+        state.newsPage = 1;
+        state.reviewsPage = 1;
+        renderAll();
+    }
 
     function getBadgesHTML(item) {
         let html = '';
-        if (item.cz || item.czech) html += `<span class="cz-flag"><img src="https://flagcdn.com/w20/cz.png" alt="Česky" class="h-4 w-6 rounded-sm">ČESKY</span>`;
-        if (item.earlyAccess) html += `<span class="px-4 py-1 text-xs font-bold bg-orange-500 rounded-3xl">EARLY ACCESS</span>`;
-        if (item.isDLC) html += `<span class="px-4 py-1 text-xs font-bold bg-violet-600 rounded-3xl">DLC</span>`;
+        if (item.cz || item.czech) html += `<span class="cz-flag"><img src="https://flagcdn.com/w20/cz.png" class="h-4 w-6 rounded-sm">ČESKY</span>`;
+        if (item.earlyAccess) html += `<span class="px-4 py-1 text-[10px] font-black bg-orange-600 text-white rounded-3xl uppercase tracking-wider">EARLY ACCESS</span>`;
+        if (item.isDLC) html += `<span class="px-4 py-1 text-[10px] font-black bg-blue-600 text-white rounded-3xl uppercase tracking-wider">DLC / EXPANSION</span>`;
         return html;
     }
 
-    function getPlatformLinksHTML(item) {
-        if (!item.platforms || !item.storeLinks) return '';
-        let html = '';
-        item.platforms.forEach(p => {
-            const lower = p.toLowerCase();
-            let key = lower === 'ps5' ? 'playstation' : lower === 'xbox' ? 'xbox' : lower;
-            const url = item.storeLinks[key];
-            if (url) {
-                let colorClass = '';
-                if (lower === 'pc' || lower === 'steam') colorClass = 'platform-steam';
-                else if (lower.includes('ps')) colorClass = 'platform-ps';
-                else if (lower.includes('xbox')) colorClass = 'platform-xbox';
-                else if (lower.includes('switch')) colorClass = 'platform-switch';
-
-                const icon = lower === 'pc' || lower === 'steam' ? `<i class="fab fa-steam mr-1"></i>` : 
-                             lower.includes('ps') ? `<i class="fab fa-playstation mr-1"></i>` : 
-                             lower.includes('xbox') ? `<i class="fab fa-xbox mr-1"></i>` : 
-                             `<i class="fas fa-gamepad mr-1"></i>`;
-
-                html += `<a href="${url}" target="_blank" onclick="event.stopImmediatePropagation()" class="inline-flex items-center px-4 py-1 text-xs font-bold bg-zinc-700 hover:bg-zinc-600 ${colorClass} rounded-3xl transition-colors">${icon}${p}</a>`;
-            }
-        });
-        return html;
-    }
-
-    function toggleMobileMenu() {
+    function toggleMobileMenu() { 
         const menu = document.getElementById('mobileMenu');
         menu.classList.toggle('show');
     }
 
-    window.navigateToTab = function(tab) {
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
-        document.getElementById('tab-' + tab).classList.remove('hidden');
-        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-nav'));
-        const activeLink = document.querySelector(`.nav-link[data-tab="${tab}"]`);
-        if (activeLink) activeLink.classList.add('active-nav');
-        document.getElementById('mobileMenu').classList.remove('show');
-        window.scrollTo({top: 0, behavior: 'smooth'});
-    };
-
-    // SDÍLENÍ
-    function getShareUrl(id) {
-        return window.location.href.split('?')[0] + '?id=' + id;
+    function animateRing(selector, score) {
+        const ring = document.querySelector(selector);
+        if (ring) {
+            const radius = 62;
+            const circumference = 2 * Math.PI * radius;
+            const offset = circumference - (score / 100) * circumference;
+            ring.style.strokeDasharray = circumference;
+            ring.style.strokeDashoffset = offset;
+        }
     }
 
-    window.shareToFacebook = function(id) {
-        const url = encodeURIComponent(getShareUrl(id));
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
-    };
+    function getScoreRingHTML(score, size = 140, fontSize = "text-5xl", ringId = "") {
+        return `
+            <div class="score-container" style="width: ${size}px; height: ${size}px;">
+                <svg class="score-ring" width="${size}" height="${size}" viewBox="0 0 140 140">
+                    <circle class="ring-bg" cx="70" cy="70" r="62"></circle>
+                    <circle class="ring-progress ${ringId}" cx="70" cy="70" r="62" style="stroke-dasharray: 390; stroke-dashoffset: 390;"></circle>
+                </svg>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <span class="${fontSize} font-black italic text-red-600">${score}<span class="text-sm ml-0.5">%</span></span>
+                </div>
+            </div>`;
+    }
 
-    window.shareToX = function(id) {
-        const item = [...state.news, ...state.reviews].find(x => x.id === id);
-        const text = encodeURIComponent(item.title || item.game);
-        const url = encodeURIComponent(getShareUrl(id));
-        window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
-    };
+    function getProTipsHTML(tips) {
+        if (!tips || tips.length === 0) return '';
+        const tipsList = tips.map(tip => `<li class="flex items-start gap-3 mb-3"><i class="fas fa-bolt text-yellow-400 mt-1"></i><span class="text-zinc-300 text-sm md:text-base">${tip}</span></li>`).join('');
+        return `<div class="my-10 p-6 rounded-3xl border border-yellow-500/30 bg-gradient-to-br from-yellow-500/10 to-transparent"><div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 rounded-full bg-yellow-500 flex items-center justify-center text-black"><i class="fas fa-lightbulb text-xl"></i></div><h3 class="condensed text-2xl font-black italic uppercase text-yellow-500">PRO TIPS</h3></div><ul class="list-none">${tipsList}</ul></div>`;
+    }
 
-    window.shareToIGStory = function(id) {
-        const url = getShareUrl(id);
-        navigator.clipboard.writeText(url).then(() => {
-            alert('✅ Odkaz zkopírován!\n\nOtevři Instagram → Nová Story → Swipe nahoru (nebo Sticker „Link“) a vlož odkaz.');
-        });
-    };
+    function getProsConsHTML(pros, cons) {
+        if (!pros || !pros.length || !cons || !cons.length) return '';
+        const prosList = pros.map(p => `<li class="flex items-start gap-3"><i class="fas fa-check-circle text-emerald-400 mt-1 text-xl"></i><span class="text-zinc-200">${p}</span></li>`).join('');
+        const consList = cons.map(c => `<li class="flex items-start gap-3"><i class="fas fa-times-circle text-rose-400 mt-1 text-xl"></i><span class="text-zinc-200">${c}</span></li>`).join('');
+        return `<div class="my-12 grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-emerald-900/10 border border-emerald-500/30 rounded-3xl p-8"><div class="flex items-center gap-3 mb-6"><i class="fas fa-thumbs-up text-4xl text-emerald-400"></i><h3 class="condensed text-3xl font-black italic uppercase text-emerald-400">KLADY</h3></div><ul class="space-y-5 text-base">${prosList}</ul></div><div class="bg-rose-900/10 border border-rose-500/30 rounded-3xl p-8"><div class="flex items-center gap-3 mb-6"><i class="fas fa-thumbs-down text-4xl text-rose-400"></i><h3 class="condensed text-3xl font-black italic uppercase text-rose-400">ZÁPORY</h3></div><ul class="space-y-5 text-base">${consList}</ul></div></div>`;
+    }
 
-    window.copyLink = function(id) {
-        const url = getShareUrl(id);
-        navigator.clipboard.writeText(url).then(() => {
-            alert('✅ Odkaz zkopírován do schránky!');
-        });
-    };
+    function renderPaginationUI(totalItems, currentPage, containerId, stateKey, renderFn) {
+        const totalPages = Math.ceil(totalItems / state.itemsPerPage);
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        if (totalPages <= 1) { container.innerHTML = ''; return; }
+        container.innerHTML = `
+            <button class="page-btn condensed" ${currentPage === 1 ? 'disabled' : ''} onclick="state.${stateKey}--; ${renderFn}()">Předchozí</button>
+            <div class="flex items-center px-4 font-black italic condensed text-zinc-500">${currentPage} / ${totalPages}</div>
+            <button class="page-btn condensed" ${currentPage >= totalPages ? 'disabled' : ''} onclick="state.${stateKey}++; ${renderFn}()">Další</button>
+        `;
+    }
 
-    function renderCalendar() {
-        const minYear = 2000;
-        const maxYear = 2030;
-        const current = state.selectedYear;
+    function initHeroSlider() {
+        const combined = [...state.news, ...state.reviews].sort((a,b) => new Date(b.rDate) - new Date(a.rDate)).slice(0, 3);
+        window.changeHeroSlide = (index) => {
+            state.heroIndex = index;
+            renderHero(combined);
+            resetHeroTimer();
+        };
+        function renderHero(items) {
+            const item = items[state.heroIndex];
+            if (!item) return;
+            const type = item.score !== undefined ? 'RECENZE' : 'NOVINKA';
+            document.getElementById('hero-content').innerHTML = `
+                <div class="relative h-[420px] sm:h-[480px] md:h-[550px] lg:h-[620px] rounded-[40px] overflow-hidden cursor-pointer fade-in" onclick="openModal(${item.id})">
+                    <img src="${item.img}" class="w-full h-full object-cover opacity-40">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+                    <div class="absolute top-8 left-8"><span class="px-5 py-2 text-xs font-black uppercase bg-red-600 text-white rounded neon-red">${type}</span></div>
+                    <div class="absolute bottom-12 left-8 md:left-12 max-w-3xl">
+                        <span class="text-red-500 text-sm font-black uppercase tracking-widest mb-2 block neon-red">Aktuálně ze světa her</span>
+                        <h1 class="condensed text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-black italic uppercase leading-[0.9] neon-red">${item.title || item.game}</h1>
+                        <div class="flex gap-2 mt-6">${getBadgesHTML(item)}</div>
+                    </div>
+                </div>`;
+            document.getElementById('hero-dots').innerHTML = items.map((_, idx) => `<div class="hero-dot ${idx === state.heroIndex ? 'active' : ''}" onclick="event.stopPropagation(); changeHeroSlide(${idx})"></div>`).join('');
+        }
+        function resetHeroTimer() {
+            clearInterval(state.heroInterval);
+            state.heroInterval = setInterval(() => { state.heroIndex = (state.heroIndex + 1) % combined.length; renderHero(combined); }, 4500);
+        }
+        renderHero(combined);
+        resetHeroTimer();
+    }
 
-        let yearHTML = `<div class="flex items-center justify-center gap-6">
-            <button onclick="changeYear(-1)" class="w-9 h-9 flex items-center justify-center text-3xl text-zinc-400 hover:text-white transition-colors"><i class="fas fa-chevron-left"></i></button>
-            <button onclick="state.selectedYear = ${current-1}; renderCalendar()" class="filter-btn px-6 ${current-1 < minYear ? 'opacity-30 pointer-events-none' : ''}">${current-1}</button>
-            <button onclick="state.selectedYear = ${current}; renderCalendar()" class="filter-btn px-6 bg-red-600 border-red-600 text-white">${current}</button>
-            <button onclick="state.selectedYear = ${current+1}; renderCalendar()" class="filter-btn px-6 ${current+1 > maxYear ? 'opacity-30 pointer-events-none' : ''}">${current+1}</button>
-            <button onclick="changeYear(1)" class="w-9 h-9 flex items-center justify-center text-3xl text-zinc-400 hover:text-white transition-colors"><i class="fas fa-chevron-right"></i></button>
+    function getTop5HTML(top) {
+        return `
+        <div onclick="openTopModal()" class="top-card feed-card p-8 cursor-pointer">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <span class="px-4 py-1 text-xs font-black bg-red-600 rounded-full">TOP 5</span>
+                    <h3 class="condensed text-4xl font-black italic mt-2 neon-red">${top.title}</h3>
+                    <p class="text-zinc-400 text-sm">${top.subtitle}</p>
+                </div>
+                <div class="text-6xl font-black text-red-500/30">5</div>
+            </div>
+            <div class="space-y-4">
+                ${top.items.map(item => `
+                <div class="flex items-center gap-4 bg-black/30 p-3 rounded-2xl">
+                    <div class="w-8 h-8 flex items-center justify-center font-black text-xl text-red-500">${item.rank}</div>
+                    <img src="${item.img}" class="w-12 h-12 object-cover rounded-xl">
+                    <div class="flex-1"><div class="font-bold">${item.game}</div></div>
+                    <div class="font-black text-red-500">${item.score}%</div>
+                </div>`).join('')}
+            </div>
         </div>`;
-        document.getElementById('year-nav').innerHTML = yearHTML;
-
-        document.getElementById('month-nav').innerHTML = monthsShort.map((m, idx) => 
-            `<button onclick="state.selectedMonth=${idx}; renderCalendar()" class="filter-btn ${state.selectedMonth === idx ? 'active' : ''}">${m}</button>`
-        ).join('');
-
-        const filtered = state.calendar.filter(c => {
-            const d = new Date(c.rDate);
-            return d.getFullYear() === state.selectedYear && d.getMonth() === state.selectedMonth;
-        }).sort((a, b) => new Date(a.rDate) - new Date(b.rDate));
-
-        sameDayData = {};
-        filtered.forEach(c => {
-            const key = new Date(c.rDate).toISOString().split('T')[0];
-            if (!sameDayData[key]) sameDayData[key] = [];
-            sameDayData[key].push(c);
-        });
-
-        let html = '';
-        Object.keys(sameDayData).sort().forEach(key => {
-            const group = sameDayData[key];
-            const first = group[0];
-            const d = new Date(first.rDate);
-            const day = d.getDate();
-            const monthShort = monthsShort[d.getMonth()];
-            const hasMultiple = group.length > 1;
-
-            html += `
-            <div class="same-day-card bg-[#080808] border border-zinc-900 rounded-3xl overflow-hidden group cursor-default" data-date-key="${key}" data-current-index="0">
-                <div class="relative">
-                    <img src="${first.img}" class="w-full aspect-video object-cover same-day-image transition-all duration-300">
-                    <div class="absolute top-3 left-3 bg-black/90 text-white px-3 py-1 rounded-3xl flex flex-col items-center justify-center min-w-[54px] shadow-inner">
-                        <span class="text-3xl leading-none font-black">${day}</span>
-                        <span class="text-[10px] font-black tracking-widest -mt-px">${monthShort}</span>
-                    </div>
-                    ${hasMultiple ? `
-                    <button onclick="switchSameDay('${key}', -1); event.stopImmediatePropagation()" class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-black text-white w-8 h-8 rounded-2xl flex items-center justify-center text-lg shadow-lg z-10"><i class="fas fa-chevron-left"></i></button>
-                    <button onclick="switchSameDay('${key}', 1); event.stopImmediatePropagation()" class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-black text-white w-8 h-8 rounded-2xl flex items-center justify-center text-lg shadow-lg z-10"><i class="fas fa-chevron-right"></i></button>` : ''}
-                </div>
-                <div class="p-4">
-                    <h4 class="condensed text-lg font-black uppercase leading-tight same-day-name">${first.game}</h4>
-                    <div class="flex gap-2 mt-3 flex-wrap">
-                        ${getBadgesHTML(first)}
-                        ${getPlatformLinksHTML(first)}
-                    </div>
-                </div>
-            </div>`;
-        });
-
-        document.getElementById('calendar-grid').innerHTML = html || `<div class="col-span-full text-center py-20 text-zinc-700 font-bold uppercase">V tomto měsíci nic nevychází</div>`;
     }
 
-    window.changeYear = function(delta) {
-        let newYear = state.selectedYear + delta;
-        if (newYear < 2000) newYear = 2000;
-        if (newYear > 2030) newYear = 2030;
-        state.selectedYear = newYear;
-        renderCalendar();
-    };
-
-    window.openModalForCurrent = function(dateKey) {
-        const card = document.querySelector(`[data-date-key="${dateKey}"]`);
-        if (!card) return;
-        const index = parseInt(card.dataset.currentIndex || 0);
-        const group = sameDayData[dateKey];
-        if (group && group[index]) openModal(group[index].id);
-    };
-
-    window.switchSameDay = function(dateKey, direction) {
-        const card = document.querySelector(`[data-date-key="${dateKey}"]`);
-        if (!card) return;
-        const group = sameDayData[dateKey];
-        if (!group || group.length <= 1) return;
-
-        let currentIndex = parseInt(card.dataset.currentIndex || 0);
-        currentIndex = (currentIndex + direction + group.length) % group.length;
-        card.dataset.currentIndex = currentIndex;
-
-        const game = group[currentIndex];
-        const image = card.querySelector('.same-day-image');
-        const nameEl = card.querySelector('.same-day-name');
-        const badgesEl = card.querySelector('.flex.gap-2.mt-3.flex-wrap');
-
-        image.style.opacity = '0';
-        setTimeout(() => {
-            image.src = game.img;
-            image.style.opacity = '1';
-            nameEl.textContent = game.game;
-            badgesEl.innerHTML = `${getBadgesHTML(game)}${getPlatformLinksHTML(game)}`;
-        }, 180);
-    };
-
-    function renderSideCalendar() {
-        const today = new Date();
-        today.setHours(0,0,0,0);
-
-        const futureReleases = state.calendar
-            .filter(c => new Date(c.rDate) > today)
-            .sort((a, b) => new Date(a.rDate) - new Date(b.rDate))
-            .slice(0, 5);
-
-        let html = futureReleases.map(c => {
-            const d = new Date(c.rDate);
-            const day = d.getDate();
-            const monthShort = monthsShort[d.getMonth()];
-            return `
-            <div class="feed-card p-5 flex flex-col gap-3 cursor-default">
-                <div class="flex items-center gap-5">
-                    <div class="w-[72px] h-[72px] bg-[#ff0000] rounded-3xl flex flex-col items-center justify-center text-white condensed flex-shrink-0 text-center leading-none shadow-md">
-                        <span class="text-[13px] font-black tracking-[1.5px]">${monthShort}</span>
-                        <span class="text-5xl font-black -mt-1">${day}</span>
-                    </div>
-                    <div class="flex-1 condensed text-2xl font-black uppercase leading-tight">${c.game}</div>
-                </div>
-                <div class="flex gap-2 flex-wrap pl-[88px]">
-                    ${getBadgesHTML(c)}
-                    ${getPlatformLinksHTML(c)}
-                </div>
-            </div>`;
-        }).join('');
-
-        document.getElementById('side-calendar').innerHTML = html || `<div class="text-zinc-700 font-bold uppercase text-center py-12">Žádné blízké releasy</div>`;
+    function createFeedCard(i) {
+        return `
+        <div class="feed-card flex flex-col md:flex-row items-start gap-6 p-6 cursor-pointer" onclick="openModal(${i.id})">
+            <div class="relative shrink-0 w-full md:w-56">
+                <span class="absolute top-3 left-3 px-3 py-1 text-[10px] font-black uppercase bg-red-600 text-white rounded">${i.score ? 'RECENZE' : 'NOVINKA'}</span>
+                <img src="${i.img}" class="w-full h-32 object-cover rounded-2xl">
+            </div>
+            <div class="pt-1">
+                <h3 class="condensed text-2xl md:text-3xl font-black italic uppercase leading-tight">${i.title || i.game}</h3>
+                <p class="text-zinc-500 text-sm mt-2 line-clamp-2">${i.content || ''}</p>
+                <div class="flex gap-2 mt-3">${getBadgesHTML(i)}</div>
+            </div>
+        </div>`;
     }
 
     function renderAll() {
+        initHeroSlider();
         const combined = [...state.news, ...state.reviews].sort((a,b) => new Date(b.rDate) - new Date(a.rDate));
-
-        // HERO s badge a "Právě vyšlo"
-        const heroItem = combined[0];
-        const heroType = heroItem.score !== undefined ? 'RECENZE' : 'NOVINKA';
-        const heroLabel = heroItem.score !== undefined ? 'Právě vyšlo' : 'Nejnovější novinka';
-
-        document.getElementById('hero-area').innerHTML = `
-            <div class="relative h-[420px] md:h-[500px] rounded-[40px] overflow-hidden cursor-pointer" onclick="openModal(${heroItem.id})">
-                <img src="${heroItem.img}" class="w-full h-full object-cover opacity-40">
-                <div class="absolute inset-0 bg-gradient-to-t from-black"></div>
-                <div class="absolute top-8 left-8">
-                    <span class="px-5 py-2 text-xs font-black uppercase bg-red-600 text-white rounded">${heroType}</span>
-                </div>
-                <div class="absolute bottom-12 left-8 md:left-12">
-                    <span class="text-red-400 text-sm font-black uppercase tracking-widest">${heroLabel}</span>
-                    <h1 class="condensed text-5xl md:text-7xl font-black italic uppercase">${heroItem.title || heroItem.game}</h1>
-                    <div class="flex gap-2 mt-6 flex-wrap">${getBadgesHTML(heroItem)}</div>
-                </div>
-            </div>`;
-
-        document.getElementById('home-feed').innerHTML = combined.slice(1, 5).map(i => `
-            <div class="feed-card flex flex-col md:flex-row items-start gap-6 p-6 cursor-pointer" onclick="openModal(${i.id})">
-                <div class="relative">
-                    <span class="absolute top-4 left-4 px-4 py-1 text-xs font-black uppercase bg-red-600 text-white rounded">${i.score ? 'RECENZE' : 'NOVINKA'}</span>
-                    <img src="${i.img}" class="w-full md:w-48 h-48 md:h-28 object-cover rounded-2xl shrink-0">
-                </div>
-                <div class="flex-1 pt-2">
-                    <h3 class="condensed text-2xl md:text-3xl font-black italic uppercase">${i.title || i.game}</h3>
-                    <p class="text-zinc-400 text-sm mt-3 line-clamp-3">${i.content || ''}</p>
-                    <div class="flex gap-2 mt-4 flex-wrap">${getBadgesHTML(i)}</div>
-                </div>
-            </div>`).join('');
-
+        let feedItems = combined.slice(3).filter(i => (i.title || i.game).toLowerCase().includes(state.searchQuery));
+        
+        let feedHTML = feedItems.slice(0, 3).map(i => createFeedCard(i)).join('') +
+                       getTop5HTML(state.featuredTop) +
+                       feedItems.slice(3, 8).map(i => createFeedCard(i)).join('');
+        
+        document.getElementById('home-feed').innerHTML = feedHTML || `<div class="text-center py-10 text-zinc-600 italic">Nic nenalezeno</div>`;
+        
+        setTimeout(() => {
+            const cards = document.querySelectorAll('#home-feed > div');
+            cards.forEach((card, i) => { card.style.animationDelay = `${i * 70}ms`; card.classList.add('stagger-item'); });
+        }, 80);
+        
+        applyFade('home-feed');
         renderNewsPage();
         renderReviewsPage();
+        renderCalendar();
+        renderSideCalendar();
+        renderPrestigeSide();
+        renderPrestigeFull();
+    }
 
+    function renderPrestigeSide() {
         const top5 = [...state.reviews].sort((a,b) => b.score - a.score).slice(0, 5);
         document.getElementById('side-hall').innerHTML = top5.map((r, idx) => `
             <div class="flex justify-between items-center bg-white/5 p-4 rounded-2xl border border-zinc-900">
@@ -446,173 +638,408 @@
                 <span class="text-[11px] font-bold uppercase flex-1 px-4 truncate">${r.game}</span>
                 <span class="font-black text-red-600">${r.score}%</span>
             </div>`).join('');
-        
-        document.getElementById('hall-full-list').innerHTML = [...state.reviews].sort((a,b) => b.score - a.score).map((r, idx) => `
-            <div class="hall-item mb-4 flex flex-col md:flex-row items-center gap-6 bg-[#080808] p-6 rounded-3xl border border-zinc-900">
-                <div class="condensed text-7xl font-black italic w-32 ${idx===0?'gold-text':'text-zinc-900'}">#${idx+1}</div>
-                <img src="${r.img}" class="w-full md:w-56 h-32 rounded-3xl object-cover flex-shrink-0">
-                <div class="flex-1"><h3 class="condensed text-4xl font-black italic uppercase">${r.game}</h3></div>
-                <div class="text-7xl font-black italic text-red-600">${r.score}%</div>
-            </div>`).join('');
+    }
 
-        renderCalendar();
-        renderSideCalendar();
+    function renderPrestigeFull() {
+        const sorted = [...state.reviews].sort((a,b) => b.score - a.score);
+        document.getElementById('hall-full-list').innerHTML = sorted.map((r, idx) => `
+            <div class="flex flex-col md:flex-row items-center gap-8 bg-[#080808] p-8 rounded-3xl border border-zinc-900 fade-in">
+                <div class="condensed text-7xl md:text-8xl font-black italic ${idx===0?'gold-text':'text-zinc-900'} w-24 text-center">#${idx+1}</div>
+                <img src="${r.img}" class="w-full md:w-64 h-36 rounded-2xl object-cover shrink-0">
+                <div class="flex-1 text-center md:text-left">
+                    <h3 class="condensed text-4xl md:text-5xl font-black italic uppercase">${r.game}</h3>
+                    <div class="flex gap-2 mt-4 justify-center md:justify-start">${getBadgesHTML(r)}</div>
+                </div>
+                <div class="text-6xl md:text-7xl font-black italic text-red-600">${r.score}%</div>
+            </div>`).join('');
     }
 
     function renderNewsPage() {
+        const filtered = state.news.filter(n => n.title.toLowerCase().includes(state.searchQuery));
         const start = (state.newsPage - 1) * state.itemsPerPage;
-        const pageItems = state.news.slice(start, start + state.itemsPerPage);
-        document.getElementById('news-full-list').innerHTML = pageItems.map(n => `
+        const currentItems = filtered.slice(start, start + state.itemsPerPage);
+        document.getElementById('news-full-list').innerHTML = currentItems.map(n => `
             <div onclick="openModal(${n.id})" class="feed-card flex flex-col md:flex-row gap-8 p-8 cursor-pointer">
-                <div class="relative">
-                    <span class="absolute top-4 left-4 px-4 py-1 text-xs font-black uppercase bg-red-600 text-white rounded">NOVINKA</span>
-                    <img src="${n.img}" class="w-full md:w-64 h-48 md:h-36 object-cover rounded-2xl shrink-0">
-                </div>
-                <div class="flex-1">
+                <img src="${n.img}" class="w-full md:w-64 h-40 object-cover rounded-2xl">
+                <div>
                     <h3 class="condensed text-4xl font-black italic uppercase">${n.title}</h3>
-                    <p class="text-zinc-500 mt-4">${n.content}</p>
+                    <p class="text-zinc-500 mt-4">${n.content || ''}</p>
+                    <div class="flex gap-2 mt-4">${getBadgesHTML(n)}</div>
                 </div>
             </div>`).join('');
-        renderNewsPagination();
+        renderPaginationUI(filtered.length, state.newsPage, 'news-pagination', 'newsPage', 'renderNewsPage');
+        applyFade('news-full-list');
+    }
+
+    function setReviewFilter(filter) {
+        state.reviewFilter = filter;
+        document.querySelectorAll('.review-filter-btn').forEach(btn => btn.classList.toggle('active', btn.getAttribute('onclick').includes(`'${filter}'`)));
+        renderReviewsPage();
     }
 
     function renderReviewsPage() {
+        let filtered = state.reviews.filter(r => r.game.toLowerCase().includes(state.searchQuery));
+        if (state.reviewFilter === '90plus') filtered = filtered.filter(r => r.score >= 90);
+        if (state.reviewFilter === 'czech') filtered = filtered.filter(r => r.cz || r.czech);
+        if (state.reviewFilter === 'mustbuy') filtered = filtered.filter(r => r.verdict === 'MUST BUY');
+
         const start = (state.reviewsPage - 1) * state.itemsPerPage;
-        const pageItems = state.reviews.slice(start, start + state.itemsPerPage);
-        document.getElementById('reviews-full-list').innerHTML = pageItems.map(r => `
-            <div onclick="openModal(${r.id})" class="feed-card flex flex-col md:flex-row gap-8 p-8 cursor-pointer">
-                <div class="relative">
-                    <span class="absolute top-4 left-4 px-4 py-1 text-xs font-black uppercase bg-red-600 text-white rounded">RECENZE</span>
-                    <img src="${r.img}" class="w-full md:w-64 h-48 md:h-36 object-cover rounded-2xl shrink-0">
-                </div>
+        const currentItems = filtered.slice(start, start + state.itemsPerPage);
+        
+        document.getElementById('reviews-full-list').innerHTML = currentItems.map(r => `
+            <div onclick="openModal(${r.id})" class="feed-card flex flex-col md:flex-row gap-8 p-8 cursor-pointer items-center">
+                <div class="shrink-0">${getScoreRingHTML(r.score, 120, "text-3xl", `ring-list-${r.id}`)}</div>
+                <img src="${r.img}" class="w-full md:w-64 h-36 object-cover rounded-2xl shrink-0">
                 <div class="flex-1">
-                    <div class="text-5xl font-black italic text-red-600">${r.score}%</div>
                     <h3 class="condensed text-4xl font-black italic uppercase">${r.game}</h3>
+                    <div class="flex gap-2 mt-4">${getBadgesHTML(r)}</div>
                 </div>
             </div>`).join('');
-        renderReviewsPagination();
+        renderPaginationUI(filtered.length, state.reviewsPage, 'reviews-pagination', 'reviewsPage', 'renderReviewsPage');
+        applyFade('reviews-full-list');
+        setTimeout(() => currentItems.forEach(r => animateRing(`.ring-list-${r.id}`, r.score)), 120);
     }
 
-    function renderNewsPagination() {
-        const totalPages = Math.ceil(state.news.length / state.itemsPerPage);
-        let html = `<div class="flex gap-3">`;
-        if (state.newsPage > 1) html += `<button onclick="state.newsPage--; renderNewsPage()" class="px-5 py-2 bg-zinc-800 hover:bg-red-600 rounded-3xl font-bold">← Předchozí</button>`;
-        html += `<span class="px-5 py-2 bg-zinc-900 rounded-3xl font-bold">${state.newsPage} / ${totalPages}</span>`;
-        if (state.newsPage < totalPages) html += `<button onclick="state.newsPage++; renderNewsPage()" class="px-5 py-2 bg-zinc-800 hover:bg-red-600 rounded-3xl font-bold">Další →</button>`;
-        html += `</div>`;
-        document.getElementById('news-pagination').innerHTML = html;
+    function setPlatform(p) {
+        state.selectedPlatform = p;
+        document.querySelectorAll('.platform-filter').forEach(btn => btn.classList.toggle('active', btn.dataset.p === p));
+        renderCalendar();
     }
 
-    function renderReviewsPagination() {
-        const totalPages = Math.ceil(state.reviews.length / state.itemsPerPage);
-        let html = `<div class="flex gap-3">`;
-        if (state.reviewsPage > 1) html += `<button onclick="state.reviewsPage--; renderReviewsPage()" class="px-5 py-2 bg-zinc-800 hover:bg-red-600 rounded-3xl font-bold">← Předchozí</button>`;
-        html += `<span class="px-5 py-2 bg-zinc-900 rounded-3xl font-bold">${state.reviewsPage} / ${totalPages}</span>`;
-        if (state.reviewsPage < totalPages) html += `<button onclick="state.reviewsPage++; renderReviewsPage()" class="px-5 py-2 bg-zinc-800 hover:bg-red-600 rounded-3xl font-bold">Další →</button>`;
-        html += `</div>`;
-        document.getElementById('reviews-pagination').innerHTML = html;
+    function openStore(e, url) {
+        e.stopPropagation();
+        if (url && url !== "#") window.open(url, '_blank');
+    }
+
+    function renderCalendar() {
+        const filtered = state.calendar.filter(c => {
+            const d = new Date(c.rDate);
+            const mMatch = d.getFullYear() === state.selectedYear && d.getMonth() === state.selectedMonth;
+            const pMatch = state.selectedPlatform === "ALL" || c.platforms.includes(state.selectedPlatform);
+            const sMatch = state.searchQuery.length > 0 ? c.game.toLowerCase().includes(state.searchQuery) : true;
+            return mMatch && pMatch && sMatch;
+        });
+        
+        document.getElementById('month-nav').innerHTML = monthsShort.map((m, idx) => `<button onclick="state.selectedMonth=${idx}; renderCalendar()" class="filter-btn ${state.selectedMonth === idx ? 'active' : ''}">${m}</button>`).join('');
+        document.getElementById('year-nav').innerHTML = `<div class="flex items-center gap-6"><button onclick="state.selectedYear--; renderCalendar()" class="text-2xl text-zinc-600 hover:text-white"><i class="fas fa-chevron-left"></i></button><span class="text-4xl font-black italic condensed">${state.selectedYear}</span><button onclick="state.selectedYear++; renderCalendar()" class="text-2xl text-zinc-600 hover:text-white"><i class="fas fa-chevron-right"></i></button></div>`;
+
+        const groupedByDate = {};
+        filtered.forEach(c => {
+            if (!groupedByDate[c.rDate]) groupedByDate[c.rDate] = [];
+            groupedByDate[c.rDate].push(c);
+        });
+
+        const renderGameCard = (c) => {
+            let icons = '';
+            if (c.platforms.includes("PC")) icons += `<i onclick="openStore(event, '${c.storeLinks?.steam || '#'}')" class="fab fa-steam icon-pc cursor-pointer hover:scale-125 transition-transform"></i>`;
+            if (c.platforms.includes("PS5")) icons += `<i onclick="openStore(event, '${c.storeLinks?.playstation || '#'}')" class="fab fa-playstation icon-ps5 cursor-pointer hover:scale-125 transition-transform"></i>`;
+            if (c.platforms.includes("XBOX")) icons += `<i onclick="openStore(event, '${c.storeLinks?.xbox || '#'}')" class="fab fa-xbox icon-xbox cursor-pointer hover:scale-125 transition-transform"></i>`;
+            if (c.platforms.includes("SWITCH")) icons += `<i onclick="openStore(event, '${c.storeLinks?.switch || '#'}')" class="fas fa-gamepad icon-switch cursor-pointer hover:scale-125 transition-transform"></i>`;
+
+            return `
+            <div class="bg-[#080808] border border-zinc-900 rounded-3xl overflow-hidden p-4 h-full feed-card">
+                <div class="relative">
+                    <img src="${c.img}" class="w-full aspect-video object-cover rounded-xl mb-4">
+                    <div class="absolute bottom-2 left-2 flex gap-1 flex-wrap">${getBadgesHTML(c)}</div>
+                </div>
+                <h4 class="condensed text-xl font-black uppercase truncate">${c.game}</h4>
+                <div class="text-red-500 font-bold text-sm mt-1">${new Date(c.rDate).getDate()}. ${monthsShort[new Date(c.rDate).getMonth()]}</div>
+                <div class="flex gap-4 mt-3 text-xl">${icons}</div>
+            </div>`;
+        };
+
+        const calendarHtml = Object.values(groupedByDate).map((games, index) => {
+            const dayId = 'day-' + index;
+            if (games.length > 1) {
+                let slides = games.map((game, i) => `<div id="slide-${dayId}-${i}" class="${i === 0 ? '' : 'hidden'} w-full h-full transition-opacity duration-300">${renderGameCard(game)}</div>`).join('');
+                return `
+                    <div id="carousel-${dayId}" data-current="0" class="relative w-full group overflow-hidden rounded-3xl h-full">
+                        ${slides}
+                        <button onclick="prevSlide('${dayId}', ${games.length}, event)" class="absolute left-0 top-1/2 -translate-y-1/2 bg-black/80 hover:bg-[#ff0000] text-white px-3 py-4 opacity-0 group-hover:opacity-100 transition-all z-10 rounded-r-xl cursor-pointer shadow-[0_0_10px_rgba(0,0,0,0.8)]"><i class="fa-solid fa-chevron-left text-sm"></i></button>
+                        <button onclick="nextSlide('${dayId}', ${games.length}, event)" class="absolute right-0 top-1/2 -translate-y-1/2 bg-black/80 hover:bg-[#ff0000] text-white px-3 py-4 opacity-0 group-hover:opacity-100 transition-all z-10 rounded-l-xl cursor-pointer shadow-[0_0_10px_rgba(0,0,0,0.8)]"><i class="fa-solid fa-chevron-right text-sm"></i></button>
+                        <div class="absolute top-2 right-2 bg-red-600 text-white text-[10px] font-black px-2 py-1 rounded-md z-10 shadow-lg">${games.length} HRY</div>
+                    </div>`;
+            } else {
+                return renderGameCard(games[0]);
+            }
+        }).join('');
+
+        document.getElementById('calendar-grid').innerHTML = calendarHtml || `<div class="col-span-full text-center py-10 text-zinc-700 italic">Nic nenalezeno</div>`;
+        applyFade('calendar-grid');
+    }
+
+    function renderSideCalendar() {
+        const now = new Date();
+        now.setHours(0,0,0,0);
+        const future = state.calendar.filter(c => new Date(c.rDate) > now).sort((a,b) => new Date(a.rDate) - new Date(b.rDate)).slice(0, 5);
+        const sideEl = document.getElementById('side-calendar');
+        if (!sideEl) return;
+        sideEl.innerHTML = future.map(c => `
+            <div class="bg-white/5 p-4 rounded-2xl feed-card">
+                <div class="flex items-center gap-4">
+                    <div class="bg-red-600 text-white p-2 rounded-lg text-center min-w-[50px]">
+                        <div class="text-xs font-bold">${monthsShort[new Date(c.rDate).getMonth()]}</div>
+                        <div class="text-xl font-black">${new Date(c.rDate).getDate()}</div>
+                    </div>
+                    <div class="flex-1 overflow-hidden">
+                        <div class="condensed font-black text-sm uppercase truncate">${c.game}</div>
+                        <div id="countdown-${c.id}" class="flex items-center text-[10px] font-bold text-red-500 mt-1 font-mono uppercase"></div>
+                    </div>
+                </div>
+            </div>`).join('');
+        state.sideCountdownIntervals.forEach(clearInterval);
+        state.sideCountdownIntervals = [];
+        future.forEach(c => state.sideCountdownIntervals.push(initSideCountdown(c.id, c.rDate)));
+    }
+
+    function initSideCountdown(id, targetDate) {
+        const target = new Date(targetDate).getTime();
+        const tick = () => {
+            const timerEl = document.getElementById(`countdown-${id}`);
+            if (!timerEl) return;
+            const diff = target - new Date().getTime();
+            if (diff <= 0) { timerEl.innerText = "PRÁVĚ VYŠLO!"; return; }
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            timerEl.innerHTML = `<span class="cd-segment text-white">${d}D</span><span class="cd-sep">:</span><span class="cd-segment text-white">${h}H</span><span class="cd-sep">:</span><span class="cd-segment text-white">${m}M</span><span class="cd-sep">:</span><span class="cd-segment text-white">${s}S</span>`;
+        };
+        tick(); return setInterval(tick, 1000);
+    }
+
+    function openTopModal() {
+        const top = state.featuredTop;
+        let html = `
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-8">
+                    <span class="px-6 py-2 bg-red-600 text-white text-sm font-black tracking-widest rounded-full">TOP 5</span>
+                    <h2 class="condensed text-6xl font-black italic mt-4">${top.title}</h2>
+                    <p class="text-zinc-400 text-xl mt-2">${top.subtitle}</p>
+                </div>
+                <div class="space-y-6">
+                    ${top.items.map(item => `
+                        <div onclick="closeModal(); setTimeout(() => openModal(${item.rank === 1 ? 2001 : item.rank === 2 ? 2002 : item.rank === 3 ? 2005 : item.rank === 4 ? 2018 : 3001}), 300)" class="flex items-center bg-zinc-900 hover:bg-zinc-800 rounded-3xl p-6 cursor-pointer transition-all">
+                            <div class="w-16 text-5xl font-black text-red-500 text-center">${item.rank}</div>
+                            <img src="${item.img}" class="w-24 h-24 object-cover rounded-2xl mx-6">
+                            <div class="flex-1">
+                                <div class="text-3xl font-bold">${item.game}</div>
+                            </div>
+                            <div class="text-5xl font-black text-red-500">${item.score}%</div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>`;
+        document.getElementById('modal-content').innerHTML = html;
+        document.getElementById('modal-overlay').style.display = 'block';
     }
 
     window.openModal = (id) => {
-        const item = [...state.news, ...state.reviews, ...state.calendar].find(x => x.id === id);
+        if (id === 9999) {
+            openTopModal();
+            return;
+        }
+        const item = [...state.news, ...state.reviews].find(x => x.id === id);
         if (!item) return;
+        const isReview = item.score !== undefined;
+        const suggested = [...state.news, ...state.reviews].filter(x => x.id !== id).sort(() => 0.5 - Math.random()).slice(0, 3);
+        let suggestedHTML = suggested.map(s => `<div onclick="closeModal(); setTimeout(() => openModal(${s.id}), 300)" class="feed-card cursor-pointer"><img src="${s.img}" class="w-full h-32 object-cover"><div class="p-4"><h4 class="condensed text-lg font-black italic line-clamp-2 uppercase">${s.title || s.game}</h4>${s.score ? `<div class="text-red-600 font-black mt-2 italic">${s.score}%</div>` : ''}</div></div>`).join('');
+        let aiSummaryHTML = isReview ? `<div class="ai-summary-box"><div class="flex flex-col md:flex-row justify-between items-center gap-6"><div class="text-center md:text-left"><div class="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] mb-1">Verdikt</div><div class="condensed text-3xl font-black italic ${item.verdict==='MUST BUY'?'text-green-500':'text-orange-500'}">${item.verdict}</div></div><div class="flex gap-8"><div class="text-center"><div class="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] mb-1">Příběh</div><div class="text-xl font-bold italic"><i class="far fa-clock text-red-600 mr-2"></i>${item.playtimeStory}h</div></div><div class="text-center"><div class="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] mb-1">100%</div><div class="text-xl font-bold italic"><i class="fas fa-trophy text-yellow-500 mr-2"></i>${item.playtimeCompletion}h</div></div></div></div></div>` : '';
 
-        let extraHTML = '';
-        if (item.score !== undefined) {
-            extraHTML = `
-            <div class="flex justify-between items-baseline mb-6">
-                <div></div>
-                <div class="text-red-600 text-[92px] leading-none font-black">${item.score}<span class="text-5xl align-bottom">%</span></div>
-            </div>
-            ${item.pros && item.pros.length ? `
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
-                <div><h3 class="flex items-center gap-3 text-emerald-400 uppercase font-black text-2xl mb-6"><i class="fas fa-check-circle text-3xl"></i> KLADY</h3><ul class="space-y-5">${item.pros.map(p => `<li class="flex gap-4 text-zinc-200 text-lg"><span class="text-emerald-400 text-2xl leading-none mt-px">✓</span>${p}</li>`).join('')}</ul></div>
-                <div><h3 class="flex items-center gap-3 text-red-400 uppercase font-black text-2xl mb-6"><i class="fas fa-times-circle text-3xl"></i> ZÁPORY</h3><ul class="space-y-5">${item.cons.map(c => `<li class="flex gap-4 text-zinc-200 text-lg"><span class="text-red-400 text-2xl leading-none mt-px">✕</span>${c}</li>`).join('')}</ul></div>
-            </div>` : ''}
-            ${item.gallery && item.gallery.length ? `
-            <div class="mb-12">
-                <h3 class="uppercase text-zinc-400 font-black mb-5 text-lg">Galerie screenshotů</h3>
-                <div class="flex gap-4 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide">${item.gallery.map(url => `<img src="${url}" onclick="this.classList.toggle('scale-125'); this.style.transition='all 0.4s'" class="h-52 rounded-3xl object-cover cursor-zoom-in snap-center shadow-2xl flex-shrink-0 border border-zinc-800">`).join('')}</div>
-            </div>` : ''}`;
-        }
-
-        let buyHTML = '';
-        if (item.storeLinks) {
-            buyHTML = `<div class="mt-8 border-t border-zinc-800 pt-8"><h3 class="uppercase font-black text-zinc-400 mb-4 text-lg">Koupit hru</h3><div class="flex flex-wrap gap-3">${Object.keys(item.storeLinks).map(key => `<a href="${item.storeLinks[key]}" target="_blank" class="flex-1 min-w-[140px] text-center px-6 py-4 bg-zinc-800 hover:bg-red-600 rounded-3xl font-bold text-sm transition-colors">${key === 'steam' ? 'Steam' : key === 'playstation' ? 'PlayStation Store' : key === 'xbox' ? 'Xbox Store' : key}</a>`).join('')}</div></div>`;
-        }
-
-        const modalContent = `
-            <img src="${item.img}" class="w-full rounded-3xl mb-8 shadow-2xl">
-            ${extraHTML}
-            <h2 class="condensed text-5xl md:text-6xl font-black italic uppercase">${item.title || item.game}</h2>
-            <div class="flex gap-2 mt-6 flex-wrap">${getBadgesHTML(item)}</div>
-            ${buyHTML}
-            ${item.content ? `<div class="mt-12 text-zinc-300 leading-relaxed prose prose-invert max-w-none">${item.content}</div>` : ''}
-            
-            <!-- SDÍLENÍ -->
-            <div class="mt-16 pt-8 border-t border-zinc-800">
-                <h3 class="condensed text-2xl font-black mb-6 flex items-center gap-3"><i class="fas fa-share-alt text-red-500"></i> Sdílet tento příspěvek</h3>
-                <div class="flex flex-wrap gap-4">
-                    <button onclick="shareToFacebook(${id});" class="flex-1 min-w-[160px] flex items-center justify-center gap-3 bg-[#1877F2] hover:bg-[#1666d4] text-white font-bold py-4 px-6 rounded-3xl transition-colors">
-                        <i class="fab fa-facebook-f text-xl"></i><span>Facebook</span>
-                    </button>
-                    <button onclick="shareToIGStory(${id});" class="flex-1 min-w-[160px] flex items-center justify-center gap-3 bg-gradient-to-r from-[#f56040] via-[#c13584] to-[#405de6] hover:brightness-110 text-white font-bold py-4 px-6 rounded-3xl transition-colors">
-                        <i class="fab fa-instagram text-xl"></i><span>IG Story</span>
-                    </button>
-                    <button onclick="shareToX(${id});" class="flex-1 min-w-[160px] flex items-center justify-center gap-3 bg-black hover:bg-zinc-900 text-white font-bold py-4 px-6 rounded-3xl transition-colors">
-                        <i class="fab fa-x-twitter text-xl"></i><span>X (Twitter)</span>
-                    </button>
-                    <button onclick="copyLink(${id});" class="flex-1 min-w-[160px] flex items-center justify-center gap-3 bg-zinc-700 hover:bg-zinc-600 text-white font-bold py-4 px-6 rounded-3xl transition-colors">
-                        <i class="fas fa-link text-xl"></i><span>Kopírovat odkaz</span>
-                    </button>
+        let hwHTML = item.hw ? `
+            <div class="my-12">
+                <h3 class="condensed text-3xl font-black italic mb-8 uppercase text-zinc-500">HARDWAROVÉ NÁROKY</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div>
+                        <h4 class="text-sm font-black text-zinc-600 uppercase mb-4 tracking-widest">MINIMÁLNÍ</h4>
+                        <table class="hw-table">
+                            <tr><td>OS</td><td>${item.hw.min.os}</td></tr>
+                            <tr><td>CPU</td><td>${item.hw.min.cpu}</td></tr>
+                            <tr><td>RAM</td><td>${item.hw.min.ram}</td></tr>
+                            <tr><td>GPU</td><td>${item.hw.min.gpu}</td></tr>
+                            <tr><td>DISK</td><td>${item.hw.min.storage}</td></tr>
+                        </table>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-black text-red-600 uppercase mb-4 tracking-widest">DOPORUČENÉ</h4>
+                        <table class="hw-table">
+                            <tr><td>OS</td><td>${item.hw.rec.os}</td></tr>
+                            <tr><td>CPU</td><td>${item.hw.rec.cpu}</td></tr>
+                            <tr><td>RAM</td><td>${item.hw.rec.ram}</td></tr>
+                            <tr><td>GPU</td><td>${item.hw.rec.gpu}</td></tr>
+                            <tr><td>DISK</td><td>${item.hw.rec.storage}</td></tr>
+                        </table>
+                    </div>
                 </div>
-            </div>
+            </div>` : '';
 
-            <div class="mt-20 pt-12 border-t border-zinc-800">
-                <h3 class="condensed text-3xl font-black mb-8">Mohlo by se vám líbit</h3>
-                <div id="suggested-items" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
-            </div>
-        `;
+        let galleryHTML = (item.gallery && item.gallery.length) ? `
+            <div class="my-12">
+                <h3 class="condensed text-3xl font-black italic mb-8 uppercase text-zinc-500">FOTOGRAFIE</h3>
+                <div class="gallery-grid">
+                    ${item.gallery.map((img, i) => `<div onclick="openImageModal('${img}')" class="gallery-item"><img src="${img}" class="w-full h-48 object-cover"></div>`).join('')}
+                </div>
+            </div>` : '';
 
-        document.getElementById('modal-content').innerHTML = modalContent;
+        let trailerHTML = '';
+        if (item.trailer) {
+            const embedUrl = getYouTubeEmbedUrl(item.trailer);
+            if (embedUrl) {
+                trailerHTML = `
+                    <div class="my-12">
+                        <h3 class="condensed text-3xl font-black italic mb-6 uppercase text-zinc-500">TRAILER</h3>
+                        <div class="aspect-video rounded-3xl overflow-hidden">
+                            <iframe width="100%" height="100%" src="${embedUrl}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>`;
+            }
+        }
 
-        const suggestions = [...state.news, ...state.reviews].filter(i => i.id !== id);
-        const shuffled = suggestions.sort(() => 0.5 - Math.random());
-        const suggested = shuffled.slice(0, 3);
+        let videoHTML = '';
+        if (item.videos && item.videos.length > 0) {
+            const embeds = item.videos.map((url, i) => {
+                const embed = getYouTubeEmbedUrl(url);
+                return `<div class="video-tab-content ${i===0?'':'hidden'}" data-tab="${i}">
+                    <div class="video-container">
+                        <iframe id="video-iframe-${i}" width="100%" height="100%" src="${embed}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div onclick="switchVideoTabPrev(${i})" class="video-nav video-nav-left"><i class="fas fa-chevron-left"></i></div>
+                        <div onclick="switchVideoTabNext(${i})" class="video-nav video-nav-right"><i class="fas fa-chevron-right"></i></div>
+                    </div>
+                </div>`;
+            }).join('');
+            videoHTML = `
+                <div class="my-12">
+                    <h3 class="condensed text-3xl font-black italic mb-6 uppercase text-zinc-500">VIDEA</h3>
+                    <div class="video-tabs-container">${embeds}</div>
+                </div>`;
+        }
 
-        let suggestedHTML = '';
-        suggested.forEach(s => {
-            suggestedHTML += `<div onclick="closeModal(); setTimeout(() => openModal(${s.id}), 300)" class="feed-card cursor-pointer overflow-hidden"><img src="${s.img}" class="w-full h-40 object-cover"><div class="p-5"><h4 class="condensed text-xl font-black line-clamp-2">${s.title || s.game}</h4>${s.score ? `<div class="text-red-600 font-black text-2xl mt-2">${s.score}%</div>` : ''}</div></div>`;
-        });
-        document.getElementById('suggested-items').innerHTML = suggestedHTML;
+        let storeHTML = '';
+        if (item.storeLinks) {
+            storeHTML = `<div class="mb-12"><h4 class="condensed text-xl font-black italic mb-4 uppercase text-zinc-500">Koupit hru</h4><div class="flex flex-wrap gap-4">`;
+            if (item.storeLinks.steam) storeHTML += `<a href="${item.storeLinks.steam}" target="_blank" class="store-btn btn-steam"><i class="fab fa-steam text-xl"></i> Steam</a>`;
+            if (item.storeLinks.playstation) storeHTML += `<a href="${item.storeLinks.playstation}" target="_blank" class="store-btn btn-playstation"><i class="fab fa-playstation text-xl"></i> PS Store</a>`;
+            if (item.storeLinks.xbox) storeHTML += `<a href="${item.storeLinks.xbox}" target="_blank" class="store-btn btn-xbox"><i class="fab fa-xbox text-xl"></i> Xbox Store</a>`;
+            if (item.storeLinks.switch) storeHTML += `<a href="${item.storeLinks.switch}" target="_blank" class="store-btn btn-switch"><i class="fas fa-gamepad text-xl"></i> Nintendo eShop</a>`;
+            storeHTML += `</div></div>`;
+        }
 
+        let datePlatformHTML = '';
+        if (isReview) {
+            const date = new Date(item.rDate);
+            let icons = '';
+            if (item.storeLinks && item.storeLinks.steam) icons += `<i class="fab fa-steam text-xl text-zinc-400"></i>`;
+            if (item.storeLinks && item.storeLinks.playstation) icons += `<i class="fab fa-playstation text-xl text-blue-500"></i>`;
+            if (item.storeLinks && item.storeLinks.xbox) icons += `<i class="fab fa-xbox text-xl text-green-600"></i>`;
+            if (item.storeLinks && item.storeLinks.switch) icons += `<i class="fas fa-gamepad text-xl text-red-600"></i>`;
+            datePlatformHTML = `
+                <div class="flex justify-between items-center mb-6 px-4">
+                    <div class="flex items-center gap-3 text-zinc-400">
+                        <i class="fas fa-calendar"></i>
+                        <span class="font-medium">${date.getDate()}. ${monthsShort[date.getMonth()]} ${date.getFullYear()}</span>
+                    </div>
+                    <div class="flex gap-4 text-2xl">${icons}</div>
+                </div>`;
+        }
+
+        document.getElementById('modal-content').innerHTML = `
+            <div class="fade-in">
+                <img src="${item.img}" class="w-full rounded-3xl mb-8">
+                ${datePlatformHTML}
+                <div class="flex justify-center gap-4 mb-8 items-center">
+                    ${isReview ? getScoreRingHTML(item.score, 160, "text-6xl", "modal-ring") : ''}
+                </div>
+                <div class="flex justify-center gap-3 mb-8">${getBadgesHTML(item)}</div>
+                ${aiSummaryHTML}
+                <h2 class="condensed text-6xl font-black italic uppercase text-center mb-8">${item.title || item.game}</h2>
+                <div class="text-zinc-300 text-lg leading-relaxed mb-12">${item.content}</div>
+                
+                ${isReview ? getProsConsHTML(item.pros, item.cons) : ''}
+                ${trailerHTML}
+                ${videoHTML}
+                ${galleryHTML}
+                ${isReview ? getProTipsHTML(item.proTips) : ''}
+                ${hwHTML}
+                ${storeHTML}
+                <div class="border-t border-zinc-800 pt-12">
+                    <h3 class="condensed text-3xl font-black italic mb-8 uppercase">Mohlo by tě zajímat</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">${suggestedHTML}</div>
+                </div>
+            </div>`;
+        document.getElementById('modal-overlay').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (isReview) setTimeout(() => animateRing('.modal-ring', item.score), 200);
+    };
+
+    window.switchVideoTab = (el, index) => {
+        document.querySelectorAll('.video-tab-content').forEach(c => c.classList.add('hidden'));
+        const target = document.querySelector(`.video-tab-content[data-tab="${index}"]`);
+        if (target) target.classList.remove('hidden');
+    };
+
+    window.switchVideoTabPrev = (currentIndex) => {
+        const tabsCount = document.querySelectorAll('.video-tab-content').length;
+        const newIndex = currentIndex - 1 < 0 ? tabsCount - 1 : currentIndex - 1;
+        switchVideoTab(null, newIndex);
+    };
+
+    window.switchVideoTabNext = (currentIndex) => {
+        const tabsCount = document.querySelectorAll('.video-tab-content').length;
+        const newIndex = (currentIndex + 1) % tabsCount;
+        switchVideoTab(null, newIndex);
+    };
+
+    window.openImageModal = (src) => {
+        document.getElementById('modal-content').innerHTML = `
+            <div class="flex justify-center items-center min-h-[80vh] p-4">
+                <img src="${src}" class="max-h-[85vh] max-w-full rounded-3xl shadow-2xl cursor-zoom-out" onclick="closeModal()">
+            </div>`;
         document.getElementById('modal-overlay').style.display = 'block';
     };
 
-    window.closeModal = () => { document.getElementById('modal-overlay').style.display = 'none'; };
+    window.closeModal = () => document.getElementById('modal-overlay').style.display = 'none';
 
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.onclick = () => {
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-nav'));
-            link.classList.add('active-nav');
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
-            document.getElementById('tab-' + link.dataset.tab).classList.remove('hidden');
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        }
+    window.navigateToTab = (tab) => {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+        document.getElementById('tab-' + tab).classList.remove('hidden');
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-nav'));
+        document.querySelector(`.nav-link[data-tab="${tab}"]`).classList.add('active-nav');
+        document.getElementById('mobileMenu').classList.remove('show');
+        applyFade('tab-' + tab); 
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (tab === 'recenze') renderReviewsPage(); 
+        if (tab === 'kalendar') renderCalendar();
+    };
+
+    window.nextSlide = (dayId, total, event) => {
+        if (event) event.stopPropagation();
+        let container = document.getElementById('carousel-' + dayId);
+        let current = parseInt(container.dataset.current);
+        document.getElementById('slide-' + dayId + '-' + current).classList.add('hidden');
+        current = (current + 1) % total;
+        container.dataset.current = current;
+        document.getElementById('slide-' + dayId + '-' + current).classList.remove('hidden');
+    };
+
+    window.prevSlide = (dayId, total, event) => {
+        if (event) event.stopPropagation();
+        let container = document.getElementById('carousel-' + dayId);
+        let current = parseInt(container.dataset.current);
+        document.getElementById('slide-' + dayId + '-' + current).classList.add('hidden');
+        current = (current - 1 + total) % total;
+        container.dataset.current = current;
+        document.getElementById('slide-' + dayId + '-' + current).classList.remove('hidden');
+    };
+
+    document.addEventListener('mousemove', e => { 
+        const s = document.getElementById('spotlight'); 
+        if (s) { 
+            s.style.setProperty('--x', e.clientX + 'px'); 
+            s.style.setProperty('--y', e.clientY + 'px'); 
+        } 
     });
-
-    document.addEventListener('mousemove', e => {
-        const s = document.getElementById('spotlight');
-        s.style.setProperty('--x', e.clientX + 'px');
-        s.style.setProperty('--y', e.clientY + 'px');
-    });
-
-    setInterval(() => {
-        renderAll();
-        console.log('%cStránka aktualizována (každou minutu)', 'color: #ff0000; font-weight: bold');
-    }, 60000);
-
     window.onload = renderAll;
     </script>
 </body>
 </html>
+```
